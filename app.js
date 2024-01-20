@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const session=require("express-session")
+const dotenv=require("dotenv")
+dotenv.config()
 
 app.set("views",path.join(__dirname,"views"))
 app.use(express.static(path.join(__dirname, "public")))
@@ -18,7 +20,7 @@ app.use(
     session({
         resave: false,
         saveUninitialized: true,
-        secret: 'your-secret-key',
+        secret: process.env.SECRET_KEY,
     })
 );
 
