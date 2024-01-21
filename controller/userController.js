@@ -23,8 +23,8 @@ const generateOTP = () => {
     let otp = '';
 
     for (let i = 0; i < otpLength; i++) {
-        const digit = Math.floor(Math.random() * 10); // Generate a random digit (0-9)
-        otp += digit.toString(); // Append the digit to the OTP string
+        const digit = Math.floor(Math.random() * 10); 
+        otp += digit.toString(); 
     }
 
     return otp;
@@ -54,20 +54,6 @@ const insertUser=async(req,res)=>{
             return res.render("user/userSignup")
         }
 
-        const hashedPassword=await bcrypt.hash(password, 10);
-
-        const user = new User({
-            name : username,
-            email : email,
-            phone : phone,
-            password: hashedPassword
-        });
-       
-        
-        const result= await user.save();
-        console.log(result);
-        console.log("successfully register");
-
         const otp = generateOTP();
 
          // Nodemailer configuration
@@ -85,12 +71,24 @@ const insertUser=async(req,res)=>{
             text: `Your OTP for registration is: ${otp}`
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, async (error, info) => {
             if (error) {
                 console.error("Error sending email: " + error.message);
                 return res.status(500).send("Error sending OTP email");
             }
             console.log("Email sent: " + info.response);
+
+            const hashedPassword=await bcrypt.hash(password, 10);
+
+             // Store user data in the session for later retrieval
+             req.session.userData = {
+                username: username,
+                email: email,
+                phone: phone,
+                password: hashedPassword,
+                otp: otp,
+            };
+
             return res.render("user/otp", { email, otp });
         });
     } catch (error) {
@@ -100,15 +98,56 @@ const insertUser=async(req,res)=>{
 };
 
 
-const verifyOtp = async (req, res) => {
+const renderOtpPage = async (req, res) => {
         res.render("user/otp")
     
 }
+
+const verifyOtp= async (req,res)=>{
+   
+    const userData = req.session.userData;
+
+    if (!userData) {
+        return res.redirect('/signup');
+    }
+
+    const submittedOtp = req.body.otp;
+
+    if (!submittedOtp || submittedOtp !== userData.otp.toString()) {
+        return res.render("user/otp", { error: 'Incorrect OTP. Please try again.' });
+    }
+
+    try {
+        const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+        const user = new User({
+            name: userData.username,
+            email: userData.email,
+            phone: userData.phone,
+            password: hashedPassword,
+        });
+
+        const result = await user.save();
+        console.log(result);
+        console.log("Successfully registered");
+
+        // Clear the user data from the session
+        delete req.session.userData;
+
+        return res.render("user/userHome");
+
+    } catch (error) {
+        console.error("Error: " + error.message);
+        res.status(500).send("Error: " + error.message);
+    }
+};
+
 
 module.exports={
     userHomeGet,
     userLoginGet,
     userSignupGet,
     insertUser,
+    renderOtpPage,
     verifyOtp
 }
