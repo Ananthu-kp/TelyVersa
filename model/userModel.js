@@ -1,5 +1,6 @@
 const mongoose=require('mongoose')
 
+
 const userSchema=new mongoose.Schema({
     name:{
         type:String,
@@ -26,10 +27,8 @@ const userSchema=new mongoose.Schema({
     isAdmin: {
         type: String,
         default: "0"
-    }
+    } 
 })
-
-
 
 const User = mongoose.model('User', userSchema);
 

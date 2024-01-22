@@ -31,6 +31,7 @@ const generateOTP = () => {
 };
 
 
+
 const insertUser=async(req,res)=>{
 
     const {username, email, phone, password, confirmPassword}=req.body; 
@@ -77,15 +78,14 @@ const insertUser=async(req,res)=>{
                 return res.status(500).send("Error sending OTP email");
             }
             console.log("Email sent: " + info.response);
+       
 
-            const hashedPassword=await bcrypt.hash(password, 10);
-
-             // Store user data in the session for later retrieval
+             // Store user data in the session
              req.session.userData = {
                 username: username,
                 email: email,
                 phone: phone,
-                password: hashedPassword,
+                password: password,
                 otp: otp,
             };
 
@@ -103,8 +103,10 @@ const renderOtpPage = async (req, res) => {
     
 }
 
+
+
 const verifyOtp= async (req,res)=>{
-   
+    
     const userData = req.session.userData;
 
     if (!userData) {
@@ -112,6 +114,7 @@ const verifyOtp= async (req,res)=>{
     }
 
     const submittedOtp = req.body.otp;
+    console.log(req.session.userData.password);
 
     if (!submittedOtp || submittedOtp !== userData.otp.toString()) {
         return res.render("user/otp", { error: 'Incorrect OTP. Please try again.' });
@@ -119,14 +122,14 @@ const verifyOtp= async (req,res)=>{
 
     try {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
-
+        
         const user = new User({
             name: userData.username,
             email: userData.email,
             phone: userData.phone,
             password: hashedPassword,
         });
-
+        
         const result = await user.save();
         console.log(result);
         console.log("Successfully registered");
@@ -143,11 +146,54 @@ const verifyOtp= async (req,res)=>{
 };
 
 
+
+
+const verifyUser = async (req, res) => {
+    
+    try {
+        const { email, password } = req.body;
+        const findUser = await User.findOne({ email: email });
+
+        if (!findUser) {
+            console.log("User not found");
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
+
+        if (findUser.isBlocked) {
+            console.log("User is blocked. Cannot login.");
+            res.status(403).json({ error: 'User is blocked. Cannot login.' });
+            return;
+        }
+       
+        const passMatch = await bcrypt.compare(password, findUser.password);
+        // console.log(passMatch);
+
+        if (passMatch) {
+            console.log("Login successful. Password matched.");
+
+            req.session.user = findUser;
+            console.log(findUser);
+
+            if(req.session.user){
+                res.render('user/userHome');
+            }
+        } else {
+            console.log("Password doesn't match");
+            res.status(401).json({ error: 'Invalid credentials' });
+        }
+    } catch (error) {
+        console.log("Login Error:", error);
+        res.status(500).send('Login failed. Please try again later.');
+    }
+};
+
 module.exports={
     userHomeGet,
     userLoginGet,
     userSignupGet,
     insertUser,
     renderOtpPage,
-    verifyOtp
+    verifyOtp,
+    verifyUser
 }
