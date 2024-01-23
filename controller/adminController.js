@@ -9,4 +9,11 @@ const adminLoginGet=async(req,res)=>{
     res.render("admin/adminLogin")
 }
 
-module.exports={adminHomeGet,adminLoginGet}
+const addProductGet=async(req,res)=>{
+    res.render("admin/adminAddProduct")
+}
+module.exports={
+    adminHomeGet,
+    adminLoginGet,
+    addProductGet
+}

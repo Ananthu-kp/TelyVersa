@@ -4,8 +4,12 @@ const nodemailer=require("nodemailer");
 
 
 const userHomeGet=async(req,res)=>{
-    
-        res.render("user/userHome");
+        const user  = req.session.user
+        if(user){
+            res.render("user/userHome", {user : user});
+        }else{
+            res.render("user/userHome")
+        }
 }
 
 const userLoginGet=async(req,res)=>{

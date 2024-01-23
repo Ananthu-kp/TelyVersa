@@ -76,9 +76,35 @@
                             </div>
                         </div>
                     </div>
+                    <% if(locals.user) {%>
+
+                        <!-- Displayed when the user is logged in -->
+                        <li class="dropdown nav-item">
+                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false">
+                              <!-- Uncomment the following line if you want to use an icon -->
+                              <!-- <i class="fas fa-/user-circle"></i> -->
+                              <img class="svgInject" alt="Evara" src="/assets/imgs/theme/user-profile.png" style="height: 25px; width: 25px; margin-top: 2px;">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                              <a class="dropdown-item" href="/profile"><i class="material-icons md-perm_identity"></i> Profile</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i> Logout</a>
+                            </div>
+                          </li>
+                         <% }else{ %>
+     
+                            <div>
+                             <a href="/login">Sign In</a>
+                            </div>
+                             <% } %>
                 </div>
+
+             
             </div>
         </div>
+
+
+
   
     </header>
     <div class="mobile-header-active mobile-header-wrapper-style">
