@@ -4,15 +4,24 @@ const nodemailer=require("nodemailer");
 
 
 const userHomeGet=async(req,res)=>{
-    res.render("user/userHome")
+    
+        res.render("user/userHome");
 }
 
 const userLoginGet=async(req,res)=>{
-    res.render("user/userLogin")
+    if (!req.session.user) {
+        res.render("user/userLogin")
+    } else {
+        res.redirect("/")
+    } 
 }
 
 const userSignupGet=async(req,res)=>{
-    res.render("user/userSignup")
+    if (!req.session.user) {
+        res.render("user/userSignup")
+    } else {
+        res.redirect("/")
+    }
 }
 
 
@@ -37,12 +46,12 @@ const insertUser=async(req,res)=>{
     const {username, email, phone, password, confirmPassword}=req.body; 
     // console.log(req.body);
 
-    const trimUsername=username.trim()
+    // const trimUsername=username.trim()
 
-    if(!trimUsername){
-        console.log("username cannot be with whitespace");
-        return res.render("user/userSignup")
-    }
+    // if(!trimUsername){
+    //     console.log("username cannot be with whitespace");
+    //     return res.render("user/userSignup")
+    // }
 
     try{
         if(password !== confirmPassword){
@@ -159,13 +168,7 @@ const verifyUser = async (req, res) => {
             res.status(404).json({ error: 'User not found' });
             return;
         }
-
-        if (findUser.isBlocked) {
-            console.log("User is blocked. Cannot login.");
-            res.status(403).json({ error: 'User is blocked. Cannot login.' });
-            return;
-        }
-       
+    
         const passMatch = await bcrypt.compare(password, findUser.password);
         // console.log(passMatch);
 
@@ -187,6 +190,8 @@ const verifyUser = async (req, res) => {
         res.status(500).send('Login failed. Please try again later.');
     }
 };
+
+ 
 
 module.exports={
     userHomeGet,
