@@ -172,10 +172,8 @@ const verifyUser = async (req, res) => {
             res.status(404).json({ error: 'User not found' });
             return;
         }
-    
         const passMatch = await bcrypt.compare(password, findUser.password);
         // console.log(passMatch);
-
         if (passMatch) {
             console.log("Login successful. Password matched.");
 
@@ -195,6 +193,19 @@ const verifyUser = async (req, res) => {
     }
 };
 
+const logoutUser = async(req, res) => {
+    try {
+        req.session.destroy((err) => {
+            if (err) {
+                console.log("Logout Error");
+            }
+            console.log("Logout Successfully");
+            res.redirect("/login")
+        })
+    } catch (error) {
+        console.log("Logout Error : ", error);
+    }
+};
  
 
 module.exports={
@@ -204,5 +215,6 @@ module.exports={
     insertUser,
     renderOtpPage,
     verifyOtp,
-    verifyUser
+    verifyUser,
+    logoutUser
 }

@@ -21,8 +21,8 @@ const userSchema=new mongoose.Schema({
         required:true
     },
     isBlocked:{
-        type:Boolean,
-        default:false
+        type:Number,
+        default:0
     },
     isAdmin: {
         type: String,

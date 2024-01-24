@@ -28,19 +28,34 @@ const adminVerify = async (req, res) => {
     }
 };
 
+
+
 const adminHomeGet=async(req,res)=>{
     res.render("admin/adminHome")
 }
 
 
-const userList= async(req,res)=>{
-    res.render("admin/users")
-}
+
+const adminLogout = async (req, res) => {
+    try {
+        req.session.destroy((err) => {
+          if (err) {
+            console.log("Logout error");
+            res.redirect("/admin");
+          }
+          console.log("Logged out successfully");
+          res.redirect("/admin/login");
+        });
+      } catch (error) {
+        console.log("Logout Error");
+      }
+};
 
 
 module.exports={
     adminHomeGet,
     adminLoginGet,
     adminVerify,
-    userList
+    adminLogout
+    
 }

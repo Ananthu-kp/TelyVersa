@@ -33,17 +33,45 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th>Seller</th>
+                            <th>Users</th>
                             <th>Email</th>
                             <th>Status</th>
-                            <th>Registered</th>
+                            <th>phone</th>
                             <th class="text-end"> Action </th>
                         </tr>
                     </thead>
                     <tbody>
 
-                       
-
+                        <%for (let i = 0; i < data.length; i++) {
+                        %>
+                            <tr>
+                                <td width="40%">
+                                    <a href="#" class="itemside">
+                                        <div class="info pl-3">
+                                            <h6 class="mb-0 title"><%= data[i].name %></h6>
+                                            <small class="text-muted">User ID: <%= data[i]._id %></small>
+                                        </div>
+                                    </a>
+                                </td>
+                                <td><%= data[i].email %></td>
+                                <% if (data[i].isBlocked == 0) { %>
+                                    <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                <% } else { %>
+                                    <td><span class="badge rounded-pill alert-danger">Inactive</span></td>
+                                <% } %>
+                                <td><%= data[i].phone %></td>
+                                <td class="text-end">
+                                    <% if (data[i].isBlocked == 0) { %>
+                                        <a href="/admin/blockuser/<%= data[i]._id %>" class="btn btn-sm btn-brand rounded font-sm mt-15">Block</a>
+                                    <% } else { %>
+                                        <a href="/admin/unblockuser/<%= data[i]._id %>" class="btn btn-sm btn-brand rounded font-sm mt-15">Unblock</a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <%
+                        }
+                        %>
+                        
                     </tbody>
                 </table> <!-- table-responsive.// -->
             </div>
