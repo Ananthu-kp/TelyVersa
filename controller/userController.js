@@ -183,7 +183,7 @@ const verifyUser = async (req, res) => {
             console.log(findUser);
 
             if(req.session.user){
-                res.render('user/userHome');
+                res.redirect("/")
             }
         } else {
             console.log("Password doesn't match");
