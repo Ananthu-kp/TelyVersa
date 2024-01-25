@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const session=require("express-session")
+const nocache= require("nocache")
 const dotenv=require("dotenv")
 dotenv.config()
  
@@ -21,10 +22,14 @@ app.use(
         resave: false,
         saveUninitialized: true,
         secret: process.env.SECRET_KEY,
+        // cookie: { secure: false },
     })
 );
+
+app.use(nocache())
 
 app.use("/",userRoute)
 app.use("/admin",adminRoute)
 
 app.listen(3000,()=>console.log("Server start")) 
+

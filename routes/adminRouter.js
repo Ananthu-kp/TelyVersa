@@ -20,5 +20,6 @@ router.get("/unblockuser/:id",userListController.unblockUser)
 
 router.get("/addProduct",productController.addProductGet)
 router.get("/productList",productController.productListGet)
+router.post("/addproduct",productController.addProduct)
 
 module.exports=router; 

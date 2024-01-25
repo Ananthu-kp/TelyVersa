@@ -177,7 +177,7 @@ const verifyUser = async (req, res) => {
         if (passMatch) {
             console.log("Login successful. Password matched.");
 
-            req.session.user = findUser;
+            req.session.user = findUser.email;
             console.log(findUser);
 
             if(req.session.user){

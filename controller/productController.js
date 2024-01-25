@@ -9,8 +9,16 @@ const productListGet=async(req,res)=>{
     res.render("admin/adminViewProducts")
 }
 
+const addProduct=async(req,res)=>{
+    try{
+        const productlist=req.body;
+    }catch(error){
+
+    }
+};
 
 module.exports={
     addProductGet,
-    productListGet
+    productListGet,
+    addProduct
 }
