@@ -4,7 +4,9 @@ const router = express.Router();
 const adminController=require("../controller/adminController")
 const productController=require("../controller/productController")
 const userListController=require("../controller/userListController")
+const categoryController=require("../controller/categoryController")
 const productMulter=require("../multer/multerProduct")
+const {isAdmin}=require("../middlewares/Auth")
 
 
 
@@ -23,5 +25,9 @@ router.get("/addproduct", productController.addProductGet);
 router.post("/addproduct", productMulter.array('image', 5), productController.addProduct);
 router.get("/productList",productController.productListGet)
 
+
+router.get("/category",  categoryController.categoryGet)
+router.post("/add-Category",  categoryController.addCategory)
+router.get("/allCategory",  categoryController.categoryAllGet)
 
 module.exports=router; 
