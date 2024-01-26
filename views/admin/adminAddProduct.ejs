@@ -4,9 +4,9 @@
 
 <style>
     .error-message {
-        color: red;
+        color: rgb(224, 69, 69);
         margin-top: 5px;
-        font-size: 14px; /* Adjust font size as needed */
+        font-size: 12px; /* Adjust font size as needed */
     }
 </style>
 
@@ -28,8 +28,8 @@
                         <form method="post" action="/admin/addproduct" enctype="multipart/form-data"
                             onsubmit="return validateForm()">
                             <div class="mb-4">
-                                <label for="product_name" class="form-label">Product Name</label>
-                                <input type="text" placeholder="Type here" name="productName"
+                                <label class="form-label">Product Name</label>
+                                <input type="text" placeholder="Type here" name="productName" 
                                     class="form-control border" id="productName">
                                 <div id="productName-error" class="error-message"></div>
                             </div>
@@ -44,7 +44,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Regular price</label>
-                                        <input placeholder="$" name="regularPrice" type="text"
+                                        <input placeholder="$" name="regularPrice" type="text" id="regularPrice" 
                                             class="form-control border">
                                             <div id="regularPrice-error" class="error-message"></div>
 
@@ -53,7 +53,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Sale price</label>
-                                        <input placeholder="$" name="salePrice" type="text" class="form-control border">
+                                        <input placeholder="$" name="salePrice" type="text" id="salePrice"  class="form-control border">
                                         <div id="salePrice-error" class="error-message"></div>
 
                                     </div>
@@ -61,7 +61,7 @@
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Quantity</label>
-                                        <input placeholder="" name="quantity" type="text" class="form-control border">
+                                        <input placeholder="" id="quantity" name="quantity" type="text"  class="form-control border">
                                         <div id="quantity-error" class="error-message"></div>
 
                                     </div>
@@ -71,14 +71,16 @@
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">TV Size</label>
-                                        <input placeholder="" name="size" type="text" class="form-control border">
+                                        <input placeholder="" name="size" type="text" id="size"  class="form-control border">
+                                        <div id="size-error" class="error-message"></div>
                                     </div>
                                 </div>
                             
                                 <div class="col-lg-4">
                                     <div class="mb-3">
                                         <label class="form-label">Resolution</label>
-                                        <input placeholder="" name="resolution" type="text" class="form-control border">
+                                        <input placeholder="" name="resolution" type="text" id="resolution"  class="form-control border">
+                                        <div id="resolution-error" class="error-message"></div>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +89,7 @@
                                     <div class="row gx-2">
                                         <div class="col-sm-6 mb-3">
                                             <label class="form-label">Category</label>
-                                            <select class="form-select border" style="width: 150px;" name="category">
+                                            <select class="form-select border" id="category" style="width: 150px;" name="category">
                                                
                                             </select>
                                         </div>
@@ -104,13 +106,13 @@
                                 <div class="card-body">
                                     <div class="input-upload">
                                         <img src="assets/imgs/theme/upload.svg" alt="">
-                                        <input class="form-control border" name="image" id="imageInput" type="file" multiple>
+                                        <input class="form-control border" name="image"  id="imageInput" type="file" multiple>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <button class="btn btn-md rounded font-sm hover-up" type="submit"
-                                    onclick="validateAndSubmit()">Publish</button>
+                                    onclick="validateForm()">Publish</button>
                             </div>
                         </form>
                     </div>
@@ -180,7 +182,80 @@ function handleFileSelect(event) {
     }
 }
 
+function validateForm() {
+    
+    resetErrorMessages();
 
+    var isValid = true;
+
+    var productName = document.getElementById("productName").value;
+    var description = document.getElementsByName("description")[0].value;
+    var regularPrice = document.getElementsByName("regularPrice")[0].value;
+    var salePrice = document.getElementsByName("salePrice")[0].value;
+    var quantity = document.getElementById("quantity").value;
+    var size = document.getElementById("size").value;
+    var resolution = document.getElementById("resolution").value;
+ 
+
+    if (productName === "") {
+        displayErrorMessage("productName-error", "Product Name is Required");
+        isValid = false;
+    }
+
+    if (isNaN(regularPrice) || regularPrice <= 0) {
+        displayErrorMessage("regularPrice-error", "Regular price must be a positive number");
+        isValid = false;
+    }
+
+    if (isNaN(salePrice) || salePrice <= 0) {
+        displayErrorMessage("salePrice-error", "Sale price must be a positive number");
+        isValid = false;
+    }
+
+    if (parseFloat(salePrice) >= parseFloat(regularPrice)) {
+        displayErrorMessage("salePrice-error", "Sale price must be less than Regular price");
+        isValid = false;
+    }
+
+    if (size === "") {
+        displayErrorMessage("size-error", "Size is required");
+        isValid = false;
+    }
+
+    if (resolution === "") {
+        displayErrorMessage("resolution-error", "Resolution is required");
+        isValid = false;
+    }
+
+    if (!/^[1-9]\d*$/.test(quantity)) {
+        displayErrorMessage("quantity-error", "Quantity must be a positive integer");
+        isValid = false;
+    }
+
+    // // Check if category is selected
+    // if (category === "") {
+    //     displayErrorMessage("category-error", "Please select a category");
+    //     isValid = false;
+    // }
+
+
+    return isValid;
+}
+
+
+        function displayErrorMessage(elementId, message) {
+            var errorElement = document.getElementById(elementId);
+            errorElement.innerText = message;
+            errorElement.style.display = "block";
+        }
+
+        function resetErrorMessages() {
+            var errorElements = document.querySelectorAll(".error-message");
+            errorElements.forEach(function (element) {
+                element.innerText = "";
+                element.style.display = "none";
+            });
+        }
 
 
 
