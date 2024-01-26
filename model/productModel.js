@@ -9,10 +9,10 @@ const productSchema= new mongoose.Schema({
         type: String,
         required: true
     },
-    category:{
-        type: String,
-        required: true
-    },
+    // category:{
+    //     type: String,
+    //     required: true
+    // },
     regularPrice:{
         type: Number,
         required: true,
@@ -37,10 +37,10 @@ const productSchema= new mongoose.Schema({
         type: Array,
         required: true
     },
-    isBlocked:{
-        type: String,
-        required: true
-    }
+    // isBlocked:{
+    //     type: Boolean,
+    //     required: true
+    // }
 
 })
 

@@ -25,12 +25,12 @@
                 <div class="card mb-4">
                     <div class="card-body">
 
-                        <form method="post" action="/admin/addProducts" enctype="multipart/form-data"
+                        <form method="post" action="/admin/addproduct" enctype="multipart/form-data"
                             onsubmit="return validateForm()">
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Product Name</label>
                                 <input type="text" placeholder="Type here" name="productName"
-                                    class="form-control border" id="product_name">
+                                    class="form-control border" id="productName">
                                 <div id="productName-error" class="error-message"></div>
                             </div>
                             
@@ -104,13 +104,12 @@
                                 <div class="card-body">
                                     <div class="input-upload">
                                         <img src="assets/imgs/theme/upload.svg" alt="">
-                                        <input class="form-control border" name="images" id="imageInput" type="file"
-                                            multiple>
+                                        <input class="form-control border" name="image" id="imageInput" type="file" multiple>
                                     </div>
                                 </div>
                             </div>
                             <div>
-                                <button class="btn btn-md rounded font-sm hover-up" type="button"
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit"
                                     onclick="validateAndSubmit()">Publish</button>
                             </div>
                         </form>
