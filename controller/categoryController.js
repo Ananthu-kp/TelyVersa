@@ -45,6 +45,60 @@ const categoryAllGet = async (req, res) => {
     }
 }
 
+const listCategoryGet = async (req, res) => {
+    try {
+        const id = req.query.id;
+        await Category.updateOne({ _id: id }, { $set: { isListed: false } });
+        res.redirect("/admin/category");
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+const unlistCategoryGet = async (req, res) => {
+    try {
+        const id = req.query.id;
+        await Category.updateOne({ _id: id }, { $set: { isListed: true } });
+        res.redirect("/admin/category");
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+const editCategoryGet = async (req, res) => {
+    try {
+        const id = req.query.id;
+        const category = await Category.findOne({ _id: id });
+        res.render("edit-category", { category: category });
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+const editCategory = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { categoryName, description } = req.body;
+        
+        const findCategory = await Category.findById(id);
+
+        if (findCategory) {
+            await Category.updateOne(
+                { _id: id },
+                {
+                    name: categoryName,
+                    description: description
+                }
+            );
+            res.redirect("/admin/category");
+        } else {
+            console.log("Category not found");
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
 
 
 
@@ -55,4 +109,8 @@ module.exports = {
     categoryGet,
     addCategory,
     categoryAllGet,
+    listCategoryGet,
+    unlistCategoryGet,
+    editCategoryGet,
+    editCategory
 }

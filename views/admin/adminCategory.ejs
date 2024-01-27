@@ -42,14 +42,40 @@
                                     </th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <th>Status</th>
+                                    <!-- <th>Status</th> -->
                                     <th>List/Unlist</th>
                                     <th class="text-end">Edit</th>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                <% for (let i = 0; i < category.length; i++) { %>
+                                    <tr>
+                                        <!-- Content for the first column, if needed -->
+                                        <td>
+                                            <!-- Content for the first column, if needed -->
+                                        </td>
+                                        <td class="text-start"><%= category[i].name %></td>
+                                        <td class="text-start"><%= category[i].description %></td>
+                                        <td class="text-start">
+                                            <% if (category[i].isListed === true) { %>
+                                                <button class="btn btn-danger" style="width: 70px;">
+                                                    <a href="/admin/listCategory?id=<%= category[i]._id %>" class="text-white">Unlist</a>
+                                                </button>
+                                            <% } else { %>
+                                                <button class="btn btn-success" style="width: 70px;">
+                                                    <a href="/admin/unListCategory?id=<%= category[i]._id %>" class="text-white">List</a>
+                                                </button>
+                                            <% } %>
+                                        </td>
+                                        <td class="text-start">
+                                            <button class="btn btn-info">
+                                                <a href="/admin/editCategory?id=<%= category[i]._id %>" class="text-white">Edit</a>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <% } %>
                             </tbody>
+                            
                         </table>
                     </div>
                 </div> <!-- .col// -->
