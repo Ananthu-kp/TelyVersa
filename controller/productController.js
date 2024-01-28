@@ -1,7 +1,10 @@
 const Product=require("../model/productModel")
+const Category=require("../model/categoryModel")
+
 
 const addProductGet=async(req,res)=>{
-    res.render("admin/adminAddProduct")
+    const category = await Category.find({ isListed: true })
+    res.render("admin/adminAddProduct",{ category:category })
 }
 
 

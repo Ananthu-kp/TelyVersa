@@ -11,13 +11,13 @@ const categoryGet = async (req, res) => {
 
 const addCategory = async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { name, description }=req.body;
         const categoryExists = await Category.findOne({ name });
 
         if (!categoryExists) {
-            const newCategory = new Category({
-                 name: name,
-               description: description
+            const newCategory=new Category({
+                 name:name,
+               description:description
             });
 
             await newCategory.save();
@@ -69,7 +69,7 @@ const editCategoryGet = async (req, res) => {
     try {
         const id = req.query.id;
         const category = await Category.findOne({ _id: id });
-        res.render("edit-category", { category: category });
+        res.render("admin/editCategory", { category: category });
     } catch (error) {
         console.log(error.message);
     }

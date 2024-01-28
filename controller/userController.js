@@ -48,15 +48,6 @@ const generateOTP = () => {
 const insertUser=async(req,res)=>{
 
     const {username, email, phone, password, confirmPassword}=req.body; 
-    // console.log(req.body);
-
-    // const trimUsername=username.trim()
-
-    // if(!trimUsername){
-    //     console.log("username cannot be with whitespace");
-    //     return res.render("user/userSignup")
-    // }
-
     try{
         if(password !== confirmPassword){
             return res.status(404).send({error:"Password doesn't match!!! please try again"})

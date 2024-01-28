@@ -17,12 +17,12 @@
                     <form method="post" action="/admin/add-Category">
                         <div class="mb-4">
                             <label for="product_name" class="form-label">Name</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="name" />
+                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="name" required/>
                         </div>
                     
                         <div class="mb-4">
-                            <label class="form-label">Description</label>
-                            <textarea placeholder="Type here" class="form-control" name="description"></textarea>
+                            <label class="form-label" >Description</label>
+                            <textarea placeholder="Type here" class="form-control" name="description" required></textarea>
                         </div>
                     
                         <div class="d-grid">
@@ -42,9 +42,8 @@
                                     </th>
                                     <th>Name</th>
                                     <th>Description</th>
-                                    <!-- <th>Status</th> -->
                                     <th>List/Unlist</th>
-                                    <th class="text-end">Edit</th>
+                                    <th>Edit</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,11 +57,11 @@
                                         <td class="text-start"><%= category[i].description %></td>
                                         <td class="text-start">
                                             <% if (category[i].isListed === true) { %>
-                                                <button class="btn btn-danger" style="width: 70px;">
+                                                <button class="btn btn-danger" style="width: 90px;">
                                                     <a href="/admin/listCategory?id=<%= category[i]._id %>" class="text-white">Unlist</a>
                                                 </button>
                                             <% } else { %>
-                                                <button class="btn btn-success" style="width: 70px;">
+                                                <button class="btn btn-success" style="width: 90px;">
                                                     <a href="/admin/unListCategory?id=<%= category[i]._id %>" class="text-white">List</a>
                                                 </button>
                                             <% } %>
