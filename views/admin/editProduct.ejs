@@ -1,0 +1,280 @@
+<%- include("../partials/adminHeader") %>
+
+
+
+<style>
+    .error-message {
+        color: rgb(224, 69, 69);
+        margin-top: 5px;
+        font-size: 12px; /* Adjust font size as needed */
+    }
+</style>
+
+
+
+
+
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Edit Product</h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+
+                        <form method="post" action="/admin/editproduct/<%= product.id %>" enctype="multipart/form-data"
+                            onsubmit="return validateForm()">
+                            <div class="mb-4">
+                                <label class="form-label">Product Name</label>
+                                <input type="text" placeholder="Type here" name="productName" 
+                                    class="form-control border" id="productName" value="<%= product.productName %>">
+                                <div id="productName-error" class="error-message"></div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label class="form-label" value="<%= product.description %>">Full description</label>
+                                <textarea placeholder="Type here" name="description" class="form-control border"
+                                    rows="4"></textarea>
+                                <div id="description" class="error-message"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Regular price</label>
+                                        <input placeholder="$" name="regularPrice" type="text" id="regularPrice" 
+                                            class="form-control border" value="<%= product.regularPrice %>">
+                                            <div id="regularPrice-error" class="error-message"></div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Sale price</label>
+                                        <input placeholder="$" name="salePrice" type="text" id="salePrice"  class="form-control border">
+                                        <div id="salePrice-error" class="error-message" value="<%= product.salePrice %>"></div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">Quantity</label>
+                                        <input placeholder="" id="quantity" name="quantity" type="text" value="<%= product.quantity %>" class="form-control border">
+                                        <div id="quantity-error" class="error-message"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="mb-4">
+                                        <label class="form-label">TV Size</label>
+                                        <input placeholder="" name="size" type="text" id="size" value="<%= product.size %>" class="form-control border">
+                                        <div id="size-error" class="error-message"></div>
+                                    </div>
+                                </div>
+                            
+                                <div class="col-lg-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Resolution</label>
+                                        <input placeholder="" name="resolution" type="text" id="resolution" value="<%= product.resolution %>" class="form-control border">
+                                        <div id="resolution-error" class="error-message"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <div class="row gx-2">
+                                        <div class="col-sm-6 mb-3">
+                                            <label class="form-label">Category</label>
+                                            <select class="form-select border" id="category" style="width: 150px;" value="<%= product.category %>" name="category">
+                                                <% for (let i=0; i < category.length; i++) { %>
+                                                    <option value="<%= category[i].name %>">
+                                                        <%= category[i].name %>
+                                                    </option>
+                                                    <% } %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2">
+                                <div class="card-header">
+                                    <h4>Choose images</h4>
+                                </div>
+                               
+                                <div id="addedImagesContainer" class="col-md-6">
+                                    <% for (let i=0; i < product.productImage.length; i++) { %>
+                                        <div class="col-md-12 mb-4">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <img class="rounded" style="width: 50px; height: 60px;"
+                                                        src="/uploads/products/<%= product.productImage[i] %>"
+                                                        alt="image" data-filename="<%= product.productImage[i] %>">
+                                                    <span class="delete-icon"
+                                                        onclick="deleteImage('<%= product._id %>', '<%= product.productImage[i] %>')">x</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="input-upload">
+                                        <img src="assets/imgs/theme/upload.svg" alt="">
+                                        <input class="form-control border" name="image"  id="imageInput" type="file" multiple>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit"
+                                    onclick="validateForm()">Publish changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+             
+             const selectedImages = [];
+
+
+document.getElementById("imageInput").addEventListener("change", handleFileSelect);
+
+function handleFileSelect(event) {
+    // Target the container for displaying thumbnails
+    const addedImagesContainer = document.getElementById("addedImagesContainer");
+
+    // Clear previous content
+    addedImagesContainer.innerHTML = "";
+
+    const files = event.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+
+        // Add the file to the selected images array
+        selectedImages.push(file);
+
+        // Create thumbnail element
+        const thumbnail = document.createElement("div");
+        thumbnail.classList.add("thumbnail");
+
+        // Create image element
+        const img = document.createElement("img");
+        img.src = URL.createObjectURL(file);
+        img.alt = "thumbnail";
+
+        // Set a fixed width for the image
+        img.style.width = "50px"; // Adjust the width as needed
+        img.style.height = "auto";
+
+        // Create remove icon
+        const removeIcon = document.createElement("span");
+        removeIcon.classList.add("remove-icon");
+        removeIcon.innerHTML = "&times;"; 
+
+        removeIcon.addEventListener("click", function () {
+            // Remove the file from the selected images array
+            const index = selectedImages.indexOf(file);
+            if (index !== -1) {
+                selectedImages.splice(index, 1);
+            }
+
+            thumbnail.remove();
+        });
+
+        thumbnail.appendChild(img);
+        thumbnail.appendChild(removeIcon);
+
+      
+        addedImagesContainer.appendChild(thumbnail);
+    }
+}
+
+function validateForm() {
+    
+    resetErrorMessages();
+
+    var isValid = true;
+
+    var productName = document.getElementById("productName").value;
+    var description = document.getElementsByName("description")[0].value;
+    var regularPrice = document.getElementsByName("regularPrice")[0].value;
+    var salePrice = document.getElementsByName("salePrice")[0].value;
+    var quantity = document.getElementById("quantity").value;
+    var size = document.getElementById("size").value;
+    var resolution = document.getElementById("resolution").value;
+ 
+
+    if (productName === "") {
+        displayErrorMessage("productName-error", "Product Name is Required");
+        isValid = false;
+    }
+
+    if (isNaN(regularPrice) || regularPrice <= 0) {
+        displayErrorMessage("regularPrice-error", "Regular price must be a positive number");
+        isValid = false;
+    }
+
+    if (isNaN(salePrice) || salePrice <= 0) {
+        displayErrorMessage("salePrice-error", "Sale price must be a positive number");
+        isValid = false;
+    }
+
+    if (parseFloat(salePrice) >= parseFloat(regularPrice)) {
+        displayErrorMessage("salePrice-error", "Sale price must be less than Regular price");
+        isValid = false;
+    }
+
+    if (size === "") {
+        displayErrorMessage("size-error", "Size is required");
+        isValid = false;
+    }
+
+    if (resolution === "") {
+        displayErrorMessage("resolution-error", "Resolution is required");
+        isValid = false;
+    }
+
+    if (!/^[1-9]\d*$/.test(quantity)) {
+        displayErrorMessage("quantity-error", "Quantity must be a positive integer");
+        isValid = false;
+    }
+
+    // Check if category is selected
+    if (category === "") {
+        displayErrorMessage("category-error", "Please select a category");
+        isValid = false;
+    }
+
+
+    return isValid;
+}
+
+
+        function displayErrorMessage(elementId, message) {
+            var errorElement = document.getElementById(elementId);
+            errorElement.innerText = message;
+            errorElement.style.display = "block";
+        }
+
+        function resetErrorMessages() {
+            var errorElements = document.querySelectorAll(".error-message");
+            errorElements.forEach(function (element) {
+                element.innerText = "";
+                element.style.display = "none";
+            });
+        }
+
+
+
+
+    </script>
+
+<%- include("../partials/adminFooter") %>

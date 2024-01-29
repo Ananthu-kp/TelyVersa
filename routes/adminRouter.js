@@ -24,6 +24,8 @@ router.get("/unblockuser/:id",userListController.unblockUser)
 router.get("/addproduct", productController.addProductGet);
 router.post("/addproduct", productMulter.array('image', 5), productController.addProduct);
 router.get("/productList",productController.productListGet)
+router.get("/editProduct", productController.editProductGet)
+router.post("/editProduct/:id",productMulter.array("image", 5), productController.editProduct)
 
 
 router.get("/category",  categoryController.categoryGet)

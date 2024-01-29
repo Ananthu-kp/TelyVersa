@@ -64,9 +64,70 @@ const addProduct = async (req, res) => {
     }
 };
 
+const editProductGet = async (req, res) => {
+    try {
+        const id = req.query.id
+        const findProduct = await Product.findOne({ _id: id })
+        const category = await Category.find({})
+        res.render("admin/editProduct", { product: findProduct, category: category})
+    } catch (error) {
+        console.log(error.message);
+    }   
+}
+
+
+const editProduct = async (req, res) => {
+    try {
+        const id = req.params.id
+        const productData = req.body
+        const productImage = []
+        if (req.files && req.files.length > 0) {
+            for (let i = 0; i < req.files.length; i++) {
+                images.push(req.files[i].filename);
+            }
+        }
+        console.log(req.files)
+        if (req.files.length > 0) {
+
+            const updatedProduct = await Product.findByIdAndUpdate(id, {
+                productName: productData.productName,
+                description: productData.description,
+                regularPrice: productData.regularPrice,
+                salePrice: productData.salePrice,
+                quantity: productData.quantity,
+                size: productData.size,
+                resolution: productData.resolution,
+                category: productData.category,
+                productImage: productImage,
+                
+            }, { new: true })
+            console.log("product updated");
+            res.redirect("/admin/productList")
+        } else {
+            console.log("no change in image")
+            const updatedProduct = await Product.findByIdAndUpdate(id, {
+                productName: productData.productName,
+                description: productData.description,
+                regularPrice: productData.regularPrice,
+                salePrice: productData.salePrice,
+                quantity: productData.quantity,
+                size: productData.size,
+                resolution: productData.resolution,
+                category: productData.category,
+            }, { new: true })
+            console.log("product updated");
+            res.redirect("/admin/productList")
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 module.exports={
     addProductGet,
     productListGet,
-    addProduct
+    addProduct,
+    editProductGet,
+    editProduct
 }
