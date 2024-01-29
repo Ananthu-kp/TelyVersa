@@ -163,6 +163,14 @@ const verifyUser = async (req, res) => {
             res.status(404).json({ error: 'User not found' });
             return;
         }
+
+        // Check if the user is blocked by the admin
+        if (findUser.isBlocked) {
+            console.log("User account is blocked by admin");
+            res.status(401).json({ error: 'Admin has restricted this account' });
+            return;
+        }
+        
         const passMatch = await bcrypt.compare(password, findUser.password);
         // console.log(passMatch);
         if (passMatch) {
