@@ -28,7 +28,6 @@ router.get("/productList",productController.productListGet)
 
 router.get("/category",  categoryController.categoryGet)
 router.post("/add-Category",  categoryController.addCategory)
-router.get("/allCategory",  categoryController.categoryAllGet)
 router.get("/listCategory",categoryController.listCategoryGet)
 router.get("/unListCategory",  categoryController.unlistCategoryGet)
 router.get("/editCategory", categoryController.editCategoryGet)

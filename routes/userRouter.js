@@ -13,6 +13,7 @@ router.post("/signup",userController.insertUser)
 router.get("/otp",userController.renderOtpPage)
 router.post("/verify",userController.verifyOtp)
 router.get("/logout",isLogged,userController.logoutUser)
+router.get("/pageError-404", userController.pageError)
 
 
 module.exports=router;

@@ -31,5 +31,9 @@ app.use(nocache())
 app.use("/",userRoute)
 app.use("/admin",adminRoute)
 
+app.get('*', function (req, res) {
+    res.redirect("/pageError-404");
+});
+
 app.listen(3000,()=>console.log("Server start")) 
 

@@ -197,6 +197,15 @@ const logoutUser = async(req, res) => {
         console.log("Logout Error : ", error);
     }
 };
+
+
+const pageError = async (req, res) => {
+    try {
+        res.render("user/404")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
  
 
 module.exports={
@@ -207,5 +216,6 @@ module.exports={
     renderOtpPage,
     verifyOtp,
     verifyUser,
-    logoutUser
+    logoutUser,
+    pageError
 }

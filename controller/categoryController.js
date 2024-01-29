@@ -22,7 +22,7 @@ const addCategory = async (req, res) => {
 
             await newCategory.save();
             console.log("Category done:", newCategory);
-            res.redirect("/admin/allCategory");
+            res.redirect("/admin/category");
         } else {
             res.redirect("/admin/category");
             console.log("Category Already exists");
@@ -34,16 +34,6 @@ const addCategory = async (req, res) => {
 };
 
 
-
-
-const categoryAllGet = async (req, res) => {
-    try {
-        const categoryData = await Category.find({})
-        res.render("admin/adminCategory", { category: categoryData })
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 const listCategoryGet = async (req, res) => {
     try {
@@ -108,7 +98,6 @@ const editCategory = async (req, res) => {
 module.exports = {
     categoryGet,
     addCategory,
-    categoryAllGet,
     listCategoryGet,
     unlistCategoryGet,
     editCategoryGet,
