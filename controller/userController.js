@@ -83,17 +83,19 @@ const insertUser=async(req,res)=>{
             }
             console.log("Email sent: " + info.response);
        
+            const hashedPassword = await bcrypt.hash(password, 10);
+        
 
              // Store user data in the session
              req.session.userData = {
                 username: username,
                 email: email,
                 phone: phone,
-                password: password,
+                password: hashedPassword,
                 otp: otp,
             };
 
-            return res.render("user/otp", { email, otp });
+            return res.redirect("/otp");
         });
     } catch (error) {
         console.error("Error: " + error.message);
@@ -111,41 +113,32 @@ const renderOtpPage = async (req, res) => {
 
 const verifyOtp= async (req,res)=>{
     
-    const userData = req.session.userData;
+    try{
+        let otpFromAjax=req.body.otp
+        const {username,email,phone,password,otp}=req.session.userData;
+        // console.log(phone,"phone........");
+        console.log(otp,otpFromAjax);
 
-    if (!userData) {
-        return res.redirect('/signup');
-    }
-
-    const submittedOtp = req.body.otp;
-    console.log(req.session.userData.password);
-
-    if (!submittedOtp || submittedOtp !== userData.otp.toString()) {
-        return res.render("user/otp", { error: 'Incorrect OTP. Please try again.' });
-    }
-
-    try {
-        const hashedPassword = await bcrypt.hash(userData.password, 10);
         
-        const user = new User({
-            name: userData.username,
-            email: userData.email,
-            phone: userData.phone,
-            password: hashedPassword,
-        });
-        
-        const result = await user.save();
-        console.log(result);
-        console.log("Successfully registered");
+        if(otpFromAjax===otp){
+            const newUser=new User({
+                name: username,
+                email: email,
+                phone: phone,
+                password: password
+            });
 
-        // Clear the user data from the session
-        delete req.session.userData;
+            await newUser.save();
+            res.json({status:true})
 
-        return res.render("user/userHome");
+            delete req.session.userData
 
-    } catch (error) {
-        console.error("Error: " + error.message);
-        res.status(500).send("Error: " + error.message);
+        }else{
+            console.log("otp invalid");
+            res.json({status:false})
+        }
+    }catch(error){
+        console.log(error.message);
     }
 };
 
@@ -170,7 +163,7 @@ const verifyUser = async (req, res) => {
             res.status(401).json({ error: 'Admin has restricted this account' });
             return;
         }
-        
+
         const passMatch = await bcrypt.compare(password, findUser.password);
         // console.log(passMatch);
         if (passMatch) {
