@@ -16,5 +16,12 @@ router.get("/resendOtp",userController.resendOTP)
 router.get("/logout",isLogged,userController.logoutUser)
 router.get("/pageError-404", userController.pageError)
 
+router.get('/forgot', userController.forgotPasswordGet)
+router.post('/forgotEmailVerify',userController.forgotEmailVerify)
+router.get('/forgotOtp', userController.forgotGet)
+router.post('/forgotOtp', userController.forgotOtpVerify)
+router.get('/repassword', userController.newPasswordGet)
+router.post("/newpass", userController.newPassword)
+
 
 module.exports=router;

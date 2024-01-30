@@ -249,6 +249,140 @@ const pageError = async (req, res) => {
         console.log(error.message);
     }
 }
+
+
+
+
+
+
+//forgotPassword
+
+const forgotPasswordGet = async(req,res)=>{
+    try {
+        res.render("user/forgotPassword")
+    } catch (error) {
+        console.log(error.message);
+    }
+} 
+
+
+
+
+const forgotEmailVerify = async (req,res)=>{
+    try {
+        const { email } = req.body
+        req.session.forgotemail = email
+        const existed = await User.findOne({ email })
+        if(existed){
+            const otp = generateOTP()
+
+            req.session.userData = {
+                otp
+            }
+
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                  user: process.env.EMAIL_ID,
+                  pass: process.env.EMAIL_PASS
+                }
+              });
+    
+    
+            // Set Email options
+    
+            const mailOption = {
+                from: process.env.EMAIL_ID,
+                to: email,
+                subject: "OTP Verification",
+                text: `Your OTP for forgotPassword Verification is ${otp}`
+            }
+    
+            // Sending email
+    
+            transporter.sendMail(mailOption, (error,info)=>{
+    
+                if(error){
+                    console.error("Mailing error",error);
+                }else{
+                    console.log('Email sent: ' + info.response);
+                }
+                // console.log(otp);
+                res.redirect("/forgotOtp")
+            })
+            
+        }else{
+            res.render("user/forgotPassword", { message: "User with this email not exists" })
+        }
+    }catch{
+        console.log(error.message);
+    }
+}
+
+
+const forgotGet = async (req,res)=>{
+    try {
+        res.render("user/forgotEmailVerify")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+const forgotOtpVerify = async (req,res)=>{
+    try{
+
+    let otpfromAjax = req.body.otp
+        const {otp} = req.session.userData
+        
+        if(otpfromAjax == otp){
+            console.log("otp matched");
+    
+            res.json({status : true})
+            delete req.session.userData
+        }else{
+            console.log("otp invalid");
+            res.json({status : false})
+        }
+    } catch (error) {
+       console.log(error.message);
+    }
+}
+
+
+const  newPasswordGet = async (req,res)=>{
+    try {
+        res.render("user/newPassword")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const newPassword = async (req,res)=>{
+    try{
+        const { newPass1, newPass2 } =req.body
+        const email = req.session.forgotemail
+        const passwordHash = await bcrypt.hash(newPass1, 10)
+        if (newPass1 === newPass2) {
+            await User.updateOne(
+                { email: email },
+                {
+                    $set: {
+                        password: passwordHash
+                    }
+                }
+            )
+                .then((data) => console.log(data))
+            res.redirect("/login")
+        }else {
+            console.log("Password not match");
+            res.render("rePassword", { message: "Password not matching" })
+        }
+    }catch(error){
+        console.log(error.message);
+    }
+}
+
  
 
 module.exports={
@@ -261,5 +395,11 @@ module.exports={
     resendOTP,
     verifyUser,
     logoutUser,
-    pageError
+    pageError,
+    forgotPasswordGet,
+    forgotEmailVerify,
+    forgotGet,
+    forgotOtpVerify,
+    newPasswordGet,
+    newPassword
 }
