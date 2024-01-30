@@ -1,15 +1,17 @@
 const User=require("../model/userModel")
 const bcrypt=require("bcrypt")
 const nodemailer=require("nodemailer");
+const Product=require("../model/productModel")
 
 
 const userHomeGet=async(req,res)=>{
-        const user  = req.session.user
-        if(user){
-            res.render("user/userHome", {user : user});
-        }else{
-            res.render("user/userHome")
-        }
+    try{
+        const user=req.session.user
+        const product= await Product.find({})
+        res.render("user/userHome", {user : user ,product:product});
+    }catch(error){
+        res.render("user/userHome")
+    }
 }
 
 const userLoginGet=async(req,res)=>{

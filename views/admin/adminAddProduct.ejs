@@ -207,17 +207,17 @@ function validateForm() {
     }
 
     if (isNaN(regularPrice) || regularPrice <= 0) {
-        displayErrorMessage("regularPrice-error", "Regular price must be a positive number");
+        displayErrorMessage("regularPrice-error", "Invalid Regular price");
         isValid = false;
     }
 
     if (isNaN(salePrice) || salePrice <= 0) {
-        displayErrorMessage("salePrice-error", "Sale price must be a positive number");
+        displayErrorMessage("salePrice-error", " Invalid Sale price");
         isValid = false;
     }
 
     if (parseFloat(salePrice) >= parseFloat(regularPrice)) {
-        displayErrorMessage("salePrice-error", "Sale price must be less than Regular price");
+        displayErrorMessage("salePrice-error", "Invalid Sale price");
         isValid = false;
     }
 
@@ -232,7 +232,7 @@ function validateForm() {
     }
 
     if (!/^[1-9]\d*$/.test(quantity)) {
-        displayErrorMessage("quantity-error", "Quantity must be a positive integer");
+        displayErrorMessage("quantity-error", " Invalid Quantity");
         isValid = false;
     }
 
