@@ -24,7 +24,7 @@
 
             <button onclick="submitOtp()" class="btn btn-primary">Verify OTP</button>
             <div id="timer">Time remaining: <span id="time"></span></div>
-            <p class="mt-3">Didn't receive the OTP? <a href="" id="resendOtp">Resend OTP</a></p>
+            <p class="mt-3">Didn't receive the OTP? <a href="/resendOtp" id="resendOtp">Resend OTP</a></p>
         </div>
     </div>
 </div>
@@ -47,14 +47,14 @@ function updateTimer() {
 }
 updateTimer()
 
-function resnedOTP() {
+function resendOTP() {
             remainingTime = 60
             updateTimer()
         }
 
 
         function submitOtp(){
-            alert("hi")
+            // alert("hi")
             let otp= document.getElementById("otp").value;
             const errorMessageElement= document.getElementById("errorMessage")
 

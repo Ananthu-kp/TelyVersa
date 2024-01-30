@@ -144,6 +144,46 @@ const verifyOtp= async (req,res)=>{
 
 
 
+const resendOTP = async(req,res)=>{
+    try {
+        const { email } = req.session.userData;
+        console.log(email);
+
+        const newotp = generateOTP()
+        req.session.userData.otp = newotp
+        console.log(newotp);
+
+        // Nodemailer configuration
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL_ID,
+                pass: process.env.EMAIL_PASS
+            }
+        });
+        const mailOptions = {
+            from: process.env.EMAIL_ID,
+            to: email,
+            subject: 'OTP Verification',
+            text: `Your Resend OTP for registration is: ${newotp}`
+        };
+
+        transporter.sendMail(mailOptions, async (error, info) => {
+            if (error) {
+                console.error("Error sending email: " + error.message);
+                return res.status(500).send("Error sending OTP email");
+            }
+            console.log("Email sent: " + info.response);
+
+            res.redirect("/otp")
+        })
+    } catch (error) {
+        res.render("user/otp")
+    }
+}
+
+
+
 
 const verifyUser = async (req, res) => {
     
@@ -216,6 +256,7 @@ module.exports={
     insertUser,
     renderOtpPage,
     verifyOtp,
+    resendOTP,
     verifyUser,
     logoutUser,
     pageError

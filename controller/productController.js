@@ -83,7 +83,7 @@ const editProduct = async (req, res) => {
         const productImage = []
         if (req.files && req.files.length > 0) {
             for (let i = 0; i < req.files.length; i++) {
-                images.push(req.files[i].filename);
+                productImage.push(req.files[i].filename);
             }
         }
         console.log(req.files)
