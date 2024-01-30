@@ -17,16 +17,20 @@
                     <form method="post" action="/admin/add-Category">
                         <div class="mb-4">
                             <label for="product_name" class="form-label">Name</label>
-                            <input type="text" placeholder="Type here" class="form-control" id="product_name" name="name" required/>
+                            <input type="text" placeholder="Type here" class="form-control" id="name" name="name" />
+                            <p id="name-err-msg"></p>
                         </div>
+                        
                     
                         <div class="mb-4">
                             <label class="form-label" >Description</label>
-                            <textarea placeholder="Type here" class="form-control" name="description" required></textarea>
+                            <textarea placeholder="Type here" class="form-control" name="description" id="description"></textarea>
+                            <p id="err-msg"></p>
                         </div>
+                        
                     
                         <div class="d-grid">
-                            <button class="btn btn-primary">Create category</button>
+                            <button onclick="validate()" class="btn btn-primary">Create category</button>
                         </div>
                     </form>
                     
@@ -82,5 +86,30 @@
         </div> <!-- card body .// -->
     </div> <!-- card .// -->
 </section> <!-- content-main end// -->
+
+<script>
+    function validate(){
+        document.getElementById("name-err-msg").innerHTML=""
+        document.getElementById('err-msg').innerHTML = ''
+        let name = document.getElementById('name').value;
+        let description = document.getElementById('description').value;
+
+        const nameRegex = /^[A-Za-z0-9]{1,50}$/;
+        if (nameRegex.test(name)) {
+        } else {
+            document.getElementById('name').style.borderColor = '#cc0000'
+            document.getElementById('name').style.borderWidth = '1px'
+            document.getElementById('name-err-msg').innerHTML = document.getElementById('err-msg').innerHTML + '<br> Enter valid Name ,limit 50words'
+            event.preventDefault()
+        }
+        const descRegex = /^(?!\s*$).+/;
+        if (descRegex.test(description)) { } else {
+            document.getElementById('err-msg').innerHTML = document.getElementById('err-msg').innerHTML + '<br> Description  error'
+            document.getElementById('description').style.borderColor = '#cc0000'
+            document.getElementById('description').style.borderWidth = '1px'
+            event.preventDefault()
+        }
+    }
+</script>
 
 <%- include("../partials/adminFooter") %>
