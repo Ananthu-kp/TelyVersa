@@ -98,7 +98,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
                             </div>
                             <div class="card mb-2">
                                 <div class="card-header">
@@ -110,7 +110,7 @@
                                 <div class="card-body">
                                     <div class="input-upload">
                                         <img src="assets/imgs/theme/upload.svg" alt="">
-                                        <input class="form-control border" name="image"  id="imageInput" type="file" multiple>
+                                        <input class="form-control border" name="image" required id="imageInput" type="file" multiple>
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +199,8 @@ function validateForm() {
     var quantity = document.getElementById("quantity").value;
     var size = document.getElementById("size").value;
     var resolution = document.getElementById("resolution").value;
- 
+
+    
 
     if (productName === "") {
         displayErrorMessage("productName-error", "Product Name is Required");
@@ -235,6 +236,16 @@ function validateForm() {
         displayErrorMessage("quantity-error", " Invalid Quantity");
         isValid = false;
     }
+
+    var fileInput = document.getElementById('imageInput');
+            var files = fileInput.files;
+
+            // Check if at least one file is selected
+            if (files.length === 0) {
+                alert('Please choose at least one image.');
+                return false;
+            }
+               return true
 
     // // Check if category is selected
     // if (category === "") {

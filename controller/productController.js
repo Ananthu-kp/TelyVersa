@@ -23,18 +23,18 @@ const addProduct = async (req, res) => {
     try {
         const productData = req.body;
         console.log(req.body);
-        const images = req.files;
-        const productImage = images ? images[0].filename : null;
+        // const images = req.files;    
+        // const productImage = images ? images[0].filename : null;
 
         // Check if a product with the same name already exists
         const existingProduct = await Product.findOne({ name: productData.productName });
 
         if (!existingProduct) {
-            const images = [];
+            const productImage = [];
 
             if (req.files && req.files.length > 0) {
                 for (let i = 0; i < req.files.length; i++) {
-                    images.push(req.files[i].filename);
+                    productImage.push(req.files[i].filename);
                 }
             }
 
@@ -89,7 +89,7 @@ const editProduct = async (req, res) => {
         console.log(req.files)
         if (req.files.length > 0) {
 
-            const updatedProduct = await Product.findByIdAndUpdate(id, {
+            await Product.findByIdAndUpdate(id, {
                 productName: productData.productName,
                 description: productData.description,
                 regularPrice: productData.regularPrice,
@@ -103,9 +103,10 @@ const editProduct = async (req, res) => {
             }, { new: true })
             console.log("product updated");
             res.redirect("/admin/productList")
-        } else {
+        } 
+        else {
             console.log("no change in image")
-            const updatedProduct = await Product.findByIdAndUpdate(id, {
+            await Product.findByIdAndUpdate(id, {
                 productName: productData.productName,
                 description: productData.description,
                 regularPrice: productData.regularPrice,
