@@ -10,8 +10,10 @@ const adminVerify = async (req, res) => {
     try {
         const { email, password } = req.body;
         console.log(email);
+        console.log(password);
 
         const findAdmin = await Admin.findOne({ email: email });
+        req.session.admin = findAdmin.email;    
 
         if (!findAdmin) {
             res.redirect("/admin/login");
@@ -19,7 +21,7 @@ const adminVerify = async (req, res) => {
             if(findAdmin.password==password){
                 res.redirect("/admin");
             }else {
-                req.session.admin = true;
+               
                  res.redirect("/admin/login");
             }
         }

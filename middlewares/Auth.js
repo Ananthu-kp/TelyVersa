@@ -1,4 +1,5 @@
 const User = require("../model/userModel")
+const Admin= require("../model/adminModel")
 
 const isLogged = (req, res, next)=>{
     if(req.session.user){
@@ -18,7 +19,7 @@ const isLogged = (req, res, next)=>{
 
 const isAdmin = (req, res, next) => {
     if (req.session.admin) {
-        User.findOne({ isAdmin: "1" })
+        Admin.findOne({email: req.session.admin}).lean()
             .then((data) => {
                 if (data) {
                     next();
@@ -27,7 +28,7 @@ const isAdmin = (req, res, next) => {
                 }
             })
             .catch((error) => {
-                console.error("Error in isAdmin middleware:", error);
+                console.error("Error", error);
                 res.status(500).send("Internal Server Error");
             });
     } else {

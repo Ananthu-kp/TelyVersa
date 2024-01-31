@@ -10,29 +10,29 @@ const {isAdmin}=require("../middlewares/Auth")
 
 
 
-router.get("/",adminController.adminHomeGet)
+router.get("/",isAdmin,adminController.adminHomeGet)
 router.get("/login",adminController.adminLoginGet)
 router.post("/login",adminController.adminVerify)
-router.get("/logout",adminController.adminLogout)
+router.get("/logout",isAdmin,adminController.adminLogout)
 
 
-router.get("/userList",userListController.displayUser)
-router.get("/blockuser/:id",userListController.blockUser)
-router.get("/unblockuser/:id",userListController.unblockUser)
+router.get("/userList",isAdmin,userListController.displayUser)
+router.get("/blockuser/:id",isAdmin,userListController.blockUser)
+router.get("/unblockuser/:id",isAdmin,userListController.unblockUser)
 
 
-router.get("/addproduct", productController.addProductGet);
-router.post("/addproduct", productMulter.array('image', 5), productController.addProduct);
-router.get("/productList",productController.productListGet)
-router.get("/editProduct", productController.editProductGet)
-router.post("/editProduct/:id",productMulter.array("image", 5), productController.editProduct)
+router.get("/addproduct",isAdmin, productController.addProductGet);
+router.post("/addproduct",isAdmin, productMulter.array('image', 5), productController.addProduct);
+router.get("/productList",isAdmin,productController.productListGet)
+router.get("/editProduct", isAdmin,productController.editProductGet)
+router.post("/editProduct/:id",isAdmin,productMulter.array("image", 5), productController.editProduct)
 
 
-router.get("/category",  categoryController.categoryGet)
-router.post("/add-Category",  categoryController.addCategory)
-router.get("/listCategory",categoryController.listCategoryGet)
-router.get("/unListCategory",  categoryController.unlistCategoryGet)
-router.get("/editCategory", categoryController.editCategoryGet)
-router.post("/editCategory/:id", categoryController.editCategory)
+router.get("/category", isAdmin, categoryController.categoryGet)
+router.post("/add-Category", isAdmin, categoryController.addCategory)
+router.get("/listCategory",isAdmin,categoryController.listCategoryGet)
+router.get("/unListCategory", isAdmin, categoryController.unlistCategoryGet)
+router.get("/editCategory",isAdmin, categoryController.editCategoryGet)
+router.post("/editCategory/:id",isAdmin, categoryController.editCategory)
 
 module.exports=router; 
