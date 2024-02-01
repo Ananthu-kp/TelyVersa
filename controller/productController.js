@@ -125,10 +125,36 @@ const editProduct = async (req, res) => {
 }
 
 
+const blockProduct= async(req,res)=>{
+    try {
+        let id = req.query.id
+        await Product.updateOne({ _id: id }, { $set: { isBlocked: true } })
+        console.log("product blocked")
+        res.redirect("/admin/productList")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const unblockProduct = async (req, res) => {
+    try {
+        let id = req.query.id
+        await Product.updateOne({ _id: id }, { $set: { isBlocked: false } })
+        console.log("product unblocked")
+        res.redirect("/admin/productList")
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
 module.exports={
     addProductGet,
     productListGet,
     addProduct,
     editProductGet,
-    editProduct
+    editProduct,
+    blockProduct,
+    unblockProduct
 }

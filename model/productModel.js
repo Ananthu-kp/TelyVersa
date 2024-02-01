@@ -37,10 +37,10 @@ const productSchema= new mongoose.Schema({
         type: Array,
         required: true
     },
-    // isBlocked:{
-    //     type: Boolean,
-    //     required: true
-    // }
+    isBlocked:{
+        type: Boolean,
+        required: false
+    }
 
 })
 

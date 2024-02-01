@@ -7,7 +7,7 @@ const Product=require("../model/productModel")
 const userHomeGet=async(req,res)=>{
     try{
         const user=req.session.user
-        const product= await Product.find({})
+        const product= await Product.find({isBlocked:false})
         res.render("user/userHome", {user : user ,product:product});
     }catch(error){
         res.render("user/userHome")
