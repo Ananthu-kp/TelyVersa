@@ -24,4 +24,7 @@ router.get('/repassword', userController.newPasswordGet)
 router.post("/newpass", userController.newPassword)
 
 
+router.get("/productDetails",userController.productDetailsGet)
+
+
 module.exports=router;

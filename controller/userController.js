@@ -383,6 +383,30 @@ const newPassword = async (req,res)=>{
     }
 }
 
+
+
+
+//product details
+
+const productDetailsGet= async(req,res)=>{
+    try {
+        const user = req.session.user
+        console.log(user);
+        const productId = req.query.id
+        console.log(productId);
+        const findProduct = await Product.findOne({ _id: productId });
+        const product =await Product.find({})
+        console.log(findProduct._id);
+        if (user) {
+            res.render("user/productDetails", { product: findProduct, user: user,  })
+        } 
+        else {
+            res.render("user/productDetails", { product: findProduct })
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
  
 
 module.exports={
@@ -401,5 +425,6 @@ module.exports={
     forgotGet,
     forgotOtpVerify,
     newPasswordGet,
-    newPassword
+    newPassword,
+    productDetailsGet
 }

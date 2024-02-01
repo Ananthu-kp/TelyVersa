@@ -2,7 +2,12 @@ const Admin =require("../model/adminModel")
 const bcrypt=require("bcrypt")
 
 const adminLoginGet=async(req,res)=>{
-    res.render("admin/adminLogin")
+    if(req.session.admin){
+        res.redirect("/admin")
+    }else{
+        res.render("admin/adminLogin")
+    }
+    
 }
 
 
@@ -33,7 +38,12 @@ const adminVerify = async (req, res) => {
 
 
 const adminHomeGet=async(req,res)=>{
-    res.render("admin/adminHome")
+   
+        res.render("admin/adminHome")
+    
+        
+    
+    
 }
 
 
