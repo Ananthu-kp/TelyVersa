@@ -50,18 +50,14 @@ const adminHomeGet=async(req,res)=>{
 
 const adminLogout = async (req, res) => {
     try {
-        req.session.destroy((err) => {
-          if (err) {
-            console.log("Logout error");
-            res.redirect("/admin");
-          }
-          console.log("Logged out successfully");
-          res.redirect("/admin/login");
-        });
-      } catch (error) {
-        console.log("Logout Error");
-      }
+        req.session.admin = null
+        res.redirect("/admin/login")
+    } catch (error) {
+        console.log(error.message);
+    }
 };
+
+  
 
 
 module.exports={

@@ -202,7 +202,8 @@ const verifyUser = async (req, res) => {
         // Check if the user is blocked by the admin
         if (findUser.isBlocked) {
             console.log("User account is blocked by admin");
-            res.status(401).json({ error: 'Admin has restricted this account' });
+            res.render("user/userLogin", { login_err: "User is blocked by admin" })
+
             return;
         }
 
@@ -219,7 +220,7 @@ const verifyUser = async (req, res) => {
             }
         } else {
             console.log("Password doesn't match");
-            res.status(401).json({ error: 'Invalid credentials' });
+            res.render("user/userLogin", { login_err: "invalid credential" })
         }
     } catch (error) {
         console.log("Login Error:", error);

@@ -16,6 +16,11 @@
             </div>
             <form id="loginForm" method="post" onsubmit="validateForm(event)" novalidate>
                 <div class="form-group">
+                    <% if (locals.login_err) { %>
+                        <div class="alert alert-danger text-center" id="err">
+                          <%= login_err %>
+                        </div>
+                        <% } %>
                     <label for="email">Email:</label>
                     <input type="email" id="email" required name="email" placeholder="Your Email" aria-label="Email">
                     <small class="text-error" id="emailError"></small>
