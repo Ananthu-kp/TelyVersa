@@ -204,13 +204,13 @@ function validateForm() {
         isValid = false;
     }
 
-    if (isNaN(parseFloat(regularPrice)) || parseFloat(regularPrice) <= 0) {
-        displayErrorMessage("regularPrice-error", "Regular price is Required");
+    if (isNaN(parseFloat(regularPrice)) ||!/^\d+$/.test(regularPrice)|| parseFloat(regularPrice) <= 0) {
+        displayErrorMessage("regularPrice-error", "Regular price must be an integer");
         isValid = false;
     }
 
-    if (isNaN(parseFloat(salePrice)) || parseFloat(salePrice) < 0) {
-        displayErrorMessage("salePrice-error", "Sale price is Required");
+    if (isNaN(parseFloat(salePrice)) ||!/^\d+$/.test(salePrice)|| parseFloat(salePrice) < 0) {
+        displayErrorMessage("salePrice-error", "Sale price must be an integer");
         isValid = false;
     }
 

@@ -35,9 +35,9 @@
                             </div>
                             
                             <div class="mb-4">
-                                <label class="form-label" value="<%= product.description %>">Full description</label>
+                                <label class="form-label" >Full description</label>
                                 <textarea placeholder="Type here" name="description" class="form-control border"
-                                    rows="4"></textarea>
+                                    rows="4"><%= product.description %></textarea>
                                 <div id="description" class="error-message"></div>
                             </div>
                             <div class="row">
@@ -53,8 +53,8 @@
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Sale price</label>
-                                        <input placeholder="$" name="salePrice" type="text" id="salePrice"  class="form-control border">
-                                        <div id="salePrice-error" class="error-message" value="<%= product.salePrice %>"></div>
+                                        <input placeholder="$" name="salePrice" type="text" id="salePrice" value="<%= product.salePrice %>" class="form-control border">
+                                        <div id="salePrice-error" class="error-message" ></div>
 
                                     </div>
                                 </div>
@@ -212,38 +212,48 @@ function validateForm() {
     var resolution = document.getElementById("resolution").value;
  
 
-    if (productName === "") {
+    if (productName.trim() === "") {
         displayErrorMessage("productName-error", "Product Name is Required");
         isValid = false;
     }
 
-    if (isNaN(regularPrice) || regularPrice <= 0) {
-        displayErrorMessage("regularPrice-error", "Regular price must be a positive number");
+    if (isNaN(parseFloat(regularPrice)) ||!/^\d+$/.test(regularPrice)|| parseFloat(regularPrice) <= 0) {
+        displayErrorMessage("regularPrice-error", "Regular price must be an integer");
         isValid = false;
     }
 
-    if (isNaN(salePrice) || salePrice <= 0) {
-        displayErrorMessage("salePrice-error", "Sale price must be a positive number");
+    if (isNaN(parseFloat(salePrice)) ||!/^\d+$/.test(salePrice)|| parseFloat(salePrice) < 0) {
+        displayErrorMessage("salePrice-error", "Sale price must be an integer");
         isValid = false;
     }
 
     if (parseFloat(salePrice) >= parseFloat(regularPrice)) {
-        displayErrorMessage("salePrice-error", "Sale price must be less than Regular price");
+        displayErrorMessage("salePrice-error", "Sale price should be less than Regular price");
         isValid = false;
     }
 
-    if (size === "") {
+    if (parseFloat(regularPrice) < 0) {
+        displayErrorMessage("regularPrice-error", "Regular price cannot be negative");
+        isValid = false;
+    }
+
+    if (parseFloat(salePrice) < 0) {
+        displayErrorMessage("salePrice-error", "Sale price cannot be negative");
+        isValid = false;
+    }
+
+    if (size.trim() === "") {
         displayErrorMessage("size-error", "Size is required");
         isValid = false;
     }
 
-    if (resolution === "") {
+    if (resolution.trim() === "") {
         displayErrorMessage("resolution-error", "Resolution is required");
         isValid = false;
     }
 
     if (!/^[1-9]\d*$/.test(quantity)) {
-        displayErrorMessage("quantity-error", "Quantity must be a positive integer");
+        displayErrorMessage("quantity-error", "Invalid Quantity");
         isValid = false;
     }
 

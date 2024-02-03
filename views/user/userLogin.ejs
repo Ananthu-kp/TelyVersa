@@ -49,6 +49,13 @@
 </div>
 
 <script>
+    const login_err = document.getElementById("err");
+        if (login_err) {
+            setTimeout(() => {
+                login_err.style.display = "none";
+            }, 3000);
+        }
+
     function validateForm(event) {
         var emailInput = document.getElementById('email');
         var passwordInput = document.getElementById('password');

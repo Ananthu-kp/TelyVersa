@@ -363,6 +363,7 @@ const newPassword = async (req,res)=>{
     try{
         const { newPass1, newPass2 } =req.body
         const email = req.session.forgotemail
+        console.log(email);
         const passwordHash = await bcrypt.hash(newPass1, 10)
         if (newPass1 === newPass2) {
             await User.updateOne(
