@@ -1,7 +1,5 @@
 <%- include("../partials/adminHeader") %>
 
-
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4 mt-60">
@@ -15,7 +13,6 @@
                     <label for="product_name" class="form-label">Name</label>
                     <input type="text" name="categoryName" value="<%= category.name %>" class="form-control border" />
                 </div>
-                
                 <div class="mb-4">
                     <label class="form-label">Description</label>
                     <textarea name="description" class="form-control border"><%= category.description %></textarea>
@@ -28,9 +25,46 @@
     </div>
 </div>
 
-<br><br>
-<br><br>
-<br><br>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
 
+        form.addEventListener("submit", async function (event) {
+            try {
+                const nameInput = document.querySelector('input[name="categoryName"]');
+                const isNameExists = await checkCategoryNameExists(nameInput.value);
+
+                if (isNameExists) {
+                    alert("Category name already exists. Please choose a different name.");
+                    event.preventDefault(); // Prevent form submission
+                }
+                // If all validations pass, the form will be submitted
+            } catch (error) {
+                console.error("An error occurred:", error);
+
+                if (error instanceof TypeError) {
+                    alert("Unable to connect to the server. Please try again later.");
+                } else if (error.exists === true) {
+                    alert("Category name already exists. Please choose a different name.");
+                    event.preventDefault(); // Prevent form submission
+                } else {
+                    alert("An unexpected error occurred. Please try again later.");
+                    event.preventDefault(); // Prevent form submission
+                }
+            }
+        });
+
+        async function checkCategoryNameExists(categoryName) {
+            const response = await fetch(`/admin/checkCategoryName/${encodeURIComponent(categoryName)}`);
+
+            if (!response.ok) {
+                throw new TypeError("Failed to fetch");
+            }
+
+            const data = await response.json();
+            return data.exists; // Assuming the server returns a JSON object with a property 'exists'
+        }
+    });
+</script>
 
 <%- include("../partials/adminFooter") %>
