@@ -2,6 +2,7 @@ const User=require("../model/userModel")
 const bcrypt=require("bcrypt")
 const nodemailer=require("nodemailer");
 const Product=require("../model/productModel")
+const Category=require("../model/categoryModel")
 
 
 const userHomeGet=async(req,res)=>{
@@ -409,6 +410,21 @@ const productDetailsGet= async(req,res)=>{
         console.log(error.message);
     }
 }
+
+const getShop = async (req, res) => {
+    try {
+        const user = req.session.user;
+        const count = await Product.countDocuments({ isBlocked: false });
+        const product = await Product.find({ isBlocked: false });
+        const category = await Category.find({ isListed: true }); // Corrected here
+        console.log(product);
+        res.render("user/userShop", { product, user, count, category }); // Corrected here
+
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
  
 
 module.exports={
@@ -428,5 +444,6 @@ module.exports={
     forgotOtpVerify,
     newPasswordGet,
     newPassword,
-    productDetailsGet
+    productDetailsGet,
+    getShop
 }
