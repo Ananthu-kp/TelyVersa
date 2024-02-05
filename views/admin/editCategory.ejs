@@ -1,9 +1,15 @@
 <%- include("../partials/adminHeader") %>
 
+<style>
+    .error-message{
+        color: red;
+    }
+</style>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4 mt-60">
-            <form method="post" action="/admin/editCategory/<%= category.id %>">
+            <form method="post" action="/admin/editCategory/<%= category.id %>" onsubmit="return validateForm(event)">
                 
                 <div>
                     <h2 class="content-title card-title">Edit Category</h2>
@@ -11,60 +17,60 @@
 
                 <div class="mb-4 mt-30">
                     <label for="product_name" class="form-label">Name</label>
-                    <input type="text" name="categoryName" value="<%= category.name %>" class="form-control border" />
+                    <input type="text" id="categoryName" name="categoryName" value="<%= category.name %>" class="form-control border" />
+                    <div id="nameError" class="error-message"></div>
                 </div>
                 <div class="mb-4">
                     <label class="form-label">Description</label>
-                    <textarea name="description" class="form-control border"><%= category.description %></textarea>
+                    <textarea id="description" name="description" class="form-control border"><%= category.description %></textarea>
+                    <div id="descriptionError" class="error-message"></div>
                 </div>
                 <div class="d-grid text-end mt-30 col-md-5">
-                    <button class="btn btn-primary" type="submit">Update category</button>
+                    <button type="submit" class="btn btn-primary">Update category</button>
+
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<br><br>
+<br><br>
+<br><br>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector("form");
+    function validateForm(event) {
+    const categoryNameInput = document.getElementById('categoryName');
+    const descriptionInput = document.getElementById('description');
+    const nameError = document.getElementById('nameError');
+    const descriptionError = document.getElementById('descriptionError');
+    const existingCategories = ["LED", "LCD", "OLED","QLED","Curved"]; 
 
-        form.addEventListener("submit", async function (event) {
-            try {
-                const nameInput = document.querySelector('input[name="categoryName"]');
-                const isNameExists = await checkCategoryNameExists(nameInput.value);
+    nameError.textContent = ""; 
+    descriptionError.textContent = "";
 
-                if (isNameExists) {
-                    alert("Category name already exists. Please choose a different name.");
-                    event.preventDefault(); // Prevent form submission
-                }
-                // If all validations pass, the form will be submitted
-            } catch (error) {
-                console.error("An error occurred:", error);
+    const categoryName = categoryNameInput.value.trim().toLowerCase();
 
-                if (error instanceof TypeError) {
-                    alert("Unable to connect to the server. Please try again later.");
-                } else if (error.exists === true) {
-                    alert("Category name already exists. Please choose a different name.");
-                    event.preventDefault(); // Prevent form submission
-                } else {
-                    alert("An unexpected error occurred. Please try again later.");
-                    event.preventDefault(); // Prevent form submission
-                }
-            }
-        });
+    if (categoryName === "") {
+        nameError.textContent = "Please enter a name for the category.";
+    } else if (existingCategories.map(cat => cat.toLowerCase()).includes(categoryName)) {
+        nameError.textContent = `The category '${categoryName}' already exists.`;
+    }
 
-        async function checkCategoryNameExists(categoryName) {
-            const response = await fetch(`/admin/checkCategoryName/${encodeURIComponent(categoryName)}`);
+    if (descriptionInput.value.trim() === "") {
+        descriptionError.textContent = "Please enter a description for the category.";
+    }
 
-            if (!response.ok) {
-                throw new TypeError("Failed to fetch");
-            }
+    if (nameError.textContent !== "" || descriptionError.textContent !== "") {
+        event.preventDefault();
+        return false;
+    }
 
-            const data = await response.json();
-            return data.exists; // Assuming the server returns a JSON object with a property 'exists'
-        }
-    });
+    return true;
+}
+
+
+
 </script>
 
 <%- include("../partials/adminFooter") %>

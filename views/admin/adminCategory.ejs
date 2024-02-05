@@ -1,5 +1,12 @@
 <%- include("../partials/adminHeader") %>
 
+<style>
+    .error{
+        color: red;
+    }
+   
+</style>
+
 <section class="content-main">
     <div class="content-header">
         <div>
@@ -18,14 +25,14 @@
                         <div class="mb-4">
                             <label for="product_name" class="form-label">Name</label>
                             <input type="text" placeholder="Type here" class="form-control" id="name" name="name" />
-                            <p id="name-err-msg"></p>
+                            <p id="name-err-msg" class="error"></p>
                         </div>
                         
                     
                         <div class="mb-4">
                             <label class="form-label" >Description</label>
                             <textarea placeholder="Type here" class="form-control" name="description" id="description"></textarea>
-                            <p id="err-msg"></p>
+                            <p id="err-msg" class="error"></p>
                         </div>
                         
                     
@@ -110,6 +117,17 @@
             document.getElementById('description').style.borderWidth = '1px'
             event.preventDefault()
         }
+
+     const existingCategories = ["LED", "LCD", "OLED","QLED","Curved"];
+    const lowerCaseName = name.toLowerCase();
+    
+    if (existingCategories.map(cat => cat.toLowerCase()).includes(lowerCaseName)) {
+        document.getElementById('name').style.borderColor = '#cc0000';
+        document.getElementById('name').style.borderWidth = '1px';
+        document.getElementById('name-err-msg').innerHTML = 'Category name already exists.';
+        event.preventDefault();
+        return;
+    }
     }
 </script> 
 
