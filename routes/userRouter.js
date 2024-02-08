@@ -4,6 +4,7 @@ const router=express();
 const {isLogged} = require("../middlewares/Auth")
 
 const userController = require("../controller/userController");
+const cartController=require("../controller/cartController")
 
 
 router.get("/",userController.userHomeGet)
@@ -28,5 +29,8 @@ router.post("/newpass", userController.newPassword)
 router.get("/productDetails",userController.productDetailsGet)
 router.get("/shop",userController.getShop)
 
+
+router.get("/cart",isLogged,cartController.cartPageGet)
+router.post("/cart", isLogged,cartController.addToCart)
 
 module.exports=router;

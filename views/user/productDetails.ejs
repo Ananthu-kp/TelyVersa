@@ -109,9 +109,11 @@
                                     </div> -->
                                     <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                                     <div class="detail-extralink">
-                                  
+
                                         <div class="product-extra-link2">
-                                            <button type="button" class="button button-add-to-cart" >Add to cart</button>
+                                            <button type="submit" class="button button-add-to-cart"
+                                                onclick="addToCart('<%= product.id %>',1,'<%= product.quantity %>')">Add
+                                                to cart</button>
 
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up"
                                                 href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
@@ -180,6 +182,54 @@
         </div>
     </section>
     </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
+    <script>
+
+        function addToCart(proId,quantity, stock) {
+            // console.log(proId, stock);
+            if (stock <= 0) {
+                Swal.fire({
+                    title: 'OUT OF STOCK!',
+                    text: 'Quantity exceed.',
+                    icon: 'error',
+                    timer: 5000
+                })
+                return;
+            }
+
+            $.ajax({
+                url: `/cart`,
+                method: 'post',
+                data: {
+                    id:proId,
+                    quantity: quantity,
+                },
+                success(response) {
+                    if (response.added == true) {
+                        Swal.fire({
+                            title: 'CART',
+                            text: 'PRODUCT ADDED TO CART.',
+                            icon: 'success',
+                            timer: 5000
+                        })
+                    } else if (response.added == false) {
+                        Swal.fire({
+                            title: 'STOCK!',
+                            text: 'Product is out of stock.',
+                            icon: 'error',
+                            timer: 5000
+                        })
+                    } else {
+                        location.href = '/login'
+                    }
+                }
+            })
+        }
+        
+    </script>
+
     <footer class="main">
         <hr>
         <section class="section-padding footer-mid">
@@ -310,6 +360,11 @@
     <!-- Template  JS -->
     <script src="assets/js/maind134.js?v=3.4"></script>
     <script src="assets/js/shopd134.js?v=3.4"></script>
+
+
+
+
+
     </body>
 
 
