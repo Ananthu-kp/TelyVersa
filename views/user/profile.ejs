@@ -1,0 +1,249 @@
+<%- include("../partials/header") %>
+
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Pages
+                    <span></span> Account
+                </div>
+            </div>
+        </div>
+        <section class="pt-150 pb-150">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 m-auto">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="dashboard-menu">
+                                    <ul class="nav flex-column" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab"
+                                                href="#dashboard" role="tab" aria-controls="dashboard"
+                                                aria-selected="false"><i
+                                                    class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders"
+                                                role="tab" aria-controls="orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                        </li>
+                                        
+                                      
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address"
+                                                role="tab" aria-controls="address" aria-selected="true"><i
+                                                    class="fi-rs-marker mr-10"></i>My Address</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab"
+                                                href="#account-detail" role="tab" aria-controls="account-detail"
+                                                aria-selected="true"><i class="fi-rs-sign-out mr-10"></i>Account
+                                                details</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="/logout"><i
+                                                    class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="tab-content dashboard-content">
+                                    <div class="tab-pane fade show active" id="dashboard" role="tabpanel"
+                                        aria-labelledby="dashboard-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">User Profile</h5>
+                                            </div>
+                                            <div class="card-body text-center">
+                                                <img src="/assets/profile.png"
+                                                    class="card-img-top rounded-circle mx-auto mt-3" alt="Profile Image"
+                                                    style="width: 100px; height: 100px; object-fit: cover;">
+                                                <div class="card-body text-center">
+                                                    <h5 class="card-title">
+                                                        <%= user.name %>
+                                                    </h5>
+                                                    <p class="card-text"><strong>Email:</strong>
+                                                        <%= user.email %>
+                                                    </p>
+                                                    <p class="card-text"><strong>Phone:</strong>
+                                                        <%= user.phone %>
+                                                    </p>
+                                                    <p class="card-text"><strong>Account Id:</strong>
+                                                        <%= user._id %>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">MY Orders</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Order</th>
+                                                                <th>Status</th>
+                                                                <th>Total</th>
+                                                                <th>Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            <% if (order) { %>
+
+                                                                <% for (let i=0; i < order.length; i++) { %>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <%= order[i]._id %>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <%= order[i].status %>
+                                                                        </td>
+
+
+                                                                        <td>
+                                                                            <%= order[i].totalPrice %>
+                                                                        </td>
+
+
+                                                                        <td><a href="/orderDetails?id=<%= order[i]._id %>"
+                                                                                class="btn-small d-block">View</a></td>
+                                                                    </tr>
+                                                                    <% } %>
+
+
+                                                                        <% }else{ %>
+
+                                                                            <td>No Orders found</td>
+
+                                                                            <% } %>
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                             
+
+
+
+                                    <div class="tab-pane fade" id="address" role="tabpanel"
+                                    aria-labelledby="address-tab">
+                                    <div class="row">
+
+                                        <%if(userAddress){%>
+                                            <%userAddress.address.forEach((address)=>{%>
+                                                <div class="col-lg-6">
+                                                    <div class="card  mb-3 mb-lg-0">
+                                                        <div class="card-header">
+                                                            <h5 class="mb-0">
+                                                                <%=address.addressType%>
+                                                            </h5>
+                                                        </div>
+
+                                                        <div class="card-body">
+                                                            <address>
+                                                                <%=address.name%><br />
+                                                                    <%=address.city%>,<br />
+                                                                        <%=address.landMark%> <br />
+                                                                            <%=address.state%>
+                                                            </address>
+                                                            <p>
+                                                                <%=address.pincode%>
+                                                            </p>
+                                                            <p>
+                                                                <%=address.phone%>
+                                                            </p>
+                                                            <p>
+                                                                <%=address.altPhone%>
+                                                            </p>
+                                                            <div class="d-flex justify-content-between">
+                                                                <a href="/editAddress?id=<%=address._id%>"
+                                                                    class="btn-small">Edit</a>
+                                                                <a href="/deleteAddress?id=<%=address._id%>"
+                                                                    class="btn-small">Delete</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <%})%>
+                                                    <%}else{%>
+                                                        <div class="col-lg-6">
+                                                            <div class="card  mb-3 mb-lg-0">
+                                                                <div class="card-header">
+                                                                    <h5 class="mb-0"></h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <address>
+                                                                        No address
+                                                                    </address>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <%}%>
+                                                            <div>
+                                                                <a href="/addAddress">
+                                                                    <button class="btn btn-primary w-70">Add
+                                                                        address</button>
+                                                                </a>
+                                                            </div>
+
+
+                                    </div>
+                                </div>
+                                    
+                                    <div class="tab-pane fade" id="account-detail" role="tabpanel"
+                                        aria-labelledby="account-detail-tab">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Account Details</h5>
+                                            </div>
+                                            <div class="card-body">
+
+                                                <form method="post" action="/editUserDetails?id=<%= user._id %>">
+                                                    <div class="row">
+                                                        <div class="form-group col-md-6">
+                                                            <label> Name <span class="required">*</span></label>
+                                                            <input required="" value="<%= user.name %>"
+                                                                class="form-control square" name="name" type="text">
+                                                        </div>
+
+                                                        <div class="form-group col-md-12">
+                                                            <label>Mobile Number <span class="required">*</span></label>
+                                                            <input required="" value="<%= user.phone %>"
+                                                                class="form-control square" name="phone" type="text">
+                                                        </div>
+                                                        <div class="col-md-12 mt-15">
+                                                            <button type="submit" class="btn btn-fill-out submit"
+                                                                name="submit" value="Submit">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+     
+
+    
+
+
+        <%- include("../partials/footer") %>

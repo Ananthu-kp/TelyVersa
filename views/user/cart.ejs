@@ -48,7 +48,7 @@
                                                     </p>
                                                 </td>
                                                 <td class="price" product-title="Price">₹<span> <text
-                                                            id="subTotal<%= product[i].productDetails[0].id %>">
+                                                            id="subTotal<%= product[i].productDetails[0]._id %>">
                                                             <%= product[i].productDetails[0].salePrice * product[i].quantity
                                                                 %>
                                                         </text><br>
@@ -59,26 +59,21 @@
                                                             / per item </small>
 
                                                 </td>
-                                                <% console.log(product[i].productDetails[0].salePrice *
-                                                    product[i].quantity,"qqqq"); %>
+                                                
 
-                                                    <% x +=product[i].productDetails[0].salesPrice * product[i].quantity%>
+                                                    <% x +=product[i].productDetails[0].salePrice * product[i].quantity%>
 
 
                                                         <td class="text-center" product-title="Stock">
                                                             <div class="detail-qty border radius m-auto">
                                                                 <div class="quantity-control">
 
-
-                                                                    <script>
-
-                                                                    </script>
                                                                     <button class="btn btn-sm increment-button"
                                                                         onclick="changeQuantity('<%= product[i].productDetails[0]._id %>', '<%= product[i].quantity %>', 1, '<%= product[i].productDetails[0].salePrice %>',  '<%= product[i].productDetails[0].id %>', '<%= product[i].productDetails[0].quantity%>')">+</button>
 
 
                                                                     <input class="quantity-input"
-                                                                        id="cartProductQuantity<%= product[i].productDetails[0].id %>"
+                                                                        id="cartProductQuantity<%= product[i].productDetails[0]._id %>"
                                                                         value="<%= product[i].quantity %>"
                                                                         style="width: 45px;" type="text" readonly
                                                                         value="">
@@ -86,7 +81,7 @@
 
 
                                                                     <button class="btn btn-sm decrement-button"
-                                                                        onclick="changeQuantity('<%= product[i].productDetails[0]._id %>', '<%= product[i].quantity %>', -1, '<%= product[i].productDetails[0].salesPrice %>',  '<%= product[i].productDetails[0].id %>', '<%= product[i].productDetails[0].quantity%>')">-</button>
+                                                                        onclick="changeQuantity('<%= product[i].productDetails[0]._id %>', '<%= product[i].quantity %>', -1, '<%= product[i].productDetails[0].salePrice %>',  '<%= product[i].productDetails[0].id %>', '<%= product[i].productDetails[0].quantity%>')">-</button>
 
                                                                 </div>
                                                             </div>
@@ -110,173 +105,111 @@
                                             <% } %>
                                                 
 
-                                                    <input type="hidden" name="" id="totalabc" value="<%= x  %>">
+                                                    
 
                             </tbody>
                         </table>
                     </div>
-                    <div class="cart-action text-end">
-                        <!-- <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a> -->
-                        <a class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
-                    </div>
-                    <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
-                    <div class="row mb-50">
-                        <div class="col-lg-6 col-md-12">                          
-                            <div class="mb-30 mt-50">
-                                <div class="heading_s1 mb-3">
-                                    <h4>Apply Coupon</h4>
-                                </div>
-                                <div class="total-amount">
-                                    <div class="left">
-                                        <div class="coupon">
-                                            <form action="#" target="_blank">
-                                                <div class="form-row row justify-content-center">
-                                                    <div class="form-group col-lg-6">
-                                                        <input class="font-medium" name="Coupon" placeholder="Enter Your Coupon">
-                                                    </div>
-                                                    <div class="form-group col-lg-6">
-                                                        <button class="btn  btn-sm"><i class="fi-rs-label mr-10"></i>Apply</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                   
+                </div>
+                <div class="col-3">
+                    <div class="border p-md-4 p-30 border-radius cart-totals">
+                        <div class="heading_s1 mb-3">
+                            <h4>PRICE DETAILS</h4>
                         </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="border p-md-4 p-30 border-radius cart-totals">
-                                <div class="heading_s1 mb-3">
-                                    <h4>Cart Totals</h4>
-                                </div>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <td class="cart_total_label">Cart Subtotal</td>
-                                                <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">$240.00</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="cart_total_label">Shipping</td>
-                                                <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="cart_total_label">Total</td>
-                                                <td class="cart_total_amount"><strong><span class="font-xl fw-900 text-brand">$240.00</span></strong></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <a href="#" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
-                            </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <tbody>
+
+                                    <tr>
+                                        <td class="cart_total_label">Shipping</td>
+                                        <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cart_total_label">Total</td>
+                                        <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">₹
+                                                <text id="total">
+                                                    <%= grandTotal %>
+                                                </text>
+                                            </span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
+                        <a href="/checkout?userId=<%= user._id %>" class="btn "> <i class="fi-rs-box-alt mr-10"></i>
+                            Proceed To CheckOut</a>
                     </div>
                 </div>
+
             </div>
+
+        </div>
+        </div>
+        </div>
         </div>
     </section>
 </main>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
 <script>
-      function changeQuantity(productId, cartQuantity, count, productPrice, i, productQuantity) {
-
-// alert(productPrice)
-// alert(cartQuantity)
-// alert(i)
-
-const abc = document.getElementById("totalabc").value
-console.log(abc, "hi");
-console.log(productId, cartQuantity, count, productPrice, i, productQuantity);
-const cartProductQuantityElement = document.querySelector(`#cartProductQuantity${i}`)
-// alert('quantity')
-// alert(cartProductQuantityElement.value,'quantity')
-const subtotalElement = document.querySelector(`#subTotal${i}`);
-// alert(subtotalElement.innerHTML,"subelm")
-const totalElements = document.getElementById('total').innerHTML;
-// alert(parseInt(subtotalElement.innerHTML)+ parseInt(productPrice))
-
-
-
-
-let currentQuantity = parseInt(cartProductQuantityElement.value)
-
-const currentSubTotal = parseInt(subtotalElement.innerHTML)
-// alert(currentSubTotal+"sub")
-
-// alert(currentTotal+"total")
-
-const newQuantity = currentQuantity + count
-// alert(newQuantity)
-
-if (count === -1 && newQuantity < 1) {
-    return;
-}
-
-if (currentSubTotal < currentSubTotal) {
-    return
-}
-
-if (count == 1 && newQuantity > productQuantity) {
-
-
-    Swal.fire({
-        title: 'STOCK!',
-        text: 'Product is out of stock.',
-        icon: 'error',
-        timer: 5000
-    })
-    return
-}
-
-const newSubtotal = newQuantity * productPrice
-if (count == 1) {
-    // alert('1')
-    document.getElementById(`subTotal${i}`).innerHTML = parseInt(subtotalElement.innerHTML) + parseInt(productPrice)
-} else {
-    // alert('else')
-    document.getElementById(`subTotal${i}`).innerHTML = parseInt(subtotalElement.innerHTML) - parseInt(productPrice)
-}
-
-
-
-// alert('in starting '+newTotal)
-$.ajax({
-    url: '/changeQuantity',
-    method: 'POST',
-    data: {
-        productId: productId,
-        quantity: newQuantity,
-        count: count
-    },
-
-    success: (response) => {
-        //   alert('sucess')
-        // location.reload()
-
-
-        let currentQuantity = parseInt(cartProductQuantityElement.value)
-        // alert(currentQuantity,"currQua")
-        let currentSubTotal = parseInt(subtotalElement.value)
-        // alert(subtotalElement.value,"subttl")
-        // alert(currentTotal,"ctotal")
-        document.getElementById(`cartProductQuantity${i}`).value = currentQuantity + count
-
-        document.getElementById(`subTotal${i}`).value = currentSubTotal * count
-        // alert(parseInt(abc) + parseInt(response.totalAmount),"helloooooooooooooooooooo")
-        if (response.count == 1) {
-            console.log("TOtal Element == >", totalElements)
-            document.getElementById(`total`).innerHTML = parseInt(totalElements) + parseInt(response.totalAmount)
-        } else {
-            document.getElementById(`total`).innerHTML = parseInt(totalElements) - parseInt(response.totalAmount)
-
+    function changeQuantity(productId, cartQuantity, count, productPrice, i, productQuantity) {
+        // const abc = document.getElementById("totalabc").value;
+        const cartProductQuantityElement = document.querySelector(`#cartProductQuantity${productId}`);
+        const subtotalElement = document.querySelector(`#subTotal${productId}`);
+        const totalElement = document.getElementById('total');
+    
+        let currentQuantity = parseInt(cartProductQuantityElement.value);
+        let currentSubTotal = parseInt(subtotalElement.innerHTML);
+    
+        const newQuantity = currentQuantity + count;
+    
+        if (count === -1 && newQuantity < 1) {
+            return;
         }
-
-
-    },
-    error: (error) => {
-        // alert(error)    
+    
+        if (count === 1 && newQuantity > productQuantity) {
+            Swal.fire({
+                title: 'STOCK!',
+                text: 'Product is out of stock.',
+                icon: 'error',
+                timer: 5000
+            });
+            return;
+        }
+    
+        const newSubtotal = newQuantity * productPrice;
+    
+        // Update quantity and subtotal displayed on the page
+        cartProductQuantityElement.value = newQuantity;
+        subtotalElement.innerHTML = newSubtotal;
+    
+        // Calculate new total amount
+        const currentTotal = parseInt(totalElement.innerHTML);
+        const newTotal = currentTotal + (count * productPrice);
+    
+        // Update total amount displayed on the page
+        totalElement.innerHTML = newTotal;
+    
+        // Send AJAX request to update quantity on the server
+        $.ajax({
+            url: '/changeQuantity',
+            method: 'POST',
+            data: {
+                productId: productId,
+                quantity: newQuantity,
+                count: count
+            },
+            success: (response) => {
+                // Handle success response
+            },
+            error: (error) => {
+                // Handle error
+            }
+        });
     }
-})
-}
-</script>
+    </script>
+    
 <%- include("../partials/footer") %>
