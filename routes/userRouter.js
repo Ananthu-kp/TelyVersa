@@ -6,6 +6,7 @@ const {isLogged} = require("../middlewares/Auth")
 const userController = require("../controller/userController");
 const cartController=require("../controller/cartController")
 const profileController=require("../controller/profileController")
+const orderController=require("../controller/orderController")
 
 router.get("/",userController.userHomeGet)
 router.get("/login",userController.userLoginGet)
@@ -33,7 +34,7 @@ router.get("/shop",userController.getShop)
 router.get("/cart",isLogged,cartController.cartPageGet)
 router.post("/cart", isLogged,cartController.addToCart)
 router.post("/changeQuantity",isLogged,cartController.changeQuantity)
-router.get("/deleteItem", isLogged, cartController.deleteProduct)
+router.get("/deleteItem", isLogged, cartController.deleteCartProduct)
 
 
 router.get("/profile", isLogged, profileController.profileGET)
@@ -43,5 +44,10 @@ router.get("/editAddress", isLogged, profileController.editAddressGET),
 router.post("/editAddress", isLogged, profileController.editAddress)
 router.get("/deleteAddress", isLogged, profileController.deleteAddressGET)
 router.post("/editUserDetails", isLogged, profileController.editUserDetails)
+
+
+
+
+router.get("/checkout",isLogged,orderController.checkoutPageGET)
 
 module.exports=router;

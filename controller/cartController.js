@@ -118,7 +118,7 @@ const changeQuantity = async (req, res) => {
 
 
 
-const deleteProduct = async (req, res) => {
+const deleteCartProduct = async (req, res) => {
     try {
         const id = req.query.id;
         console.log(id, "id");
@@ -141,5 +141,5 @@ module.exports = {
     cartPageGet,
     addToCart,
     changeQuantity,
-    deleteProduct
+    deleteCartProduct
 };

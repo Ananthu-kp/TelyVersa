@@ -1,0 +1,275 @@
+<%- include("../partials/header") %>
+
+    <main class="main">
+
+        <section class="mt-50 mb-50">
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="order_review">
+                            <div class="mb-20">
+                                <h4>Your Orders</h4>
+                            </div>
+                            <div class="table-responsive order_table text-center">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+
+                                        </tr>
+                                    </thead>
+
+
+                                    <tbody>
+                                        <% if (isSingle===true) { %>
+                                            <% if (product && Array.isArray(product) && product.length> 0) { %>
+                                                <% for (let i=0; i < product.length; i++) { %>
+                                                    <tr>
+                                                        <td class="image product-thumbnail"><img
+                                                                src="/uploads/products/<%= product[i].productImage[0] %>"
+                                                                alt="#"></td>
+                                                        <td>
+                                                            <h5><a href="shop-product-full.html">
+                                                                    <%= product[i].productName %>
+                                                                </a></h5>
+                                                        </td>
+                                                        <td>
+
+                                                            <p>1</p>
+
+                                                        </td>
+                                                        <td>
+                                                            <%= product[i].salePrice %>
+                                                        </td>
+                                                    </tr>
+                                                    <% } %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="4">No products found</td>
+                                                            </tr>
+                                                            <% } %>
+                                                                <% }else{ %>
+
+
+                                                                    <% if (data.length> 0) { %>
+
+                                                                        <% for (let i=0; i < data.length; i++) { %>
+
+                                                                            <tr>
+                                                                                <td class="image product-thumbnail">
+                                                                                    <img src="/uploads/products/<%= data[i].productDetails[0].productImage[0] %>"
+                                                                                        alt="#" />
+                                                                                </td>
+                                                                                <td>
+                                                                                    <h5>
+                                                                                        <%= data[i].productDetails[0].productName
+                                                                                            %>
+                                                                                    </h5>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <%= data[i].quantity %>
+                                                                                </td>
+                                                                                <td>
+                                                                                    ₹<span> <text>
+                                                                                            <%= data[i].productDetails[0].salePrice
+                                                                                                * data[i].quantity %>
+                                                                                        </text>
+                                                                                </td>
+                                                                            </tr>
+
+
+                                                                            <% } %>
+
+                                                                                <% } %>
+
+
+                                                                                    <% } %>
+                                    </tbody>
+
+
+
+                                </table>
+                            </div>
+
+
+
+                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                            <div class="payment_method">
+                                <div class="mb-25">
+                                    <h5>Payment</h5>
+                                </div>
+                                <div class="payment_option">
+                                    <!-- <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option"
+                                            id="exampleRadios3" checked="">
+                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse"
+                                            data-target="#bankTranfer" aria-controls="bankTranfer">Direct Bank
+                                            Transfer</label>
+                                        <div class="form-group collapse in" id="bankTranfer">
+                                            <p class="text-muted mt-5">There are many variations of passages of Lorem
+                                                Ipsum available, but the majority have suffered alteration. </p>
+                                        </div>
+                                    </div> -->
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option"
+                                            id="exampleRadios4" checked="">
+                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
+                                            data-target="#checkPayment" aria-controls="checkPayment">Cash On Delivery
+                                            </label>
+                                        <!-- <div class="form-group collapse in" id="checkPayment">
+                                            <p class="text-muted mt-5">Please send your cheque to Store Name, Store
+                                                Street, Store Town, Store State / County, Store Postcode. </p>
+                                        </div> -->
+                                    </div>
+                                    <!-- <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option"
+                                            id="exampleRadios5" checked="">
+                                        <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse"
+                                            data-target="#paypal" aria-controls="paypal">Paypal</label>
+                                        <div class="form-group collapse in" id="paypal">
+                                            <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card
+                                                if you don't have a PayPal account.</p>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <table>
+                                    <tr>
+                                        <th><h5>Shipping</h5></th>
+                                        <td colspan="2"><em>Free Shipping</em></td>
+                                    </tr>
+                                    <tr>
+                                        <th><h5>Total</h5></th>
+                                        <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900"></span><%= grandTotal.toFixed(2) %></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <a href="#" class="btn btn-fill-out btn-block mt-30">Place Order</a>
+                        </div>
+                    </div>
+
+                    <div class="col-8">
+                        <div class="row align-items-start mt-30 ml-150">
+                            <!-- Use align-items-start to vertically align content at the top -->
+                            <% if (locals.userAddress) { %>
+                                <% userAddress.address.forEach((address)=> { %>
+                                    <div class="col-lg-6 mb-3">
+                                        <div class="card">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio"
+                                                    id="addressRadio<%= address._id %>" name="selectedAddress"
+                                                    value="<%= address._id %>">
+                                                <label class="form-check-label"
+                                                    for="addressRadio<%= address._id %>">Select Address</label>
+                                            </div>
+
+                                            <div class="card-header">
+                                                <h5 class="mb-0">
+                                                    <%= address.addressType %>
+                                                </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <!-- Add a radio button with a unique id for each address -->
+
+                                                <address>
+                                                    <%= address.name %><br />
+                                                        <%= address.city %>,<br />
+                                                            <%= address.landMark %> <br />
+                                                                <%= address.state %>
+                                                </address>
+                                                <p>
+                                                    <%= address.pincode %>
+                                                </p>
+                                                <p>
+                                                    <%= address.phone %>
+                                                </p>
+                                                <p>
+                                                    <%= address.altPhone %>
+                                                </p>
+                                                <div class="d-flex justify-content-between">
+                                                    <a href="/editAddress?id=<%= address._id %>"
+                                                        class="btn-small">Edit</a>
+                                                        <a href="/checkout" class="btn-small delete-address" data-address-id="<%= address._id %>">Delete</a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <div class="col-lg-6 mb-3">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h5 class="mb-0"></h5>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <address>
+                                                            No address
+                                                        </address>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                                <div class="col-lg-6 mb-3">
+                                                    <a href="/addAddress">
+                                                        <button class="btn btn-primary w-100">Add address</button>
+                                                    </a>
+                                                </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
+"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let deleteButtons = document.querySelectorAll('.delete-address');
+    
+            deleteButtons.forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    // Prevent default link behavior
+                    event.preventDefault();
+    
+                    // Get the address ID from the data attribute
+                    let addressId = button.getAttribute('data-address-id');
+    
+                    // Send AJAX request to delete the address
+                    $.ajax({
+                        url: "/deleteAddress?id=" + addressId,
+                        method: "GET",
+                        success: function(response) {
+                            // Update the page content or show a success message
+                            // For example, you can remove the deleted address from the page
+                            button.closest('.card').remove();
+                           
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Address Deleted',
+                                text: 'The address has been successfully deleted.',
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle errors, if any
+                            console.error(xhr, status, error);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    
+
+    <%- include("../partials/footer") %>
