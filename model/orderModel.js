@@ -7,7 +7,7 @@ const orderSchema = mongoose.Schema({
     },
     totalPrice : {
         type : Number,
-        required : true
+        // required : true
     },
     address : {
         type : Array,

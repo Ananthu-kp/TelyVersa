@@ -90,50 +90,46 @@
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th>Order</th>
+                                                                <th>Order ID</th>
+                                                                <th>Date</th>
+                                                                <th>Product Image</th>
+                                                                <th>Product Name</th>
+                                                                <th>Quantity</th>
                                                                 <th>Status</th>
                                                                 <th>Total</th>
                                                                 <th>Actions</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-
-                                                            <% if (order) { %>
-
+                                                            <% if (order && order.length > 0) { %>
                                                                 <% for (let i=0; i < order.length; i++) { %>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <%= order[i]._id %>
-                                                                        </td>
-
-                                                                        <td>
-                                                                            <%= order[i].status %>
-                                                                        </td>
-
-
-                                                                        <td>
-                                                                            <%= order[i].totalPrice %>
-                                                                        </td>
-
-
-                                                                        <td><a href="/orderDetails?id=<%= order[i]._id %>"
-                                                                                class="btn-small d-block">View</a></td>
-                                                                    </tr>
+                                                                    <% const orderId = Math.random().toString(36).substr(2, 9); %>
+                                                                    <% for (let j = 0; j < order[i].products.length; j++) { %>
+                                                                        <tr>
+                                                                            <td><%= orderId %></td>
+                                                                            <td><%= order[i].orderDate %></td>
+                                                                            <td><img src="<%= order[i].products[j].productImage %>" alt="Product Image" style="width: 50px;"></td>
+                                                                            <td><%= order[i].products[j].productName %></td>
+                                                                            <td><%= order[i].products[j].quantity %></td>
+                                                                            <td><%= order[i].status %></td>
+                                                                            <td><%= order[i].totalPrice %></td>
+                                                                            <td><a href="/orderDetails?id=<%= orderId %>" class="btn-small d-block">View</a></td>
+                                                                        </tr>
                                                                     <% } %>
-
-
-                                                                        <% }else{ %>
-
-                                                                            <td>No Orders found</td>
-
-                                                                            <% } %>
-
+                                                                <% } %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="8">No Orders found</td>
+                                                                </tr>
+                                                            <% } %>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    
+                                    
                              
 
 

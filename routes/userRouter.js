@@ -49,5 +49,6 @@ router.post("/editUserDetails", isLogged, profileController.editUserDetails)
 
 
 router.get("/checkout",isLogged,orderController.checkoutPageGET)
+router.post('/orderPlaced', isLogged, orderController.placeOrder)
 
 module.exports=router;
