@@ -5,39 +5,47 @@
         <div class="row mb-50">
             <div class="form-group col-md-4">
                 <label for="addressType">Address Type:</label>
-                <input type="text" class="form-control border-3" id="addressType" name="addressType" required>
+                <input type="text" class="form-control border-3" id="addressType" name="addressType">
+                <small class="text-danger error-msg" id="addressType-error"></small>
             </div>
             <div class="form-group col-md-4">
                 <label for="name">Name:</label>
-                <input type="text" class="form-control border-3" id="name" name="name" required>
+                <input type="text" class="form-control border-3" id="name" name="name">
+                <small class="text-danger error-msg" id="name-error"></small>
             </div>
             <div class="form-group col-md-4">
                 <label for="city">City:</label>
-                <input type="text" class="form-control border-3" id="city" name="city" required>
+                <input type="text" class="form-control border-3" id="city" name="city">
+                <small class="text-danger error-msg" id="city-error"></small>
             </div>
         </div>
         <div class="row mb-3">
             <div class="form-group col-md-4">
                 <label for="landMark">Landmark:</label>
-                <input type="text" class="form-control border-3" id="landMark" name="landMark" required>
+                <input type="text" class="form-control border-3" id="landMark" name="landMark">
+                <small class="text-danger error-msg" id="landMark-error"></small>
             </div>
             <div class="form-group col-md-4">
                 <label for="state">State:</label>
-                <input type="text" class="form-control border-3" id="state" name="state" required>
+                <input type="text" class="form-control border-3" id="state" name="state">
+                <small class="text-danger error-msg" id="state-error"></small>
             </div>
             <div class="form-group col-md-4">
                 <label for="pincode">Pincode:</label>
-                <input type="number" class="form-control border-3" id="pincode" name="pincode" required>
+                <input type="number" class="form-control border-3" id="pincode" name="pincode">
+                <small class="text-danger error-msg" id="pincode-error"></small>
             </div>
         </div>
         <div class="row mb-3">
             <div class="form-group col-md-4">
                 <label for="phone">Phone:</label>
-                <input type="number" class="form-control border-3" id="phone" name="phone" required>
+                <input type="number" class="form-control border-3" id="phone" name="phone">
+                <small class="text-danger error-msg" id="phone-error"></small>
             </div>
             <div class="form-group col-md-4">
                 <label for="altPhone">Alternate Phone:</label>
-                <input type="number" class="form-control border-3" id="altPhone" name="altPhone" required>
+                <input type="number" class="form-control border-3" id="altPhone" name="altPhone">
+                <small class="text-danger error-msg" id="altPhone-error"></small>
             </div>
         </div>
         <button type="submit" id="submitButton" class="btn btn-primary">Submit</button>
@@ -45,29 +53,111 @@
 </div>
 
 <script>
-    document.getElementById('submitButton').addEventListener('click', function (event) {
-        if (!validateForm()) {
-            event.preventDefault();
-        }
-    });
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("addressForm").addEventListener("submit", function(event) {
+            const addressType = document.getElementById("addressType").value.trim();
+            const name = document.getElementById("name").value.trim();
+            const city = document.getElementById("city").value.trim();
+            const landMark= document.getElementById("landMark").value.trim();
+            const state= document.getElementById("state").value.trim();
+            const pincode= document.getElementById("pincode").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const altPhone= document.getElementById("altPhone").value.trim();
+            
+            const isNumeric = str => !isNaN(str);
+            const isAlphabetic = str => /^[A-Za-z\s]+$/.test(str);
 
-    function validateForm() {
-        let isValid = true;
-        const requiredFields = ["addressType", "name", "city", "landMark", "state", "pincode", "phone", "altPhone"];
-        requiredFields.forEach(function (field) {
-            const input = document.getElementById(field);
-            if (input.value.trim() === "") {
-                Swal.fire({
-                    title: 'Error',
-                    text: `Please fill all the field.`,
-                    icon: 'error'
-                });
-                isValid = false;
+            if (addressType === "") {
+                document.getElementById("addressType-error").innerText = "Address type is required.";
+                event.preventDefault();
+            } else if (!isAlphabetic(addressType)) {
+                document.getElementById("addressType-error").innerText = "Address type must be alphabetic characters.";
+                event.preventDefault();
+            } else {
+                document.getElementById("addressType-error").innerText = "";
+            }
+
+            if (name === "") {
+                document.getElementById("name-error").innerText = "Name is required.";
+                event.preventDefault();
+            } else if (!isAlphabetic(name)) {
+                document.getElementById("name-error").innerText = "Name must be alphabetic characters.";
+                event.preventDefault();
+            } else {
+                document.getElementById("name-error").innerText = "";
+            }
+
+            if (city === "") {
+                document.getElementById("city-error").innerText = "City is required.";
+                event.preventDefault();
+            } else if (!isAlphabetic(city)) {
+                document.getElementById("city-error").innerText = "City must be alphabetic characters.";
+                event.preventDefault();
+            } else {
+                document.getElementById("city-error").innerText = "";
+            }
+            
+            if (landMark === ""){
+                document.getElementById("landMark-error").innerText="LandMark is required";
+                event.preventDefault();
+            }else if (!isAlphabetic(landMark)) {
+                document.getElementById("landMark-error").innerText = "LandMark must be alphabetic characters.";
+                event.preventDefault();
+            } else {
+                document.getElementById("landMark-error").innerText = "";
+            }
+
+            if (state === ""){
+                document.getElementById("state-error").innerText="State is required";
+                event.preventDefault();
+            }else if (!isAlphabetic(state)) {
+                document.getElementById("state-error").innerText = "State must be alphabetic characters.";
+                event.preventDefault();
+            } else {
+                document.getElementById("state-error").innerText = "";
+            }
+
+            if (pincode === ""){
+                document.getElementById("pincode-error").innerText="pincode is required";
+                event.preventDefault();
+            } else if (!isNumeric(pincode)) {
+                document.getElementById("pincode-error").innerText = "Pincode must be an integer.";
+                event.preventDefault();
+            } else if (pincode.length !== 6) {
+                document.getElementById("pincode-error").innerText = "Pincode must be 6 digits.";
+                event.preventDefault();
+            } else {
+                document.getElementById("pincode-error").innerText = "";
+            }
+
+            if (phone === ""){
+                document.getElementById("phone-error").innerText="Phone number is required";
+                event.preventDefault();
+            } else if (!isNumeric(phone)) {
+                document.getElementById("phone-error").innerText = "Phone must be an integer.";
+                event.preventDefault();
+            } else if (phone.length !== 10) {
+                document.getElementById("phone-error").innerText = "Phone must be 10 digits.";
+                event.preventDefault();
+            } else {
+                document.getElementById("phone-error").innerText = "";
+            }
+
+            if (altPhone === ""){
+                document.getElementById("altPhone-error").innerText="Alternate Phone number is required";
+                event.preventDefault();
+            } else if (!isNumeric(altPhone)) {
+                document.getElementById("altPhone-error").innerText = "Alternate Phone must be an integer.";
+                event.preventDefault();
+            } else if (altPhone.length !== 10) {
+                document.getElementById("altPhone-error").innerText = "Alternate Phone must be 10 digits.";
+                event.preventDefault();
+            } else {
+                document.getElementById("altPhone-error").innerText = "";
             }
         });
-
-        return isValid;
-    }
+    });
 </script>
+
 
 <%- include("../partials/footer") %>
