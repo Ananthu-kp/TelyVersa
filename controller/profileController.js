@@ -3,6 +3,7 @@ const Product=require("../model/productModel")
 const Address=require("../model/addressModel")
 const Order=require("../model/orderModel")
 const { ObjectId } = require('mongoose');
+const bcrypt=require("bcrypt")
 
 
 
@@ -211,6 +212,51 @@ const orderDetails=async(req,res)=>{
     }
 }
 
+const verifyOldPassword = async (req, res) => {
+    try {
+        const { oldPass } = req.body;
+        const userEmail = req.session.user;
+
+        const findUser = await User.findOne({ email: userEmail });
+        const passwordMatch = await bcrypt.compare(oldPass, findUser.password);
+        if (!passwordMatch) {
+            return res.json({ status: false, error: "Old password does not match" });
+        }
+        return res.json({ status: true });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ status: false, error: "Internal server error" });
+    }
+}
+
+
+const changePassword = async (req, res) => {
+    try {
+        const { oldPass, newPass } = req.body;
+        const userEmail = req.session.user;
+
+        const findUser = await User.findOne({ email: userEmail });
+        if (!findUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const passwordMatch = await bcrypt.compare(oldPass, findUser.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ error: "Old password does not match" });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPass, 10);
+        await User.updateOne({ email: userEmail }, { $set: { password: hashedPassword }});
+
+        console.log('Password changed successfully.');
+        res.json({ status: true });
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+
 module.exports={
     profileGET,
     editUserDetails,
@@ -219,5 +265,7 @@ module.exports={
     editAddressGET,
     editAddress,
     deleteAddressGET,
-    orderDetails
+    orderDetails,
+    verifyOldPassword,
+    changePassword
 }

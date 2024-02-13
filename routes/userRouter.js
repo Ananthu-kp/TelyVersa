@@ -45,6 +45,8 @@ router.post("/editAddress", isLogged, profileController.editAddress)
 router.get("/deleteAddress", isLogged, profileController.deleteAddressGET)
 router.post("/editUserDetails", isLogged, profileController.editUserDetails)
 router.get("/orderDetails",isLogged,profileController.orderDetails)
+router.post("/verifyOldPassword",isLogged,profileController.verifyOldPassword)
+router.post("/changepassword", isLogged, profileController.changePassword)
 
 
 
