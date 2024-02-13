@@ -360,31 +360,43 @@ const  newPasswordGet = async (req,res)=>{
     }
 }
 
-const newPassword = async (req,res)=>{
-    try{
-        const { newPass1, newPass2 } =req.body
-        const email = req.session.forgotemail
-        console.log(email);
-        const passwordHash = await bcrypt.hash(newPass1, 10)
-        if (newPass1 === newPass2) {
-            await User.updateOne(
-                { email: email },
-                {
-                    $set: {
-                        password: passwordHash
-                    }
-                }
-            )
-                .then((data) => console.log(data))
-            res.redirect("/login")
-        }else {
-            console.log("Password not match");
-            res.render("rePassword", { message: "Password not matching" })
+const newPassword = async (req, res) => {
+    try {
+        const { password: newPass1, confirmpassword: newPass2 } = req.body;
+        const email = req.session.forgotemail;
+
+        if (!newPass1 || !newPass2) {
+            console.error('New password fields are empty');
+            return res.render("rePassword", { message: "New password fields cannot be empty" });
         }
-    }catch(error){
-        console.log(error.message);
+
+        if (newPass1 !== newPass2) {
+            console.error('Passwords do not match');
+            return res.render("rePassword", { message: "Passwords do not match" });
+        }
+
+        const passwordHash = await bcrypt.hash(newPass1, 10);
+        console.log('Password Hash:', passwordHash);
+
+        await User.updateOne(
+            { email: email },
+            {
+                $set: {
+                    password: passwordHash
+                }
+            }
+        );
+
+        console.log('Password updated successfully');
+        res.redirect("/login");
+    } catch(error) {
+        console.error('Error:', error.message);
+        res.render("rePassword", { message: "An error occurred" });
     }
 }
+
+
+
 
 
 
