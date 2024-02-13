@@ -10,11 +10,14 @@ const { ObjectId } = require('mongoose');
 const profileGET = async (req, res) => {
     try {
         console.log(req.session.user);
-        const userId = req.session.user; 
-        const userData = await User.findOne({ email: userId });
+        const userEmail = req.session.user; 
+        const userData = await User.findOne({ email: userEmail });
         const addressData = await Address.findOne({ userId: userData._id });
-        const orderData = await Order.find({ userId: userData._id }).sort({ createdOn: -1 });
+        console.log("this is address ",addressData);
+        const orderData = await Order.find({ userId: userEmail }).sort({ createdOn: -1 });
+        console.log("this is my order data",orderData);
         res.render("user/profile", { user: userData, userAddress: addressData, order: orderData });
+
     } catch (error) {
         console.log(error.message);
     }
@@ -192,6 +195,21 @@ const deleteAddressGET = async (req, res) => {
     }
 }
 
+const orderDetails=async(req,res)=>{
+    try{
+        const userEmail=req.session.user;
+        const orderId=req.query.id;
+    
+        const findOrder= await Order.findOne({_id: orderId});
+        const findUser= await User.findOne({email: userEmail});
+        console.log(findOrder,findUser);
+
+        res.render("user/orderDetails", { orders: findOrder, orderId , user:findUser})
+
+    }catch(error){
+        console.log(error);
+    }
+}
 
 module.exports={
     profileGET,
@@ -200,5 +218,6 @@ module.exports={
     addAddress,
     editAddressGET,
     editAddress,
-    deleteAddressGET
+    deleteAddressGET,
+    orderDetails
 }

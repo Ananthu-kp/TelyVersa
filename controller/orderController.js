@@ -48,32 +48,39 @@ const checkoutPageGET = async (req, res) => {
 const placeOrder = async (req, res) => {
     try {
         console.log("hi");
-        const { grandTotal, addressId, payment, ProductIds } = req.body;
+        const { grandTotal, addressId, payment, productId } = req.body;
         const userId = req.session.user;
-
+        console.log("this is the proId",productId);
         const findUser = await User.findOne({ email: userId });
         const findAddress = await Address.findOne({ 'address._id': addressId });
         const desiredAddress = findAddress.address.find(item => item._id.toString() === addressId.toString());
-        const findProduct = await Product.find({ _id: { $in: ProductIds } });
+        const products = await Product.find({ _id: { $in: productId } });
+        console.log(products);
 
         const cartItemUnit = findUser.cart.map((item) => ({
-            productId: item.productId,
+            ProductId: item.ProductId,
             quantity: item.quantity
         }));
         console.log("this is the cart item",cartItemUnit);
 
-        const orderedProducts = findProduct.map((item) => ({
+        const orderedProducts = products.map((item) => ({
             _id: item._id,
             price: item.salePrice,
             name: item.productName,
             images: item.productImage[0],
-            quantity: cartItemUnit.find(cartItem => cartItem.productId.toString() === item._id.toString()).quantity
+            quantity: cartItemUnit.find(cartItem => cartItem.ProductId.toString() === item._id.toString()).quantity
         }));
 
         console.log("this is the ordered item",orderedProducts);
 
+        
+        const totalPrice = orderedProducts.reduce((total, product) => {
+            return total + (product.price * product.quantity);
+        }, 0);
+
         const newOrder = new Order({
             product: orderedProducts,
+            totalPrice: totalPrice,
             grandTotal: grandTotal,
             address: desiredAddress,
             payment: payment,
@@ -106,6 +113,7 @@ const placeOrder = async (req, res) => {
         // Handle other payment methods if needed
 
     } catch (error) {
+        console.error('Error fetching products:', error);
         console.log(error.message);
         // Send an appropriate error response to the client
         res.status(500).json({ error: 'Internal Server Error' });
@@ -113,9 +121,23 @@ const placeOrder = async (req, res) => {
 };
 
 
+const cancelOrder=async(req,res)=>{
+    try{
+        console.log(req.query);
+        const orderId = req.query.orderId.trim();
+        console.log(orderId);
+        await Order.updateOne({ _id: orderId },
+            { status: "Canceled" }
+        ).then((data) => console.log(data))
 
+        res.redirect('/profile');
+    }catch(error){
+
+    }
+}
 
 module.exports={
     checkoutPageGET,
-    placeOrder
+    placeOrder,
+    cancelOrder
 }

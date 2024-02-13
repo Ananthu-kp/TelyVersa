@@ -44,11 +44,13 @@ router.get("/editAddress", isLogged, profileController.editAddressGET),
 router.post("/editAddress", isLogged, profileController.editAddress)
 router.get("/deleteAddress", isLogged, profileController.deleteAddressGET)
 router.post("/editUserDetails", isLogged, profileController.editUserDetails)
+router.get("/orderDetails",isLogged,profileController.orderDetails)
 
 
 
 
 router.get("/checkout",isLogged,orderController.checkoutPageGET)
 router.post('/orderPlaced', isLogged, orderController.placeOrder)
+router.get("/cancelOrder",isLogged,orderController.cancelOrder)
 
 module.exports=router;

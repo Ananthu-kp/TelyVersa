@@ -82,6 +82,7 @@
                             </div>
                         </div>
 
+                        
                         <div class="col-md-4">
                             <div class="table-responsive">
                                 <table class="table">
@@ -106,10 +107,25 @@
                                 </table>
                             </div>
                         </div>
-                       
-                        <a href="#" id="placeOrderButton" class="btn btn-fill-out btn-block mt-30">Place Order</a>
-                    </div>
-                </div>
+
+                            <div class="ml-65">
+                                <%if(isSingle===true){%>
+                                    <button type="button" class="btn"
+                                        onclick="placeOrder('<%= user._id %>' , '<%=product[0]._id%>',  true)">Place
+                                        order</button>
+                                    <%}else{%>
+
+
+                                        <button type="button" class="btn"
+                                            onclick="placeOrder('<%= user._id %>', [<% for (let i = 0; i < data.length; i++) { %>'<%= data[i].productDetails[0]._id %>'<% if (i < data.length - 1) { %>,<% } %><% } %>], false)">Place
+                                            Order</button>
+
+
+                                        <% } %>
+
+                            </div>
+                        </div>
+                
 
                 <div class="col-lg-8">
                     <div class="row align-items-start mt-30 ml-150">
@@ -173,32 +189,37 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const placeOrderButton = document.getElementById("placeOrderButton");
-        placeOrderButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked');
-            const payment = $("input[name='payment_option']:checked").val();
-            const proID = document.getElementById("productId").value;
+     async function placeOrder(userId, prodId, isSingle) {
+            // alert(prodId)
+            let address = $("input[name='selectedAddress']:checked").val();
+            let payment = $("input[name='payment_option']:checked").val();
+
             const sum = document.getElementById("totalValue").textContent;
             const numericValue = parseInt(sum.replace(/[^\d.]/g, ''));
 
-            if (!selectedAddress) {
+            if (!payment) {
                 Swal.fire({
+                    title: 'NO PAYMENT FOUND!',
+                    text: 'Please select your Payment.',
                     icon: 'error',
-                    title: 'Select an address to place the order',
-                    showConfirmButton: false,
-                    timer: 2000
+                    timer: 3000,
+                });
+            } else if (!address) {
+                Swal.fire({
+                    title: 'NO ADDRESS FOUND!',
+                    text: 'Please select your address.',
+                    icon: 'error',
+                    timer: 3000,
                 });
             } else {
                 $.ajax({
                     url: '/orderPlaced',
                     method: 'POST',
                     data: {
-                        grandTotal: numericValue,
-                        addressId: selectedAddress.value, 
+                        totalPrice: numericValue,
+                        addressId: address,
                         payment: payment,
-                        productId: proID
+                        productId: prodId,
                     },
                     success: function (response) {
                         if (response.method === "cod") {
@@ -213,19 +234,11 @@
                                 window.location.href = "/profile";
                             }, 700);
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Something went wrong! Please try again later.',
-                        });
                     }
                 })
             }
-        });
-    });
+
+        }
 </script>
 
 <%- include("../partials/footer") %>

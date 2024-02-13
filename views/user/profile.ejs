@@ -94,7 +94,6 @@
                                                                 <th>Date</th>
                                                                 <th>Product Image</th>
                                                                 <th>Product Name</th>
-                                                                <th>Quantity</th>
                                                                 <th>Status</th>
                                                                 <th>Total</th>
                                                                 <th>Actions</th>
@@ -103,17 +102,16 @@
                                                         <tbody>
                                                             <% if (order && order.length > 0) { %>
                                                                 <% for (let i=0; i < order.length; i++) { %>
-                                                                    <% const orderId = Math.random().toString(36).substr(2, 9); %>
-                                                                    <% for (let j = 0; j < order[i].products.length; j++) { %>
+                                                                   
+                                                                    <% for (let j = 0; j < order[i].product.length; j++) { %>
                                                                         <tr>
-                                                                            <td><%= orderId %></td>
-                                                                            <td><%= order[i].orderDate %></td>
-                                                                            <td><img src="<%= order[i].products[j].productImage %>" alt="Product Image" style="width: 50px;"></td>
-                                                                            <td><%= order[i].products[j].productName %></td>
-                                                                            <td><%= order[i].products[j].quantity %></td>
+                                                                            <td><%=  order[i]._id %></td>
+                                                                            <td><%= order[i].createdOn %></td>
+                                                                            <td><img src="/uploads/products/<%= order[i].product[j].images %>" alt="Product Image" style="width: 50px;"></td>
+                                                                            <td><%= order[i].product[j].name %></td>
                                                                             <td><%= order[i].status %></td>
                                                                             <td><%= order[i].totalPrice %></td>
-                                                                            <td><a href="/orderDetails?id=<%= orderId %>" class="btn-small d-block">View</a></td>
+                                                                            <td><a href="/orderDetails?id=<%=  order[i]._id %>" class="btn-small d-block">View</a></td>
                                                                         </tr>
                                                                     <% } %>
                                                                 <% } %>
