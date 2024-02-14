@@ -123,14 +123,22 @@ const placeOrder = async (req, res) => {
 
 const cancelOrder=async(req,res)=>{
     try{
-        console.log(req.query);
         const orderId = req.query.orderId.trim();
-        console.log(orderId);
+        const order = await Order.findById(orderId);
+        for (const product of order.product) {
+            
+            const productId = product._id;
+            const quantity = product.quantity;
+
+            await Product.findByIdAndUpdate(productId, { $inc: { quantity: quantity } });
+            console.log(`Increasing quantity for product ${productId} by ${quantity}`);
+        }
         await Order.updateOne({ _id: orderId },
             { status: "Canceled" }
         ).then((data) => console.log(data))
 
         res.redirect('/profile');
+
     }catch(error){
 
     }
@@ -162,11 +170,29 @@ const orderDetails=async(req,res)=>{
     }
 }
 
+const changeOrderStatus = async (req, res) => {
+    try {
+        console.log(req.query);
+
+        const orderId = req.query.orderId.trim(); 
+        console.log(orderId);
+
+        await Order.updateOne({ _id: orderId },
+            { status: req.query.status }
+        ).then((data) => console.log(data))
+        
+        res.redirect('/admin/orderList');
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports={
     checkoutPageGET,
     placeOrder,
     cancelOrder,
     orderList,
-    orderDetails
+    orderDetails,
+    changeOrderStatus
 }
