@@ -136,8 +136,37 @@ const cancelOrder=async(req,res)=>{
     }
 }
 
+
+//admin side
+
+const orderList=async(req,res)=>{
+    try{
+        const orders = await Order.find({}).sort({ createdOn: -1 });
+        console.log(orders);
+        res.render("admin/orderList",{orders})
+    }catch(error){
+        console.log(error);
+    }
+}
+
+const orderDetails=async(req,res)=>{
+    try{
+        const orderId = req.query.id
+        const findOrder = await Order.findOne({ _id: orderId }).sort({ createdOn: 1 })
+        console.log(findOrder);
+
+
+        res.render("admin/orderDetails", { orders: findOrder, orderId })
+    }catch(error){
+
+    }
+}
+
+
 module.exports={
     checkoutPageGET,
     placeOrder,
-    cancelOrder
+    cancelOrder,
+    orderList,
+    orderDetails
 }

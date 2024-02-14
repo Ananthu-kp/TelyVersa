@@ -8,7 +8,7 @@ const categoryController=require("../controller/categoryController")
 const productMulter=require("../multer/multerProduct")
 const {isAdmin}=require("../middlewares/Auth")
 
-
+const orderController=require("../controller/orderController")
 
 router.get("/",isAdmin,adminController.adminHomeGet)
 router.get("/login",adminController.adminLoginGet)
@@ -36,5 +36,8 @@ router.get("/listCategory",isAdmin,categoryController.listCategoryGet)
 router.get("/unListCategory", isAdmin, categoryController.unlistCategoryGet)
 router.get("/editCategory",isAdmin, categoryController.editCategoryGet)
 router.post("/editCategory/:id",isAdmin, categoryController.editCategory)
+
+router.get("/orderList",isAdmin,orderController.orderList)
+router.get("/orderDetailsAdmin",isAdmin,orderController.orderDetails)
 
 module.exports=router; 
