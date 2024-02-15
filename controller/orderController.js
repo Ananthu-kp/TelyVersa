@@ -147,15 +147,25 @@ const cancelOrder=async(req,res)=>{
 
 //admin side
 
-const orderList=async(req,res)=>{
-    try{
-        const orders = await Order.find({}).sort({ createdOn: -1 });
-        console.log(orders);
-        res.render("admin/orderList",{orders})
-    }catch(error){
+const orderList = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1; // Get the current page from query parameters, default to 1 if not provided
+        const perPage = 4; // Number of orders per page
+
+        const totalOrders = await Order.countDocuments({});
+        const totalPages = Math.ceil(totalOrders / perPage);
+
+        const orders = await Order.find({})
+            .sort({ createdOn: -1 })
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        res.render("admin/orderList", { orders, currentPage: page, totalPages });
+    } catch (error) {
         console.log(error);
     }
 }
+
 
 const orderDetails=async(req,res)=>{
     try{

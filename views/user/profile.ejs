@@ -1,5 +1,29 @@
 <%- include("../partials/header") %>
-
+<style>
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    
+    .pagination .btn {
+        margin: 0 5px;
+        padding: 5px 10px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        text-decoration: none;
+        color: #333;
+    }
+    
+    .pagination .active {
+        background-color: #333;
+        color: #fff;
+    }
+    
+    .pagination .btn:hover {
+        background-color: #ddd;
+    }
+</style>
 
     <main class="main">
         <section class="pt-150 pb-150">
@@ -118,6 +142,19 @@
                                                             <% } %>
                                                         </tbody>
                                                     </table>
+                                                         <!-- Pagination -->
+                                                        <div class="pagination">
+                                                            <% if (currentPage > 1) { %>
+                                                                <a href="?page=<%= currentPage - 1 %>" class="btn">Previous</a>
+                                                            <% } %>
+                                                            <% for (let i = 1; i <= totalPages; i++) { %>
+                                                                <a href="?page=<%= i %>" class="btn <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+                                                            <% } %>
+                                                            <% if (currentPage < totalPages) { %>
+                                                                <a href="?page=<%= currentPage + 1 %>" class="btn">Next</a>
+                                                            <% } %>
+                                                        </div>
+
                                                 </div>
                                             </div>
                                         </div>

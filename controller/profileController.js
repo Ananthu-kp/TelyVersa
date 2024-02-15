@@ -15,9 +15,19 @@ const profileGET = async (req, res) => {
         const userData = await User.findOne({ email: userEmail });
         const addressData = await Address.findOne({ userId: userData._id });
         console.log("this is address ",addressData);
-        const orderData = await Order.find({ userId: userEmail }).sort({ createdOn: -1 });
+
+        const page = parseInt(req.query.page) || 1;
+        const perPage = 4;
+
+        const totalOrders = await Order.countDocuments({});
+        const totalPages = Math.ceil(totalOrders / perPage);
+
+        const orderData = await Order.find({ userId: userEmail }).sort({ createdOn: -1 })
+                .skip((page-1)* perPage)
+                .limit(perPage)
+
         console.log("this is my order data",orderData);
-        res.render("user/profile", { user: userData, userAddress: addressData, order: orderData });
+        res.render("user/profile", { user: userData, userAddress: addressData, order: orderData ,currentPage: page,totalPages});
 
     } catch (error) {
         console.log(error.message);

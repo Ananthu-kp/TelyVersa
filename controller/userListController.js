@@ -1,15 +1,24 @@
 const User=require("../model/userModel")
 
-const displayUser= async(req, res) => {
+const displayUser = async (req, res) => {
     try {
-        const data = await User.find({});
-        console.log(data);
-        res.render("admin/users", { data });
+        const page = parseInt(req.query.page) || 1; 
+        const perPage = 2; 
+
+        const totalUsers = await User.countDocuments({});
+        const totalPages = Math.ceil(totalUsers / perPage);
+
+        const data = await User.find({})
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        res.render("admin/users", { data, currentPage: page, totalPages });
     } catch (error) {
-        console.error("error:", error);
-        res.render("error", { errorMessage: "users not found" });
+        console.error("Error:", error);
+        res.render("error", { errorMessage: "Users not found" });
     }
 };
+
 
 const blockUser = async (req, res) => {
     try {

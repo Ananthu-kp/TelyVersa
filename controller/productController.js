@@ -10,14 +10,24 @@ const addProductGet=async(req,res)=>{
 
 const productListGet = async (req, res) => {
     try {
-        const data = await Product.find({});
+        const page = parseInt(req.query.page) || 1;
+        const perpage = 5;
+
+        const totalProducts = await Product.countDocuments({});
+        const totalPages = Math.ceil(totalProducts / perpage);
+
+        const data = await Product.find({})
+            .skip((page - 1) * perpage)
+            .limit(perpage);
+
         console.log(data);
-        res.render("admin/adminViewProducts", { data });
+        res.render("admin/adminViewProducts", { data, currentPage: page, totalPages });
     } catch (err) {
         console.error("Product Listing error", err);
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 const addProduct = async (req, res) => {
     try {

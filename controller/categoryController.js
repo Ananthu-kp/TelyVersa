@@ -2,8 +2,16 @@ const Category=require("../model/categoryModel")
 
 const categoryGet = async (req, res) => {
     try {
+        const page= parseInt(req.query.page)||1;
+        const perpage= 4;
+        
+        const totalCat= await Category.countDocuments({});
+        const totalPages= Math.ceil(totalCat/perpage);
+
         const categoryData = await Category.find({})
-        res.render("admin/adminCategory", { category: categoryData })
+                .skip((page - 1)* perpage)
+                .limit(perpage);
+        res.render("admin/adminCategory", { category: categoryData ,currentPage: page, totalPages})
     } catch (error) {
         console.log(error.message);
     }
