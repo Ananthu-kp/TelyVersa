@@ -1,14 +1,14 @@
 const express=require("express");
 const router=express();
 
-const {isLogged} = require("../middlewares/Auth")
+const {isLogged , isBlocked} = require("../middlewares/Auth")
 
 const userController = require("../controller/userController");
 const cartController=require("../controller/cartController")
 const profileController=require("../controller/profileController")
 const orderController=require("../controller/orderController")
 
-router.get("/",userController.userHomeGet)
+router.get("/" , isBlocked ,userController.userHomeGet)
 router.get("/login",userController.userLoginGet)
 router.post("/login",userController.verifyUser)
 router.get("/signup",userController.userSignupGet)
@@ -31,21 +31,21 @@ router.get("/productDetails",userController.productDetailsGet)
 router.get("/shop",userController.getShop)
 
 
-router.get("/cart",isLogged,cartController.cartPageGet)
-router.post("/cart", isLogged,cartController.addToCart)
+router.get("/cart",isLogged,isBlocked,cartController.cartPageGet)
+router.post("/cart", isLogged,isBlocked,cartController.addToCart)
 router.post("/changeQuantity",isLogged,cartController.changeQuantity)
 router.get("/deleteItem", isLogged, cartController.deleteCartProduct)
 
 
-router.get("/profile", isLogged, profileController.profileGET)
-router.get("/addAddress", isLogged, profileController.addAddressGET)
-router.post("/addAddress", isLogged, profileController.addAddress)
-router.get("/editAddress", isLogged, profileController.editAddressGET),
-router.post("/editAddress", isLogged, profileController.editAddress)
-router.get("/deleteAddress", isLogged, profileController.deleteAddressGET)
-router.post("/editUserDetails", isLogged, profileController.editUserDetails)
-router.get("/orderDetails",isLogged,profileController.orderDetails)
-router.post("/verifyOldPassword",isLogged,profileController.verifyOldPassword)
+router.get("/profile", isLogged, isBlocked, profileController.profileGET)
+router.get("/addAddress", isLogged ,isBlocked, profileController.addAddressGET)
+router.post("/addAddress", isLogged , isBlocked,profileController.addAddress)
+router.get("/editAddress", isLogged ,isBlocked, profileController.editAddressGET),
+router.post("/editAddress", isLogged ,isBlocked, profileController.editAddress)
+router.get("/deleteAddress", isLogged ,isBlocked, profileController.deleteAddressGET)
+router.post("/editUserDetails", isLogged ,isBlocked, profileController.editUserDetails)
+router.get("/orderDetails",isLogged ,isBlocked,profileController.orderDetails)
+router.post("/verifyOldPassword",isLogged ,profileController.verifyOldPassword)
 router.post("/changepassword", isLogged, profileController.changePassword)
 
 

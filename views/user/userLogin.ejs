@@ -14,6 +14,11 @@
             <div class="heading_s1">
                 <h3 class="mb-30">Login</h3>
             </div>
+
+            <% if (locals.message) { %>
+                <p id="errorMessage" style="color: red;"><%= message %></p>
+            <% } %>
+
             <form id="loginForm" method="post" onsubmit="validateForm(event)" novalidate>
                 <div class="form-group">
                     <% if (locals.login_err) { %>
@@ -49,6 +54,13 @@
 </div>
 
 <script>
+    setTimeout(function() {
+        var errorMessageElement = document.getElementById('errorMessage');
+        if (errorMessageElement) {
+            errorMessageElement.parentNode.removeChild(errorMessageElement);
+        }
+    }, 3000);
+
     const login_err = document.getElementById("err");
         if (login_err) {
             setTimeout(() => {
