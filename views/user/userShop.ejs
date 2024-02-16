@@ -1,33 +1,26 @@
 <%- include("../partials/header") %>
-        
+      
         <section class="mt-50 mb-50">
             <div class="container">
                 <div class="row flex-row-reverse">
                     <div class="col-lg-9">
+
+                        <div class="search-style-1 pl-1300">
+                            <form action="/search">
+                                <div class="input-group">
+                                    <input type="text" id="filterItem" name="search" class="form-control" placeholder="Search...">
+                                </div>
+                            </form>
+                        </div>
+                        
+                        
+
                         <div class="shop-product-fillter">
                             <div class="totall-product">
-                                <!-- <p> We found <strong class="text-brand"><%-count%></strong> items for you!</p> -->
+                     
                             </div>
                             <div class="sort-by-product-area">
-                                <div class="sort-by-cover mr-10">
-                                    <!-- <div class="sort-by-product-wrap">
-                                        <div class="sort-by">
-                                            <span><i class="fi-rs-apps"></i>Show:</span>
-                                        </div>
-                                        <div class="sort-by-dropdown-wrap">
-                                            <span> 50 <i class="fi-rs-angle-small-down"></i></span>
-                                        </div>
-                                    </div> -->
-                                    <!-- <div class="sort-by-dropdown">
-                                        <ul>
-                                            <li><a class="active" href="#">50</a></li>
-                                            <li><a href="#">100</a></li>
-                                            <li><a href="#">150</a></li>
-                                            <li><a href="#">200</a></li>
-                                            <li><a href="#">All</a></li>
-                                        </ul>
-                                    </div> -->
-                                </div>
+                                
                                 <div class="sort-by-cover">
                                     <div class="sort-by-product-wrap">
                                         <div class="sort-by">
@@ -92,19 +85,7 @@
                             </div>
                             <% } %>
                         </div>
-                        <!--pagination-->
-                        <div class="pagination-area mt-15 mb-sm-5 mb-lg-0">
-                            <nav aria-label="Page navigation example">
-                                <ul class="pagination justify-content-start">
-                                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                                    <li class="page-item"><a class="page-link" href="#"><i class="fi-rs-angle-double-small-right"></i></a></li>
-                                </ul>
-                            </nav>
-                        </div>
+
                     </div>
                     <div class="col-lg-3 primary-sidebar sticky-sidebar">
                         <div class="widget-category mb-30">
@@ -112,7 +93,7 @@
                             
                               <ul class="categories"> 
                                 <% for(let i=0; i < category.length; i++) { %>
-                                <li><a href="/shop"><%= category[i].name %></a></li>
+                                <li><a href="/filter?category=<%= category[i]._id %>"><%= category[i].name %></a></a></li>
                                 <% } %>
                             </ul> 
                             
@@ -155,4 +136,48 @@
                 </div>
             </div>
         </section>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const filterItem = document.getElementById("filterItem");
+        
+                // Add event listener for input change
+                filterItem.addEventListener("input", function() {
+                    const searchQuery = filterItem.value.trim();
+                    
+                    // Call the search function when input changes
+                    searchProducts(searchQuery);
+                });
+            });
+        
+            async function searchProducts(searchQuery) {
+                try {
+                    const response = await fetch(`/search?search=${encodeURIComponent(searchQuery)}`);
+                    const searchData = await response.json();
+        
+                    // Update the product grid with search results
+                    updateProductGrid(searchData);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        
+            function updateProductGrid(searchData) {
+                // Implement logic to update the product grid with search results
+                console.log(searchData);
+                // Example: You can update the HTML content dynamically
+                const productGrid = document.querySelector('.product-grid-3');
+                productGrid.innerHTML = ''; // Clear existing content
+        
+                searchData.forEach(product => {
+                    const productHTML = `
+                        <div class="col-lg-4 col-md-4 col-12 col-sm-6">
+                            <!-- Render product details here using product object -->
+                        </div>
+                    `;
+                    productGrid.innerHTML += productHTML;
+                });
+            }
+        </script>
+        
     <%- include("../partials/footer") %>

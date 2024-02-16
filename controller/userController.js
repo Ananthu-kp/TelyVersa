@@ -437,7 +437,63 @@ const getShop = async (req, res) => {
     }
 };
 
- 
+ //search
+
+ const searchProducts = async (req, res) => {
+    try {
+        const user = req.session.user
+        let search = req.query.search
+        const categories = await Category.find({ isListed: true })
+
+        const searchResult = await Product.find({
+            $or: [
+                {
+                    productName: { $regex: ".*" + search + ".*", $options: "i" },
+                }
+            ],
+            isBlocked: false,
+        }).lean()
+        res.render("user/userShop",
+            {
+                user: user,
+                product: searchResult,
+                category: categories,
+            })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const filterProduct = async (req, res) => {
+    try {
+        const user = req.session.user;
+        const category = req.query.category;
+        const findCategory = category ? await Category.findOne({ _id: category }) : null;
+
+        const query = {
+            isBlocked: false,
+        };
+        if (findCategory) {
+            query.category = findCategory.name;
+        }
+        const findProducts = await Product.find(query);
+        const categories = await Category.find({ isListed: true });
+
+        res.render("user/userShop", {
+            user: user,
+            product: findProducts,
+            category: categories,
+            selectedCategory: category || null,   
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+};
+
+
 
 module.exports={
     userHomeGet,
@@ -457,5 +513,7 @@ module.exports={
     newPasswordGet,
     newPassword,
     productDetailsGet,
-    getShop
+    getShop,
+    searchProducts,
+    filterProduct
 }

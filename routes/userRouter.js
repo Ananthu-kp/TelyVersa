@@ -29,6 +29,8 @@ router.post("/newpass", userController.newPassword)
 
 router.get("/productDetails",userController.productDetailsGet)
 router.get("/shop",userController.getShop)
+router.get("/search", userController.searchProducts)
+router.get("/filter", userController.filterProduct)
 
 
 router.get("/cart",isLogged,isBlocked,cartController.cartPageGet)
