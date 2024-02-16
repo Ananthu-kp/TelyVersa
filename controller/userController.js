@@ -494,6 +494,38 @@ const filterProduct = async (req, res) => {
 };
 
 
+const getSortProducts = async (req, res) => {
+    try {
+        let option = req.body.option;
+        let data;
+
+        if (option == "highToLow") {
+            data = await Product.find({ isBlocked: false }).sort({ salePrice: -1 });
+        } else if (option == "lowToHigh") {
+            data = await Product.find({ isBlocked: false }).sort({ salePrice: 1 });
+        } else if (option == "A-Z") {
+            data = await Product.find({ isBlocked: false }).sort({ productName: 1 });
+        } else if (option == "Z-A"){
+            data = await Product.find({ isBlocked: false}).sort({ productName: -1});
+        } else if (option == "featured"){
+            data= await Product.find({})
+        }
+
+        res.json({
+            status: true,
+            data: {
+                currentProduct: data,
+            }
+        });
+
+    } catch (error) {
+        console.log(error.message);
+        res.json({ status: false, error: error.message });
+    }
+};
+
+
+
 
 module.exports={
     userHomeGet,
@@ -515,5 +547,6 @@ module.exports={
     productDetailsGet,
     getShop,
     searchProducts,
-    filterProduct
+    filterProduct,
+    getSortProducts
 }
