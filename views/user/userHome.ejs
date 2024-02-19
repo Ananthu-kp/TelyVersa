@@ -120,15 +120,15 @@
                                 data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one"
                                 aria-selected="true">Featured</button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <!-- <li class="nav-item" role="presentation">
                             <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two"
                                 type="button" role="tab" aria-controls="tab-two" aria-selected="false">Popular</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
+                        </li> -->
+                        <!-- <li class="nav-item" role="presentation">
                             <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab" data-bs-target="#tab-three"
                                 type="button" role="tab" aria-controls="tab-three" aria-selected="false">New
                                 added</button>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
                 <!--End nav-tabs-->
@@ -145,22 +145,25 @@
                                         <div class="product-img-action-wrap">
                                             <div class="product-img product-img-zoom">
                                                 <a href="/productDetails?id=<%=product[i].id%>">
-                                                    <img class="default-img"src="/uploads/products/<%=product[i].productImage[0]%>" alt="">
+                                                    <img class="default-img"
+                                                        src="/uploads/products/<%=product[i].productImage[0]%>" alt="">
                                                 </a>
                                             </div>
                                             <div class="product-action-1">
-                                               
+
                                                 <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                                    href="products-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                               
+                                                    onclick="addToWishlist('<%= product[i]._id %>')"><i
+                                                        class="fi-rs-heart"></i></a>
+
                                             </div>
                                             <div class="product-badges product-badges-position product-badges-mrg">
                                                 <span class="hot">New</span>
                                             </div>
                                         </div>
                                         <div class="product-content-wrap">
-                                            
-                                            <h2><a href="products-product-right.html"><%-product[i].productName%></a></h2>
+
+                                            <h2><a href="products-product-right.html"><%-product[i].productName%></a>
+                                            </h2>
                                             <!-- <div class="rating-result" title="90%">
                                                 <span>
                                                     <span>90%</span>
@@ -168,7 +171,8 @@
                                             </div> -->
                                             <div class="product-price">
                                                 <span>₹<%-product[i].salePrice.toLocaleString('en-IN')%> </span>
-                                                <span class="old-price">₹<%-product[i].regularPrice.toLocaleString('en-IN')%></span>
+                                                <span
+                                                    class="old-price">₹<%-product[i].regularPrice.toLocaleString('en-IN')%></span>
                                             </div>
                                             <div class="product-action-1 show">
                                                 <a aria-label="Add To Cart" class="action-btn hover-up"
@@ -194,16 +198,35 @@
             </div>
         </section>
 
-
-
-       
-
-
-
-
-
-
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function addToWishlist(productId) {
+
+            $.ajax({
+                url: "/wishlist/add",
+                method: "POST",
+                data: {
+                    product: productId
+                },
+                success: function (response) {
+                    if (response.status == true) {
+                        Swal.fire({
+
+                            icon: "success",
+                            title: "Product added to wishlist",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                }
+            })
+
+
+        }
+    </script>
 
 
     <%- include("../partials/footer") %>

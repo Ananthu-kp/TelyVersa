@@ -7,6 +7,10 @@ const userController = require("../controller/userController");
 const cartController=require("../controller/cartController")
 const profileController=require("../controller/profileController")
 const orderController=require("../controller/orderController")
+const wishListController=require("../controller/wishlistController")
+
+
+
 
 router.get("/" , isBlocked ,userController.userHomeGet)
 router.get("/login",userController.userLoginGet)
@@ -57,5 +61,10 @@ router.post("/changepassword", isLogged, profileController.changePassword)
 router.get("/checkout",isLogged,orderController.checkoutPageGET)
 router.post('/orderPlaced', isLogged, orderController.placeOrder)
 router.get("/cancelOrder",isLogged,orderController.cancelOrder)
+
+
+
+router.get("/wishlist",isLogged, isBlocked,wishListController.renderWishlistPage)
+router.post("/addToWishlist",isLogged,isBlocked,wishListController.productAddWishlist)
 
 module.exports=router;

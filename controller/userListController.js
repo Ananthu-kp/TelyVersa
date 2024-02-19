@@ -3,7 +3,7 @@ const User=require("../model/userModel")
 const displayUser = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1; 
-        const perPage = 2; 
+        const perPage = 4; 
 
         const totalUsers = await User.countDocuments({});
         const totalPages = Math.ceil(totalUsers / perPage);

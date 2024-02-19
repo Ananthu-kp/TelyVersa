@@ -1,0 +1,49 @@
+<%- include("../partials/header") %>
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Shop
+                <span></span> Wishlist
+            </div>
+        </div>
+    </div>
+    <section class="mt-50 mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table shopping-summery text-center">
+                            <thead>
+                                <tr class="main-heading">
+                                    <th scope="col" colspan="2">Product</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Stock Status</th>
+                                    <th scope="col">Action</th>
+                                    <th scope="col">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               
+                                <% for( let i = 0; i < data.length; i++ ) { %>
+                                    <tr>
+                                        <td class="image product-thumbnail"> <img src="/uploads/products/<%= data[i].image %>" alt="#"></td>
+                                        <td class="product-dec product-name">
+                                            <h5 class="product-name"></h5>
+                                        </td>
+                                    </tr>
+                                <% } %>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<%- include("../partials/footer") %>
