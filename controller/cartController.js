@@ -114,6 +114,7 @@ const changeQuantity = async (req, res) => {
 };
 
 
+
 const deleteCartProduct = async (req, res) => {
     try {
         const productId = req.query.id;
