@@ -51,7 +51,7 @@
                                         <div class="product-action-1">
 
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                                href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                                href="javascript:void(0);" onclick="addToWishlist('<%= product[i]._id %>')"><i class="fi-rs-heart"></i></a>
 
                                         </div>
                                         <div class="product-badges product-badges-position product-badges-mrg">
@@ -135,8 +135,70 @@
             </div>
         </div>
     </section>
+    <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
+"></script>
 
     <script>
+
+function addToWishlist(productId) {
+    $.ajax({
+        url: "/addToWishlist",
+        method: "POST",
+        data: {
+            productId: productId
+        },
+        success: (response) => {
+            if (response.status == true) {
+                Swal.fire({
+                    title: 'Product Added to Wishlist!',
+                    text: 'Continue shopping.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirect to the wishlist page
+                    window.location.href = '/wishlist';
+                });
+            } else  {
+                Swal.fire({
+                    title: 'You need to log in first',
+                    text: 'Redirecting to login page...',
+                    icon: 'warning',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirect to the login page
+                    location.href = '/login'
+                });
+            }
+        },
+        error: (error) => {
+            console.error('Error adding to wishlist:', error);
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Something went wrong. Please try again later.',
+                icon: 'error',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+    });
+}
+
+
+    function getCurrentPageFromURL(element) {
+    
+    const url = window.location.href;
+    const match = url.match(/page=(\d+)/);
+
+    if (match && match[1]) {
+        return parseInt(match[1], 10);
+    }
+
+    return 1;
+}
+
         document.addEventListener("DOMContentLoaded", function () {
             const filterItem = document.getElementById("filterItem");
 

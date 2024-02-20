@@ -12,17 +12,63 @@ const renderWishlistPage= async(req,res)=>{
     }
 }
 
-const productAddWishlist=async(req,res)=>{
-    try{
-        const productId= req.session.productId
-        console.log(productId);
-    }catch(error){
-        console.log(error);
+const productAddWishlist = async (req, res) => {
+    try {
+        if (!req.session.user) {
+            // console.log("User not found")
+            res.json({ error: "User not found", status: false })
+        }
+        const productId = req.body.productId
+        const findProduct = await Product.findOne({ _id: productId })
+        // console.log("sjdbashgashfgh",findProduct);
+        await User.updateOne(
+            {
+                email: req.session.user,
+            },
+            {
+                $addToSet: {
+                    wishlist: {
+                        productId: productId,
+                        image: findProduct.productImage[0],
+                        productName: findProduct.productName,
+                        category: findProduct.category,
+                        salePrice: findProduct.salePrice,
+                        brand: findProduct.brand,
+                        quantity : findProduct.quantity 
+                    }
+                }
+            }
+        )
+        .then(data => console.log(data))
+
+        res.json({ status: true })
+    } catch (error) {
+        console.log(error.message);
     }
-}
+};
+
+
+const deleteWishlist = async (req, res) => {
+    try {
+        const id = req.query.id;
+        const result = await User.updateOne(
+            { email: req.session.user },
+            {
+                $pull: {
+                    wishlist: { productId: id }
+                }
+            }
+        );
+        console.log(result);
+        res.redirect("/wishlist");
+    } catch (error) {
+        console.log(error.message);
+    }
+};
 
 
 module.exports={
     renderWishlistPage,
-    productAddWishlist
+    productAddWishlist,
+    deleteWishlist
 }

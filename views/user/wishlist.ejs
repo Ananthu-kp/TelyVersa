@@ -5,8 +5,8 @@
         <div class="container">
             <div class="breadcrumb">
                 <a href="/" rel="nofollow">Home</a>
-                <span></span> Shop
-                <span></span> Wishlist
+                <span></span><a href="/shop">Shop</a>
+                <span></span><a href="/wishlist">Wishlist</a>
             </div>
         </div>
     </div>
@@ -15,6 +15,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
+                        <% if (data.wishlist.length === 0) { %>
+                            <p>Your wishlist is empty.</p>
+                        <% } else { %>
                         <table class="table shopping-summery text-center">
                             <thead>
                                 <tr class="main-heading">
@@ -27,17 +30,40 @@
                             </thead>
                             <tbody>
                                
-                                <% for( let i = 0; i < data.length; i++ ) { %>
+                               
+                                <% data.wishlist.forEach(item => { %>
                                     <tr>
-                                        <td class="image product-thumbnail"> <img src="/uploads/products/<%= data[i].image %>" alt="#"></td>
-                                        <td class="product-dec product-name">
-                                            <h5 class="product-name"></h5>
+                                        <td class="image product-thumbnail"><img src="/uploads/products/<%= item.image %>" alt="#"></td>
+                                        <td class="product-des product-name">
+                                            <h5 class="product-name"><a href="shop-product-right.html"><%= item.productName %></a></h5>
+                                            <p class="font-xs">
+                                                <%= item.category %><br>
+                                                
+                                            </p>
+                                        </td>
+                                        <td class="price" data-title="Price"><span>₹<%= item.salePrice %></span></td>
+                                        <td class="text-center" data-title="Stock">
+                                            <span class="color3 font-weight-bold">
+                                                <% if (item.quantity > 0) { %>
+                                                    <p>In Stock</p>
+                                                <% } else { %>
+                                                    Out Of Stock
+                                                <% } %>
+                                            </span>
+                                        </td>
+                                        <td class="text-right" data-title="Cart">
+                                            <button class="btn btn-success" onclick="addToCart('<%=item.productId%>', 1, '<%=item.quantity%>')">Add to
+                                                Cart</button>
+                                        </td>
+                                        <td class="action" data-title="Remove">
+                                            <a href="/deleteWishlist?id=<%= item.productId %>"><i class="fi-rs-trash"></i></a>
                                         </td>
                                     </tr>
-                                <% } %>
+                                <% }) %>
 
                             </tbody>
                         </table>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -45,5 +71,50 @@
     </section>
 </main>
 
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
+"></script>
+<script>
+     function addToCart(proId,quantity, stock) {
+            // console.log(proId, stock);
+            if (stock <= 0) {
+                Swal.fire({
+                    title: 'OUT OF STOCK!',
+                    text: 'Quantity exceed.',
+                    icon: 'error',
+                    timer: 5000
+                })
+                return;
+            }
+
+            $.ajax({
+                url: `/cart`,
+                method: 'post',
+                data: {
+                    id:proId,
+                    quantity: quantity,
+                },
+                success(response) {
+                    if (response.added == true) {
+                        Swal.fire({
+                            title: 'CART',
+                            text: 'PRODUCT ADDED TO CART.',
+                            icon: 'success',
+                            timer: 5000
+                        })
+                    } else if (response.added == false) {
+                        Swal.fire({
+                            title: 'STOCK!',
+                            text: 'Product is out of stock.',
+                            icon: 'error',
+                            timer: 5000
+                        })
+                    } else {
+                        location.href = '/login'
+                    }
+                }
+            })
+        }
+</script>
 
 <%- include("../partials/footer") %>

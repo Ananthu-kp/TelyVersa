@@ -66,5 +66,6 @@ router.get("/cancelOrder",isLogged,orderController.cancelOrder)
 
 router.get("/wishlist",isLogged, isBlocked,wishListController.renderWishlistPage)
 router.post("/addToWishlist",isLogged,isBlocked,wishListController.productAddWishlist)
+router.get("/deleteWishlist",isLogged,isBlocked,wishListController.deleteWishlist)
 
 module.exports=router;
