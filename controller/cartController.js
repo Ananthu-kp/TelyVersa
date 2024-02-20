@@ -7,7 +7,7 @@ const cartPageGet = async (req, res) => {
         const email = req.session.user;
         const user = await User.findOne({ email });
         const oid = new mongodb.ObjectId(user._id);
-        
+
         let product = await User.aggregate([
             { $match: { _id: oid } },
             { $unwind: '$cart' },
@@ -17,7 +17,7 @@ const cartPageGet = async (req, res) => {
                     quantity: '$cart.quantity',
                 }
             },
-            { 
+            {
                 $lookup: {
                     from: 'products',
                     localField: 'ProductId',
@@ -90,22 +90,22 @@ const addToCart = async (req, res) => {
 
 const changeQuantity = async (req, res) => {
     try {
-        console.log("abi");
+        // console.log("abi");
         const { productId, quantity } = req.body;
         const userEmail = req.session.user;
-        const userData = await User.findOne({email:userEmail});
+        const userData = await User.findOne({ email: userEmail });
         const productData = await Product.findById(productId);
         // console.log("productId",productId);
         // console.log("userData",userData);
         // console.log("productData",productData);
         // console.log("quantity",quantity);
         const newone = await User.updateOne(
-            { email: userEmail, "cart.ProductId": productId }, 
+            { email: userEmail, "cart.ProductId": productId },
             { $set: { "cart.$.quantity": quantity } }
         );
 
-        console.log("new one : ",newone);
-        
+        console.log("new one : ", newone);
+
         res.json({ success: true });
     } catch (error) {
         console.error("Error changing quantity:", error);
@@ -114,21 +114,18 @@ const changeQuantity = async (req, res) => {
 };
 
 
-
-
-
-
 const deleteCartProduct = async (req, res) => {
     try {
-        const id = req.query.id;
-        console.log(id, "id");
-
-        const userEmail = req.session.user;
-        const user = await User.findOne({ email: userEmail }); 
-        const cartIndex = user.cart.findIndex(item => item.productId == id);
-        user.cart.splice(cartIndex, 1);
-        await user.save();
-        console.log("item deleted from cart");
+        const productId = req.query.id;
+        const result = await User.updateOne(
+            { email: req.session.user },
+            {
+                $pull: {
+                    cart: { ProductId: productId }
+                }
+            }
+        );
+        console.log(result);
         res.redirect("/cart");
     } catch (error) {
         console.log('error ', error);

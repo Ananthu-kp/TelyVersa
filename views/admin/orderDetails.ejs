@@ -53,6 +53,7 @@
                                                 <option value="status">Status</option>
                                                 <option value="Shipped">Shipped</option>
                                                 <option value="Delivered">Delivered</option>
+                                                <option value="Canceled">Canceled</option>
                                             </select>
                                             <% } %>
                                                 <% } else { %>
@@ -253,7 +254,9 @@
     </style>
 
 
-
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
+"></script>
     <script>
         
 
@@ -268,8 +271,25 @@
                 window.location.href = `http://localhost:3000/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
             } else if (selectedValue == "Delivered") {
                 window.location.href = `http://localhost:3000/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
-            } else {
-                alert("error")
+            } else if (selectedValue == "Canceled") {
+                Swal.fire({
+                    title: 'Confirm cancellation',
+                    text: 'Are you sure you want to cancel this order?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, cancel it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = `http://localhost:3000/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
+                    } else {
+                        location.reload();
+                    }
+                })
+            }
+            else {
+                location.reload();
             }
 
 

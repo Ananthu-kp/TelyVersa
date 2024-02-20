@@ -189,56 +189,80 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
 <script>
-     async function placeOrder(userId, prodId, isSingle) {
-            // alert(prodId)
-            let address = $("input[name='selectedAddress']:checked").val();
-            let payment = $("input[name='payment_option']:checked").val();
+    const MAX_PRODUCTS_LIMIT = 5;
 
-            const sum = document.getElementById("totalValue").textContent;
-            const numericValue = parseInt(sum.replace(/[^\d.]/g, ''));
+    async function placeOrder(userId, prodId, isSingle) {
+        let totalQuantity = isSingle ? 1 : prodId.length; // Use prodId.length instead of prodIds.length
+        let address = $("input[name='selectedAddress']:checked").val();
+        let payment = $("input[name='payment_option']:checked").val();
 
-            if (!payment) {
-                Swal.fire({
-                    title: 'NO PAYMENT FOUND!',
-                    text: 'Please select your Payment.',
-                    icon: 'error',
-                    timer: 3000,
-                });
-            } else if (!address) {
-                Swal.fire({
-                    title: 'NO ADDRESS FOUND!',
-                    text: 'Please select your address.',
-                    icon: 'error',
-                    timer: 3000,
-                });
-            } else {
-                $.ajax({
-                    url: '/orderPlaced',
-                    method: 'POST',
-                    data: {
-                        totalPrice: numericValue,
-                        addressId: address,
-                        payment: payment,
-                        productId: prodId,
-                    },
-                    success: function (response) {
-                        if (response.method === "cod") {
-                            Swal.fire({
-                                title: "Order success",
-                                text: "Order placed successfully",
-                                icon: "success",
-                                showConfirmButton: false,
-                                timer: 2000,
-                            })
-                            setTimeout(() => {
-                                window.location.href = "/profile";
-                            }, 700);
-                        }
-                    }
-                })
-            }
+        const sum = document.getElementById("totalValue").textContent;
+        const numericValue = parseInt(sum.replace(/[^\d.]/g, ''));
 
+        if (totalQuantity > MAX_PRODUCTS_LIMIT) {
+            Swal.fire({
+                title: 'Maximum Products Limit Exceeded',
+                text: `You can order maximum ${MAX_PRODUCTS_LIMIT} products at a time.`,
+                icon: 'error',
+                timer: 3000,
+            });
+            return;
         }
+
+        if (!payment) {
+            Swal.fire({
+                title: 'NO PAYMENT FOUND!',
+                text: 'Please select your Payment.',
+                icon: 'error',
+                timer: 3000,
+            });
+            return;
+        }
+
+        if (!address) {
+            Swal.fire({
+                title: 'NO ADDRESS FOUND!',
+                text: 'Please select your address.',
+                icon: 'error',
+                timer: 3000,
+            });
+            return;
+        }
+
+        $.ajax({
+            url: '/orderPlaced',
+            method: 'POST',
+            data: {
+                totalPrice: numericValue,
+                addressId: address,
+                payment: payment,
+                productId: prodId, // Use prodId instead of prodIds
+            },
+            success: function (response) {
+                if (response.method === "cod") {
+                    Swal.fire({
+                        title: "Order success",
+                        text: "Order placed successfully",
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+                    setTimeout(() => {
+                        window.location.href = "/profile";
+                    }, 700);
+                }
+            },
+            error: function (error) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Something went wrong. Please try again later.",
+                    icon: "error",
+                    timer: 3000,
+                });
+            }
+        });
+    }
 </script>
+
 
 <%- include("../partials/footer") %>

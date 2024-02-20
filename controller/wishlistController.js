@@ -33,7 +33,6 @@ const productAddWishlist = async (req, res) => {
                         productName: findProduct.productName,
                         category: findProduct.category,
                         salePrice: findProduct.salePrice,
-                        brand: findProduct.brand,
                         quantity : findProduct.quantity 
                     }
                 }

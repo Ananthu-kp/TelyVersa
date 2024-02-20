@@ -273,20 +273,30 @@
         }
     </style>
 
+<script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
+"></script>
 
-
-    <script>
-        function handleDropdownChange(selectElement) {
-
-        //    alert(orderId.value, "hiiiiiiiiiiiiiiiiiiiii");
-            var selectedValue = selectElement.value;
-            // alert(selectedValue);
-            if (selectedValue == "cancel") {
-                // alert("keri");
-                window.location.href = `http://localhost:3000/cancelOrder?orderId=${orderId.value}`;
-            }
+<script>
+    function handleDropdownChange(selectElement) {
+        var selectedValue = selectElement.value;
+        if (selectedValue == "cancel") {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You are about to cancel this order.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `http://localhost:3000/cancelOrder?orderId=${orderId.value}`;
+                }
+            });
         }
+    }
+</script>
 
-    </script>
 
 <%- include("../partials/footer") %>
