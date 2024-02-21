@@ -5,8 +5,16 @@ const renderWishlistPage= async(req,res)=>{
     try{
         const userEmail= req.session.user
        
-        const userData= await User.findOne({email:userEmail});  
+        if(userEmail){
+            const userData= await User.findOne({email:userEmail}); 
+            const cartCount= userData.cart.length
+            const wishlistCount= userData.wishlist.length
+
+        res.render("user/wishlist",{data:userData, user:userEmail, cartCount, wishlistCount})
+        }else{
+            
         res.render("user/wishlist",{data:userData, user:userEmail})
+        }
     }catch(error){
         console.log(error);
     }

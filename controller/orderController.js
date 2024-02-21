@@ -37,7 +37,10 @@ const checkoutPageGET = async (req, res) => {
 
         const grandTotal = req.session.grandTotal;
 
-        res.render("user/checkout", { data: data, user: findUser, isCart: true, userAddress: userAddress, isSingle: false, grandTotal: grandTotal });
+        const cartCount= findUser.cart.length
+        const wishlistCount= findUser.wishlist.length
+
+        res.render("user/checkout", { data: data, user: findUser, isCart: true, userAddress: userAddress, isSingle: false, grandTotal: grandTotal ,cartCount,wishlistCount});
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");

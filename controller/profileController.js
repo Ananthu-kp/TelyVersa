@@ -27,7 +27,10 @@ const profileGET = async (req, res) => {
                 .limit(perPage)
 
         console.log("this is my order data",orderData);
-        res.render("user/profile", { user: userData, userAddress: addressData, order: orderData ,currentPage: page,totalPages});
+        const cartCount= userData.cart.length
+        const wishlistCount=userData.wishlist.length
+
+        res.render("user/profile", { user: userData, userAddress: addressData, order: orderData ,currentPage: page,totalPages, cartCount, wishlistCount});
 
     } catch (error) {
         console.log(error.message);
@@ -60,7 +63,12 @@ const editUserDetails = async (req, res) => {
 const addAddressGET = async (req, res) => {
     try {
         const user = req.session.user
-        res.render("user/address", { user: user })
+        const findUser= await User.findOne({email:user})
+
+        const cartCount=findUser.cart.length
+        const wishlistCount= findUser.wishlist.length
+
+        res.render("user/address", { user: user ,cartCount, wishlistCount})
     } catch (error) {
         console.log(error.message);
     }
@@ -135,8 +143,13 @@ const editAddressGET = async (req, res) => {
         const addressData = currAddress.address.find((item) => {
             return item._id.toString() == addressId.toString()
         })
+        const findUser= await User.findOne({email:user})
+
+        const cartCount=findUser.cart.length
+        const wishlistCount=findUser.wishlist.length
+
         // console.log(addressData);
-        res.render("user/edit-address", { address: addressData, user: user })
+        res.render("user/edit-address", { address: addressData, user: user ,cartCount, wishlistCount})
     } catch (error) {
         console.log(error.message);
     }

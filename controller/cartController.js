@@ -37,8 +37,17 @@ const cartPageGet = async (req, res) => {
             }
         }
         req.session.grandTotal = grandTotal;
+// console.log("hii");
+       if(user){
+        const findUser= await User.findOne({email})
+        const cartCount=findUser.cart.length
+        const wishlistCount=findUser.wishlist.length
+        console.log(cartCount);
 
-        res.render("user/cart", { user, quantity, product, grandTotal });
+        res.render("user/cart", { user, quantity, product, grandTotal ,cartCount,wishlistCount});
+       }else{
+        res.render("user/cart", { user, quantity, product, grandTotal});
+       }
     } catch (err) {
         console.error("Error fetching cart page:", err);
         res.status(500).send("Error fetching cart page");

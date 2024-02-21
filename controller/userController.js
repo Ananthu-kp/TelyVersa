@@ -9,9 +9,19 @@ const userHomeGet=async(req,res)=>{
     try{
         const user=req.session.user
         const product= await Product.find({isBlocked:false})
-        res.render("user/userHome", {user : user ,product:product});
+        if(user){
+            const findUser= await User.findOne({email:user})
+
+            const cartCount= findUser.cart.length
+            const wishlistCount= findUser.wishlist.length
+
+            res.render("user/userHome", {user : user ,product:product, cartCount,wishlistCount});
+        }else{
+            res.render("user/userHome", {user : user ,product:product});
+        }
+       
     }catch(error){
-        res.render("user/userHome")
+        console.log(error);
     }
 }
 
@@ -413,7 +423,11 @@ const productDetailsGet= async(req,res)=>{
         const product =await Product.find({})
         console.log(findProduct._id);
         if (user) {
-            res.render("user/productDetails", { product: findProduct, user: user,  })
+            const findUser= await User.findOne({email:user})
+
+            const cartCount= findUser.cart.length
+            const wishlistCount= findUser.wishlist.length
+            res.render("user/productDetails", { product: findProduct, user: user, cartCount ,wishlistCount})
         } 
         else {
             res.render("user/productDetails", { product: findProduct })
@@ -430,7 +444,15 @@ const getShop = async (req, res) => {
         const product = await Product.find({ isBlocked: false });
         const category = await Category.find({ isListed: true }); // Corrected here
         console.log(product);
-        res.render("user/userShop", { product, user, count, category }); // Corrected here
+        if(user){
+            const findUser= await User.findOne({email:user})
+            const cartCount= findUser.cart.length
+            const wishlistCount= findUser.wishlist.length
+
+            res.render("user/userShop", { product, user, count, category ,cartCount,wishlistCount});
+        }else{
+            res.render("user/userShop", { product, user, count, category });
+        }
 
     } catch (error) {
         console.log(error.message);
@@ -453,12 +475,28 @@ const getShop = async (req, res) => {
             ],
             isBlocked: false,
         }).lean()
-        res.render("user/userShop",
+
+        if(user){
+            const findUser= await User.findOne({email:user})
+            const cartCount=findUser.cart.length
+            const wishlistCount= findUser.wishlist.length
+
+            res.render("user/userShop",
+            {
+                user: user,
+                product: searchResult,
+                category: categories,
+                cartCount,
+                wishlistCount
+            })
+        }else{
+            res.render("user/userShop",
             {
                 user: user,
                 product: searchResult,
                 category: categories,
             })
+        }
 
     } catch (error) {
         console.log(error.message);
@@ -480,12 +518,28 @@ const filterProduct = async (req, res) => {
         const findProducts = await Product.find(query);
         const categories = await Category.find({ isListed: true });
 
-        res.render("user/userShop", {
-            user: user,
-            product: findProducts,
-            category: categories,
-            selectedCategory: category || null,   
-        });
+        if(user){
+            const findUser= await User.findOne({email:user});
+
+            const cartCount= findUser.cart.length
+            const wishlistCount= findUser.wishlist.length
+
+            res.render("user/userShop", {
+                user: user,
+                product: findProducts,
+                category: categories,
+                selectedCategory: category || null,   
+                cartCount,
+                wishlistCount
+            });
+        }else{
+            res.render("user/userShop", {
+                user: user,
+                product: findProducts,
+                category: categories,
+                selectedCategory: category || null,   
+            });
+        }
 
     } catch (error) {
         console.log(error.message);
