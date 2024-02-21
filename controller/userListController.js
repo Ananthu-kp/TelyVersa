@@ -12,7 +12,7 @@ const displayUser = async (req, res) => {
             .skip((page - 1) * perPage)
             .limit(perPage);
 
-        res.render("admin/users", { data, currentPage: page, totalPages });
+        res.render("admin/users", { data, currentPage: page, totalPages ,userList:true});
     } catch (error) {
         console.error("Error:", error);
         res.render("error", { errorMessage: "Users not found" });

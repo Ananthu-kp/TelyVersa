@@ -39,7 +39,7 @@ const adminVerify = async (req, res) => {
 
 const adminHomeGet=async(req,res)=>{
    
-        res.render("admin/adminHome")
+        res.render("admin/adminHome",{dashboard:true})
     
         
     

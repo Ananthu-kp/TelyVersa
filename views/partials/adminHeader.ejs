@@ -34,29 +34,29 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item ">
+                <li class="menu-item <%= locals.dashboard ? 'active' : '' %>">
                     <a class="menu-link" href="/admin"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
 
-                <li class="menu-item ">
+                <li class="menu-item  <%= locals.userList ? 'active' : '' %>">
                     <a class="menu-link" href="/admin/userList"> <i class="icon material-icons md-comment"></i>
                         <span class="text">Users List</span>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <%= locals.orderList ? 'active' : '' %>">
                     <a class="menu-link" href="/admin/orderList"> <i class="icon material-icons md-map"></i>
                         <span class="text">Order List</span>
                     </a>
                 </li>
 
-                <li class="menu-item">
+                <li class="menu-item <%= locals.Products ? 'active' : '' %>">
                     <a class="menu-link" href="/admin/productList"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item  <%= locals.Category ? 'active' : '' %>">
                     <a class="menu-link" href="/admin/category"> <i class="icon material-icons md-map"></i>
                         <span class="text">Category</span>
                     </a>
@@ -64,7 +64,7 @@
                 </li>
                 
 
-                <li class="menu-item">
+                <li class="menu-item <%= locals.addProduct ? 'active' : '' %>">
                     <a class="menu-link" href="/admin/addProduct"> <i class="icon material-icons md-add_box"></i>
                         <span class="text">Add product</span>
                     </a>

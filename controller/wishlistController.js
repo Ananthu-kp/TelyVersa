@@ -6,7 +6,10 @@ const renderWishlistPage= async(req,res)=>{
         const userEmail= req.session.user
        
         const userData= await User.findOne({email:userEmail});  
-        res.render("user/wishlist",{data:userData, user:userEmail})
+
+        const cartCount = userData.cart.length;
+        const wishlistCount = userData.wishlist.length
+        res.render("user/wishlist",{data:userData, user:userEmail, cartCount, wishlistCount})
     }catch(error){
         console.log(error);
     }

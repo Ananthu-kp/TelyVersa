@@ -38,7 +38,10 @@ const cartPageGet = async (req, res) => {
         }
         req.session.grandTotal = grandTotal;
 
-        res.render("user/cart", { user, quantity, product, grandTotal });
+        const cartCount = user.length
+        const wishlistCount = user.wishlist.length
+
+        res.render("user/cart", { user, quantity, product, grandTotal ,cartCount,wishlistCount});
     } catch (err) {
         console.error("Error fetching cart page:", err);
         res.status(500).send("Error fetching cart page");

@@ -4,7 +4,7 @@ const Category=require("../model/categoryModel")
 
 const addProductGet=async(req,res)=>{
     const category = await Category.find({ isListed: true })
-    res.render("admin/adminAddProduct",{ category:category })
+    res.render("admin/adminAddProduct",{ category:category ,addProduct:true})
 }
 
 
@@ -21,7 +21,7 @@ const productListGet = async (req, res) => {
             .limit(perpage);
 
         console.log(data);
-        res.render("admin/adminViewProducts", { data, currentPage: page, totalPages });
+        res.render("admin/adminViewProducts", { data, currentPage: page, totalPages ,Products:true});
     } catch (err) {
         console.error("Product Listing error", err);
         res.status(500).send("Internal Server Error");

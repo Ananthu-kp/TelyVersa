@@ -11,7 +11,7 @@ const categoryGet = async (req, res) => {
         const categoryData = await Category.find({})
                 .skip((page - 1)* perpage)
                 .limit(perpage);
-        res.render("admin/adminCategory", { category: categoryData ,currentPage: page, totalPages})
+        res.render("admin/adminCategory", { category: categoryData ,currentPage: page, totalPages, Category:true})
     } catch (error) {
         console.log(error.message);
     }
