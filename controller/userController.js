@@ -5,23 +5,15 @@ const Product=require("../model/productModel")
 const Category=require("../model/categoryModel")
 
 
-const userHomeGet = async (req, res) => {
-    try {
-        const user = req.session.user;
-        const findUser = await User.findOne({ email: user });
-        const product = await Product.find({ isBlocked: false });
-
-        // Calculate cartCount and wishlistCount
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length;
-
-        res.render("user/userHome", { user: user, product: product, cartCount: cartCount, wishlistCount: wishlistCount });
-    } catch (error) {
-        console.error("Error in userHomeGet:", error);
-        res.render("user/userHome", { product: [] }); 
+const userHomeGet=async(req,res)=>{
+    try{
+        const user=req.session.user
+        const product= await Product.find({isBlocked:false})
+        res.render("user/userHome", {user : user ,product:product});
+    }catch(error){
+        res.render("user/userHome")
     }
 }
-
 
 const userLoginGet=async(req,res)=>{
     if (!req.session.user) {
@@ -414,17 +406,14 @@ const newPassword = async (req, res) => {
 const productDetailsGet= async(req,res)=>{
     try {
         const user = req.session.user
-        // console.log(user);
+        console.log(user);
         const productId = req.query.id
-        // console.log(productId);
-        const findUser= await User.findOne({email:user})
+        console.log(productId);
         const findProduct = await Product.findOne({ _id: productId });
         const product =await Product.find({})
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
-        // console.log(findProduct._id);
+        console.log(findProduct._id);
         if (user) {
-            res.render("user/productDetails", { product: findProduct, user: user, cartCount, wishlistCount })
+            res.render("user/productDetails", { product: findProduct, user: user,  })
         } 
         else {
             res.render("user/productDetails", { product: findProduct })
@@ -437,15 +426,11 @@ const productDetailsGet= async(req,res)=>{
 const getShop = async (req, res) => {
     try {
         const user = req.session.user;
-        const findUser= await User.findOne({email:user})
         const count = await Product.countDocuments({ isBlocked: false });
         const product = await Product.find({ isBlocked: false });
         const category = await Category.find({ isListed: true }); // Corrected here
-        // console.log(product);
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
-
-        res.render("user/userShop", { product, user, count, category ,cartCount,wishlistCount}); // Corrected here
+        console.log(product);
+        res.render("user/userShop", { product, user, count, category }); // Corrected here
 
     } catch (error) {
         console.log(error.message);
@@ -459,10 +444,6 @@ const getShop = async (req, res) => {
         const user = req.session.user
         let search = req.query.search
         const categories = await Category.find({ isListed: true })
-        const findUser= await User.findOne({email:user})
-
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
 
         const searchResult = await Product.find({
             $or: [
@@ -477,8 +458,6 @@ const getShop = async (req, res) => {
                 user: user,
                 product: searchResult,
                 category: categories,
-                cartCount,
-                wishlistCount
             })
 
     } catch (error) {
@@ -490,11 +469,7 @@ const filterProduct = async (req, res) => {
     try {
         const user = req.session.user;
         const category = req.query.category;
-        const findUser= await User.findOne({email:user})
         const findCategory = category ? await Category.findOne({ _id: category }) : null;
-
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
 
         const query = {
             isBlocked: false,
@@ -509,9 +484,7 @@ const filterProduct = async (req, res) => {
             user: user,
             product: findProducts,
             category: categories,
-            selectedCategory: category || null, 
-            cartCount,
-            wishlistCount  
+            selectedCategory: category || null,   
         });
 
     } catch (error) {

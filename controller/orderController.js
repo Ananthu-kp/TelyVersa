@@ -10,9 +10,6 @@ const checkoutPageGET = async (req, res) => {
         const userEmail = req.session.user; 
         const findUser = await User.findOne({ email: userEmail }); 
 
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
-
         if (!findUser) {
             return res.status(404).send("User not found");
         }
@@ -40,7 +37,7 @@ const checkoutPageGET = async (req, res) => {
 
         const grandTotal = req.session.grandTotal;
 
-        res.render("user/checkout", { data: data, user: findUser, isCart: true, userAddress: userAddress, isSingle: false, grandTotal: grandTotal ,cartCount, wishlistCount});
+        res.render("user/checkout", { data: data, user: findUser, isCart: true, userAddress: userAddress, isSingle: false, grandTotal: grandTotal });
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
@@ -50,24 +47,21 @@ const checkoutPageGET = async (req, res) => {
 
 const placeOrder = async (req, res) => {
     try {
-        // console.log("hi");
+        console.log("hi");
         const { grandTotal, addressId, payment, productId } = req.body;
         const userId = req.session.user;
-        // console.log("this is the proId",productId);
+        console.log("this is the proId",productId);
         const findUser = await User.findOne({ email: userId });
         const findAddress = await Address.findOne({ 'address._id': addressId });
         const desiredAddress = findAddress.address.find(item => item._id.toString() === addressId.toString());
         const products = await Product.find({ _id: { $in: productId } });
-        // console.log(products);
-
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
+        console.log(products);
 
         const cartItemUnit = findUser.cart.map((item) => ({
             ProductId: item.ProductId,
             quantity: item.quantity
         }));
-        // console.log("this is the cart item",cartItemUnit);
+        console.log("this is the cart item",cartItemUnit);
 
         const orderedProducts = products.map((item) => ({
             _id: item._id,
@@ -77,7 +71,7 @@ const placeOrder = async (req, res) => {
             quantity: cartItemUnit.find(cartItem => cartItem.ProductId.toString() === item._id.toString()).quantity
         }));
 
-        // console.log("this is the ordered item",orderedProducts);
+        console.log("this is the ordered item",orderedProducts);
 
         
         const totalPrice = orderedProducts.reduce((total, product) => {
@@ -113,7 +107,7 @@ const placeOrder = async (req, res) => {
         if (newOrder.payment === 'cod') {
             console.log('order placed by cod');
             orderDone = await newOrder.save();
-            return res.json({ payment: true, method: "cod", order: orderDone, quantity: cartItemUnit, orderId: findUser ,cartCount, wishlistCount});
+            return res.json({ payment: true, method: "cod", order: orderDone, quantity: cartItemUnit, orderId: findUser });
         } 
         
         // Handle other payment methods if needed

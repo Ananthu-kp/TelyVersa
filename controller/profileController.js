@@ -14,9 +14,7 @@ const profileGET = async (req, res) => {
         const userEmail = req.session.user; 
         const userData = await User.findOne({ email: userEmail });
         const addressData = await Address.findOne({ userId: userData._id });
-        // console.log("this is address ",addressData);
-        const cartCount = userData.cart.length;
-        const wishlistCount = userData.wishlist.length
+        console.log("this is address ",addressData);
 
         const page = parseInt(req.query.page) || 1;
         const perPage = 4;
@@ -29,7 +27,7 @@ const profileGET = async (req, res) => {
                 .limit(perPage)
 
         console.log("this is my order data",orderData);
-        res.render("user/profile", { user: userData, userAddress: addressData, order: orderData ,currentPage: page,totalPages ,cartCount, wishlistCount});
+        res.render("user/profile", { user: userData, userAddress: addressData, order: orderData ,currentPage: page,totalPages});
 
     } catch (error) {
         console.log(error.message);
@@ -62,10 +60,7 @@ const editUserDetails = async (req, res) => {
 const addAddressGET = async (req, res) => {
     try {
         const user = req.session.user
-        const findUser= await User.findOne({email:user})
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
-        res.render("user/address", { user: user , cartCount, wishlistCount})
+        res.render("user/address", { user: user })
     } catch (error) {
         console.log(error.message);
     }
@@ -133,18 +128,15 @@ const editAddressGET = async (req, res) => {
     try {
         const addressId = req.query.id
         const user = req.session.user
-        const findUser= await User.findOne({email:user})
         const currAddress = await Address.findOne({
             "address._id": addressId,
         });
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
 
         const addressData = currAddress.address.find((item) => {
             return item._id.toString() == addressId.toString()
         })
         // console.log(addressData);
-        res.render("user/edit-address", { address: addressData, user: user ,cartCount, wishlistCount})
+        res.render("user/edit-address", { address: addressData, user: user })
     } catch (error) {
         console.log(error.message);
     }
@@ -221,11 +213,9 @@ const orderDetails=async(req,res)=>{
     
         const findOrder= await Order.findOne({_id: orderId});
         const findUser= await User.findOne({email: userEmail});
-        // console.log(findOrder,findUser);
-        const cartCount = findUser.cart.length;
-        const wishlistCount = findUser.wishlist.length
+        console.log(findOrder,findUser);
 
-        res.render("user/orderDetails", { orders: findOrder, orderId , user:findUser, cartCount, wishlistCount})
+        res.render("user/orderDetails", { orders: findOrder, orderId , user:findUser})
 
     }catch(error){
         console.log(error);
