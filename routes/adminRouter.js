@@ -7,6 +7,7 @@ const userListController=require("../controller/userListController")
 const categoryController=require("../controller/categoryController")
 const productMulter=require("../multer/multerProduct")
 const {isAdmin}=require("../middlewares/Auth")
+const couponController= require("../controller/couponController")
 
 const orderController=require("../controller/orderController")
 
@@ -40,5 +41,10 @@ router.post("/editCategory/:id",isAdmin, categoryController.editCategory)
 router.get("/orderList",isAdmin,orderController.orderList)
 router.get("/orderDetailsAdmin",isAdmin,orderController.orderDetails)
 router.get("/changeStatus", isAdmin, orderController.changeOrderStatus)
+
+
+
+router.get("/coupon",isAdmin,couponController.getCouponPage);
+router.post("/createCoupon",isAdmin,couponController.createCoupon)
 
 module.exports=router; 
