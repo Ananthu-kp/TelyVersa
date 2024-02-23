@@ -60,7 +60,9 @@ router.post("/changepassword", isLogged, profileController.changePassword)
 
 router.get("/checkout",isLogged,orderController.checkoutPageGET)
 router.post('/orderPlaced', isLogged, orderController.placeOrder)
+router.post("/verifyPayment", isLogged, orderController.verify)
 router.get("/cancelOrder",isLogged,orderController.cancelOrder)
+router.post('/applyCoupon', isLogged, isBlocked, orderController.applyCoupon)
 
 
 
