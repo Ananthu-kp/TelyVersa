@@ -121,20 +121,25 @@
                                         <th>Offer Price</th>
                                         <th>Minimum Price</th>
                                         <th>Status</th>
+                                        <th>Action</th>
 
                                     </tr>
                                 </thead>
 
-                                
+
                                 <% for (let i=0; i < coupons.length; i++) { %>
                                     <tbody>
 
                                         <td class="text-start">
                                             <%= coupons[i].name %>
                                         </td>
-                                        <td class="text-start"><%= new Date(coupons[i].createdOn).toLocaleDateString('en-US') %></td>
-                                        <td class="text-start"><%= new Date(coupons[i].expireOn).toLocaleDateString('en-US') %></td>
-                                        
+                                        <td class="text-start">
+                                            <%= new Date(coupons[i].createdOn).toLocaleDateString('en-US') %>
+                                        </td>
+                                        <td class="text-start">
+                                            <%= new Date(coupons[i].expireOn).toLocaleDateString('en-US') %>
+                                        </td>
+
 
                                         <td class="text-start">
                                             <%= coupons[i].offerPrice %>
@@ -145,9 +150,12 @@
                                         <td class="text-start">
                                             <%= coupons[i].isList %>
                                         </td>
-
+                                        <td class="text-start">
+                                            <button class="btn btn-danger"
+                                                onclick="deleteCoupon('<%= coupons[i]._id %>')">Delete</button>
+                                        </td>
                                     </tbody>
-                                        <% } %>
+                                    <% } %>
 
 
                             </table>
@@ -159,6 +167,10 @@
         </div> <!-- card .// -->
     </section> <!-- content-main end// -->
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
+"></script>
 
     <script>
         function setDefaultStartDate() {
@@ -206,13 +218,13 @@
             const offerPrice = offerPriceInput.value.trim() !== '' ? parseInt(offerPriceInput.value) : NaN;
             const minimumPrice = minimumPriceInput.value.trim() !== '' ? parseInt(minimumPriceInput.value) : NaN;
 
-            if (isNaN (offerPrice)) {
-        displayErrorMessage('error-offer-price', 'Offer Price is required');
-        isValid = false;
-    } else if (isNaN(offerPrice) || parseFloat(offerPrice) <= 0) {
-        displayErrorMessage('error-offer-price', 'Offer Price must be a positive number');
-        isValid = false;
-    }
+            if (isNaN(offerPrice)) {
+                displayErrorMessage('error-offer-price', 'Offer Price is required');
+                isValid = false;
+            } else if (isNaN(offerPrice) || parseFloat(offerPrice) <= 0) {
+                displayErrorMessage('error-offer-price', 'Offer Price must be a positive number');
+                isValid = false;
+            }
 
             if (isNaN(offerPrice) || isNaN(minimumPrice)) {
                 document.getElementById('error-offer-price').innerHTML = 'Please enter numeric values for Offer Price and Minimum Price';
@@ -223,6 +235,36 @@
             return true;
         }
 
+
+        function deleteCoupon(id) {
+    Swal.fire({
+        title: 'Do you want to delete the coupon?',
+        text: 'This action cannot be undone!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: `/admin/coupons/${id}`,
+                method: 'POST',
+                success: function (data) {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to delete coupon');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error deleting coupon:', error);
+                }
+            });
+        }
+    });
+}
 
 
     </script>

@@ -91,28 +91,45 @@
 
                         <div class="col-4 mt-50 ml-0">
                             <div class="toggle_info">
-                                <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Do you have any
-                                        coupon? </span> <a href="#coupon" data-bs-toggle="collapse" class="collapsed"
-                                        aria-expanded="false">Click here to enter your
-                                        code</a></span>
+                                <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Do you have any coupon? </span> <a href="#coupon" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to enter your code</a></span>
                             </div>
                             <div class="panel-collapse collapse coupon_form" id="coupon">
                                 <div class="panel-body">
-                                    <p class="mb-30 font-sm">If you have a coupon code, please enter.
-                                    </p>
-                        
+                                    <p class="mb-30 font-sm">If you have a coupon code, please enter.</p>
+                                    
+                                    <!-- Display available coupons here -->
+                                    <div class="available-coupons">
+                                        <h5>Available Coupons</h5>
+                                        <br>
+                                        <% if (coupons.length > 0) { %>
+                                            <% coupons.forEach(coupon => { %>
+                                                <div class="coupon d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <p><strong><%= coupon.name %></strong>: <%= coupon.offerPrice %></p>
+                                                    </div>
+                                                    <div>
+                                                        <button class="btn btn-sm copy-btn" data-coupon="<%= coupon.name %>">Copy</button>
+                                                    </div>
+                                                </div>
+                                            <% }); %>
+                                        <% } else { %>
+                                            <p>No coupons available.</p>
+                                        <% } %>
+                                        
+                                    </div>
+                                    
                                     <div class="form-group">
                                         <input type="text" id="couponCode" placeholder="Enter Coupon Code...">
                                     </div>
                                     <div class="form-group">
                                         <button class="btn btn-md" onclick="applyCoupon()">Apply Coupon</button>
-                                        <button class="btn btn-md" onclick="cancelCoupon()" style="display: none;">Cancel Coupon</button> <!-- Initially hidden -->
+                                        <!-- <button class="btn btn-md" onclick="cancelCoupon()" style="display: none;">Cancel Coupon</button> -->
+                                         <!-- Initially hidden -->
                                     </div>
-                        
                                 </div>
                             </div>
                         </div>
-                        
+                    
 
                         
                         <div class="col-md-4 mt-4">
@@ -308,7 +325,7 @@
                                 "key": "rzp_test_PQuoSyT1cgKHjg",
                                 "amount": orderAmount,
                                 "currency": "INR",
-                                "name": "TeleVersa",
+                                "name": "TelyVersa",
                                 "description": "Test Transaction",
                                 "image": "https://example.com/your_logo",
                                 "order_id": response.razorpayOrder.id,
@@ -399,6 +416,30 @@ function cancelCoupon() {
     document.querySelector("#couponForm .btn").style.display = "inline-block";
     document.querySelector("#couponForm .btn-secondary").style.display = "none";
 }
+
+// copy the coupon code
+document.addEventListener("DOMContentLoaded", function() {
+   
+    const copyButtons = document.querySelectorAll(".copy-btn");
+    
+    copyButtons.forEach(function(button) {
+        button.addEventListener("click", function() {
+            const couponCode = this.getAttribute("data-coupon");
+            copyToClipboard(couponCode);
+        });
+    });
+    
+    function copyToClipboard(text) {
+        const tempInput = document.createElement("input");
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        alert("Coupon code copied: " + text);
+    }
+});
+
 
 
 function verifyPayment(order, payment, id, orderId) {

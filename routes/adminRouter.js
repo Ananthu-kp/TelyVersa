@@ -46,5 +46,6 @@ router.get("/changeStatus", isAdmin, orderController.changeOrderStatus)
 
 router.get("/coupon",isAdmin,couponController.getCouponPage);
 router.post("/createCoupon",isAdmin,couponController.createCoupon)
+router.post("/coupons/:id", couponController.deleteCoupon);
 
 module.exports=router; 
