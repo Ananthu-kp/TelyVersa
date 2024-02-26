@@ -8,7 +8,7 @@ const cartController=require("../controller/cartController")
 const profileController=require("../controller/profileController")
 const orderController=require("../controller/orderController")
 const wishListController=require("../controller/wishlistController")
-
+const walletController= require("../controller/walletController")
 
 
 
@@ -69,5 +69,8 @@ router.post('/applyCoupon', isLogged, isBlocked, orderController.applyCoupon)
 router.get("/wishlist",isLogged, isBlocked,wishListController.renderWishlistPage)
 router.post("/addToWishlist",isLogged,isBlocked,wishListController.productAddWishlist)
 router.get("/deleteWishlist",isLogged,isBlocked,wishListController.deleteWishlist)
+
+router.post("/addMoney", isLogged, isBlocked, walletController.addMoneyToWallet)
+router.post('/paymentMethod', isLogged, isBlocked, walletController.paymentMethod)
 
 module.exports=router;

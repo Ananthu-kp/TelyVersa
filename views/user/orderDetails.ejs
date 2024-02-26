@@ -176,7 +176,11 @@
                                                         <%= orders.product[i].quantity %>
                                                     </td>
                                                     <td class="text-center">
-                                                        ₹<%= (parseInt(orders.product[i].price) *
+                                                        ₹<%= orders.totalPrice.toLocaleString()
+                                                            %>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        ₹<%= (parseInt(orders.totalPrice) *
                                                             parseInt(orders.product[i].quantity)).toLocaleString() %>
 
                                                     </td>
@@ -187,7 +191,7 @@
                                                         <% let totalProductPrice=0; %>
                                                             <% for (let i=0; i < orders.product.length; i++) { %>
                                                                 <% totalProductPrice +=parseInt(orders.product[i].price)
-                                                                    * parseInt(orders.product[i].unit); %>
+                                                                    * parseInt(orders.product[i].quantity); %>
                                                                     <% } %>
 
 
@@ -196,10 +200,7 @@
 
                                                                             
 
-                                                                            <td class="text-center">
-                                                                                ₹<%= orders.totalPrice.toLocaleString()
-                                                                                    %>
-                                                                            </td>
+                                                                            
                                                 </tr>
 
 

@@ -26,137 +26,108 @@
                                 </tr>
                             </thead>
                             <tbody>
-                               
-                                <% if (product.length> 0) { %>
+                                <% if (product.length > 0) { %>
                                     <% var x=0 %>
-                                        <% for (let i=0; i < product.length;i++) { %>
-
-                                            <tr>
-                                                <td class="image product-thumbnail">
-                                                    <img src="/uploads/products/<%= product[i].productDetails[0].productImage[0] %>"
-                                                        alt="#" />
-                                                </td>
-                                                <td class="product-des product-name">
-                                                    <h5 class="product-name">
-                                                        <a href="shop-product-right.html">
-                                                            <%= product[i].productDetails[0].productName %>
-                                                        </a>
-                                                    </h5>
-                                                    <p class="font-xs">
-                                                        <%= product[i].productDetails[0].category %>
-
-                                                    </p>
-                                                </td>
-                                                <td class="price" product-title="Price">₹<span> <text
-                                                            id="subTotal<%= product[i].productDetails[0]._id %>">
-                                                            <%= product[i].productDetails[0].salePrice * product[i].quantity
-                                                                %>
-                                                        </text><br>
-                                                        <small class="text-muted text-nowrap">₹<span id="price">
-                                                                <%= product[i].productDetails[0].salePrice %>
-
-                                                            </span>
-                                                            / per item </small>
-
-                                                </td>
-                                                
-
-                                                    <% x +=product[i].productDetails[0].salePrice * product[i].quantity%>
-
-
-                                                        <td class="text-center" product-title="Stock">
-                                                            <div class="detail-qty border radius m-auto">
-                                                                <div class="quantity-control">
-
-                                                                    <button class="btn btn-sm increment-button"
-                                                                        onclick="changeQuantity('<%= product[i].productDetails[0]._id %>', '<%= product[i].quantity %>', 1, '<%= product[i].productDetails[0].salePrice %>',  '<%= product[i].productDetails[0].id %>', '<%= product[i].productDetails[0].quantity%>')">+</button>
-
-
-                                                                    <input class="quantity-input"
-                                                                        id="cartProductQuantity<%= product[i].productDetails[0]._id %>"
-                                                                        value="<%= product[i].quantity %>"
-                                                                        style="width: 45px;" type="text" readonly
-                                                                        value="">
-
-
-
-                                                                    <button class="btn btn-sm decrement-button"
-                                                                        onclick="changeQuantity('<%= product[i].productDetails[0]._id %>', '<%= product[i].quantity %>', -1, '<%= product[i].productDetails[0].salePrice %>',  '<%= product[i].productDetails[0].id %>', '<%= product[i].productDetails[0].quantity%>')">-</button>
-
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td class="action" product-title="Remove">
-                                                            <a class="btn btn-sm"
-                                                                href="/deleteItem?id=<%= product[i].productDetails[0]._id %>">
-                                                                <i class="fi-rs-trash"></i>
-                                                            </a>
-                                                        </td>
-                                                        <% } %>
-                                                            <% } else { %>
-                                            <tr>
-
-                                                <td colspan="2" class="text-center">
-                                                    <p class="lead mb-4">No item found in Cart</p>
-                                                </td>
-
-
-                                            </tr>
-                                            <% } %>
-                                                
-
-                                                    
-
+                                    <% for (let i=0; i < product.length; i++) { %>
+                                        <tr>
+                                            <td class="image product-thumbnail">
+                                                <img src="/uploads/products/<%= product[i].productDetails[0].productImage[0] %>"
+                                                    alt="#" />
+                                            </td>
+                                            <td class="product-des product-name">
+                                                <h5 class="product-name">
+                                                    <a href="shop-product-right.html">
+                                                        <%= product[i].productDetails[0].productName %>
+                                                    </a>
+                                                </h5>
+                                                <p class="font-xs">
+                                                    <%= product[i].productDetails[0].category %>
+                                                </p>
+                                            </td>
+                                            <td class="price" product-title="Price">₹<span> <text
+                                                        id="subTotal<%= product[i].productDetails[0]._id %>">
+                                                        <%= product[i].productDetails[0].salePrice * product[i].quantity
+                                                            %>
+                                                    </text><br>
+                                                    <small class="text-muted text-nowrap">₹<span id="price">
+                                                            <%= product[i].productDetails[0].salePrice %>
+                                                        </span>
+                                                        / per item </small>
+                                            </td>
+                                            <% x += product[i].productDetails[0].salePrice * product[i].quantity %>
+                                            <td class="text-center" product-title="Stock">
+                                                <div class="detail-qty border radius m-auto">
+                                                    <div class="quantity-control">
+                                                        <button class="btn btn-sm increment-button"
+                                                            onclick="changeQuantity('<%= product[i].productDetails[0]._id %>', '<%= product[i].quantity %>', 1, '<%= product[i].productDetails[0].salePrice %>',  '<%= product[i].productDetails[0].id %>', '<%= product[i].productDetails[0].quantity%>')">+</button>
+                                                        <input class="quantity-input"
+                                                            id="cartProductQuantity<%= product[i].productDetails[0]._id %>"
+                                                            value="<%= product[i].quantity %>"
+                                                            style="width: 45px;" type="text" readonly
+                                                            value="">
+                                                        <button class="btn btn-sm decrement-button"
+                                                            onclick="changeQuantity('<%= product[i].productDetails[0]._id %>', '<%= product[i].quantity %>', -1, '<%= product[i].productDetails[0].salePrice %>',  '<%= product[i].productDetails[0].id %>', '<%= product[i].productDetails[0].quantity%>')">-</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="action" product-title="Remove">
+                                                <a class="btn btn-sm"
+                                                    href="/deleteItem?id=<%= product[i].productDetails[0]._id %>">
+                                                    <i class="fi-rs-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                <% } else { %>
+                                    <tr>
+                                        <td colspan="2" class="text-center">
+                                            <p class="lead mb-4">No item found in Cart</p>
+                                        </td>
+                                    </tr>
+                                <% } %>
                             </tbody>
                         </table>
                     </div>
-                   
                 </div>
-                <div class="col-3">
-                    <div class="border p-md-4 p-30 border-radius cart-totals">
-                        <div class="heading_s1 mb-3">
-                            <h4>PRICE DETAILS</h4>
+                <% if (product.length > 0) { %>
+                    <div class="col-3">
+                        <div class="border p-md-4 p-30 border-radius cart-totals">
+                            <div class="heading_s1 mb-3">
+                                <h4>PRICE DETAILS</h4>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="cart_total_label">Shipping</td>
+                                            <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart_total_label">Total</td>
+                                            <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">₹
+                                                    <text id="total">
+                                                        <%= grandTotal %>
+                                                    </text>
+                                                </span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="/checkout?userId=<%= user._id %>" class="btn "> <i class="fi-rs-box-alt mr-10"></i>
+                                Proceed To CheckOut</a>
                         </div>
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tbody>
-
-                                    <tr>
-                                        <td class="cart_total_label">Shipping</td>
-                                        <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free Shipping
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="cart_total_label">Total</td>
-                                        <td class="cart_total_amount"><span class="font-lg fw-900 text-brand">₹
-                                                <text id="total">
-                                                    <%= grandTotal %>
-                                                </text>
-                                            </span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <a href="/checkout?userId=<%= user._id %>" class="btn "> <i class="fi-rs-box-alt mr-10"></i>
-                            Proceed To CheckOut</a>
                     </div>
-                </div>
-
+                <% } %>
             </div>
-
-        </div>
-        </div>
-        </div>
         </div>
     </section>
 </main>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
 <script>
     function changeQuantity(productId, cartQuantity, count, productPrice, i, productQuantity) {
-        // const abc = document.getElementById("totalabc").value;
         const cartProductQuantityElement = document.querySelector(`#cartProductQuantity${productId}`);
         const subtotalElement = document.querySelector(`#subTotal${productId}`);
         const totalElement = document.getElementById('total');
@@ -210,6 +181,6 @@
             }
         });
     }
-    </script>
-    
+</script>
+
 <%- include("../partials/footer") %>
