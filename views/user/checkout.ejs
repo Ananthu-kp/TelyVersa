@@ -350,6 +350,28 @@
                             }
                             var rzp1 = new Razorpay(options);
                             rzp1.open();
+
+                }else if(response.method === "wallet"){
+                    if(response.payment===true){
+                        Swal.fire({
+                            title:"Order success",
+                            text:"Order placed Successfully..",
+                            icon:"success",
+                            showConfirmButton:"false",
+                            timer:2000,
+                        });
+                        setTimeout(() => {
+                        window.location.href = "/profile";
+                    }, 700);
+
+                    }else{
+                        Swal.fire({
+                            title:"Order failed",
+                            text:"wallet amount is not enough to pay",
+                            icon:"error",
+                            showConfirmButton:true
+                        })
+                    }
                 }
             },
             error: function (error) {
@@ -453,7 +475,7 @@ function verifyPayment(order, payment, id, orderId) {
             console.log(order)
             console.log(payment);
             console.log(id);
-            alert("verify")
+            // alert("verify")
             $.ajax({
                 url: '/verifyPayment',
                 method: 'post',

@@ -152,6 +152,7 @@ const placeOrder = async (req, res) => {
             createdOn: Date.now()
         });
 
+
         await User.updateOne(
             { email: userId },
             { $set: { cart: [] } }
@@ -171,14 +172,43 @@ const placeOrder = async (req, res) => {
             console.log('order placed by cod');
             orderDone = await newOrder.save();
             return res.json({ payment: true, method: "cod", order: orderDone, quantity: cartItemUnit, orderId: findUser });
+
         } else if (newOrder.payment === 'online') {
             console.log("orderplaced with razorpay");
             orderDone = await newOrderFromRazorpay.save();
             const generateOrder = await generateOrderRazorpay(orderDone._id, orderDone.totalPrice)
             console.log(generateOrder, "order generated");
             res.json({ payment: false, method: "online", order: orderDone, razorpayOrder: generateOrder, orderId: orderDone._id, quantity: cartItemUnit })
-        }
 
+        } else if (newOrder.payment==='wallet') {
+            if(newOrder.totalPrice <= findUser.wallet){
+                console.log("orderPlaced with wallet");
+                findUser.wallet -= newOrder.totalPrice;
+                // const data= findUser.wallet - newOrder.totalPrice
+                
+
+                const newHistory={
+                    amount:newOrder.totalPrice,
+                    status:"debit",
+                    date:Date.now()
+                }
+
+                const orderDone = await newOrder.save();
+
+                console.log(newHistory);
+                findUser.history.push(newHistory)
+                await findUser.save()
+
+                res.json({payment:true, method:"wallet", order:orderDone, orderId: findUser, quantity: cartItemUnit, success:true})
+                return;
+            }else{
+                console.log("wallet amount is not enough to buy this product");
+                res.json({payment:false, method:"wallet", success:false})
+                return;
+            }
+        }
+        
+       
         // Handle other payment methods if needed
 
     } catch (error) {
@@ -253,6 +283,22 @@ const cancelOrder = async (req, res) => {
             await Product.findByIdAndUpdate(productId, { $inc: { quantity: quantity } });
             console.log(`Increasing quantity for product ${productId} by ${quantity}`);
         }
+
+        if(order.payment !=="cod"){
+            const totalAmount = order.totalPrice;
+            const findUser = await User.findOne({ email: order.userId });
+            findUser.wallet += totalAmount;
+            
+            const refundHistory = {
+                amount: totalAmount,
+                status: "credit",
+                date: Date.now()
+            };
+    
+            findUser.history.push(refundHistory);
+            await findUser.save();
+        }
+
         await Order.updateOne({ _id: orderId },
             { status: "Canceled" }
         ).then((data) => console.log(data))
@@ -260,7 +306,7 @@ const cancelOrder = async (req, res) => {
         res.redirect('/profile');
 
     } catch (error) {
-
+        console.log(error);
     }
 }
 
@@ -307,6 +353,21 @@ const changeOrderStatus = async (req, res) => {
 
         const orderId = req.query.orderId.trim();
         console.log(orderId);
+        const order = await Order.findById(orderId);
+        if(order.payment !=="cod"){
+            const totalAmount = order.totalPrice;
+            const findUser = await User.findOne({ email: order.userId });
+            findUser.wallet += totalAmount;
+            
+            const refundHistory = {
+                amount: totalAmount,
+                status: "credit",
+                date: Date.now()
+            };
+    
+            findUser.history.push(refundHistory);
+            await findUser.save();
+        }
 
         await Order.updateOne({ _id: orderId },
             { status: req.query.status }

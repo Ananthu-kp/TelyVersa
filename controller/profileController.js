@@ -226,9 +226,13 @@ const orderDetails=async(req,res)=>{
     
         const findOrder= await Order.findOne({_id: orderId});
         const findUser= await User.findOne({email: userEmail});
+
+        const cartCount= findUser.cart.length
+        const wishlistCount= findUser.wishlist.length
+
         console.log(findOrder,findUser);
 
-        res.render("user/orderDetails", { orders: findOrder, orderId , user:findUser})
+        res.render("user/orderDetails", { orders: findOrder, orderId , user:findUser, cartCount, wishlistCount})
 
     }catch(error){
         console.log(error);
