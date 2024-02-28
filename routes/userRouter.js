@@ -63,6 +63,7 @@ router.post('/orderPlaced', isLogged, orderController.placeOrder)
 router.post("/verifyPayment", isLogged, orderController.verify)
 router.get("/cancelOrder",isLogged,orderController.cancelOrder)
 router.post('/applyCoupon', isLogged, isBlocked, orderController.applyCoupon)
+router.get("/return",isLogged,isBlocked,orderController.returnProduct)
 
 
 

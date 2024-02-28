@@ -311,6 +311,53 @@ const cancelOrder = async (req, res) => {
 }
 
 
+const returnProduct = async (req, res) => {
+    try {
+        const userId = req.session.user
+        const findUser = await User.findOne({ email: userId })
+
+        const id = req.query.id
+        await Order.updateOne({ _id: id },
+            { status: "Returned" }
+        ).then((data) => console.log(data))
+
+        const findOrder = await Order.findOne({ _id: id })
+
+
+        if (findOrder.payment !=="cod") {
+            findUser.wallet += findOrder.totalPrice;
+
+            const newHistory = {
+                amount: findOrder.totalPrice,
+                status: "credit",
+                date: Date.now()
+            }
+            findUser.history.push(newHistory)
+            await findUser.save();
+        }
+
+        for (const productData of findOrder.product) {
+            const productId = productData.ProductId;
+            const quantity = productData.quantity;
+
+            const product = await Product.findById(productId);
+
+
+            if (product) {
+                product.quantity += quantity;
+                await product.save();
+            }
+        }
+
+        res.redirect('/profile');
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
+
 
 //admin side
 
@@ -349,12 +396,15 @@ const orderDetails = async (req, res) => {
 
 const changeOrderStatus = async (req, res) => {
     try {
-        console.log(req.query);
 
         const orderId = req.query.orderId.trim();
-        console.log(orderId);
+        // console.log(orderId);
+        const newStatus = req.query.status;
+        // console.log(newStatus,"bfjfjhdfhwfh");
         const order = await Order.findById(orderId);
-        if(order.payment !=="cod"){
+
+
+          if(order.newStatus === 'Confirmed' && order.payment !=="cod"){
             const totalAmount = order.totalPrice;
             const findUser = await User.findOne({ email: order.userId });
             findUser.wallet += totalAmount;
@@ -367,8 +417,8 @@ const changeOrderStatus = async (req, res) => {
     
             findUser.history.push(refundHistory);
             await findUser.save();
-        }
-
+          }
+    
         await Order.updateOne({ _id: orderId },
             { status: req.query.status }
         ).then((data) => console.log(data))
@@ -386,6 +436,8 @@ module.exports = {
     cancelOrder,
     applyCoupon,
     verify,
+    returnProduct,
+
     orderList,
     orderDetails,
     changeOrderStatus

@@ -45,9 +45,13 @@
                                     <div class="row">
                                         
                                         <div class="col-5" style="margin-top: 17px; margin-left: 50px;">
-
-                                            <h4 class="text-success">Delivered</h4>
-
+                                            <div class="col-10">
+                                                <h4 class="text-success">Delivered</h4>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-2">
+                                            <button class="btn bg-primary-light return-btn" data-order-id="<%= orders._id%>">Return</button>
                                         </div>
                                     </div>
                                     <% }else if(orders.status==="Returned" ){ %>
@@ -297,6 +301,33 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
             });
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const returnButtons = document.querySelectorAll('.return-btn');
+        returnButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Please provide a reason for returning the product:',
+                    input: 'textarea',
+                    inputPlaceholder: 'Enter reason here...',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Confirm Return',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const reason = result.value;
+                        // Redirect to the return endpoint with orderId and reason
+                        window.location.href = `http://localhost:3000/return?id=${orderId}&reason=${encodeURIComponent(reason)}`;
+                    }
+                });
+            });
+        });
+    });
+
 </script>
 
 
