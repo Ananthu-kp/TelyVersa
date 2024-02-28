@@ -54,7 +54,7 @@ router.post("/editUserDetails", isLogged ,isBlocked, profileController.editUserD
 router.get("/orderDetails",isLogged ,isBlocked,profileController.orderDetails)
 router.post("/verifyOldPassword",isLogged ,profileController.verifyOldPassword)
 router.post("/changepassword", isLogged, profileController.changePassword)
-
+router.post("/verifyReferalCode",isLogged, isBlocked,profileController.verifyReferelCode)
 
 
 

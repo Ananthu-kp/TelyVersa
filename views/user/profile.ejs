@@ -76,6 +76,11 @@
                                                 details</a>
                                         </li>
                                         <li class="nav-item">
+                                            <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#referal"
+                                                role="tab" aria-controls="track-orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-cart-check mr-10"></i>Referals</a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a class="nav-link" id="changepass-tab" data-bs-toggle="tab"
                                                 href="#changepassword" role="tab" aria-controls="password"
                                                 aria-selected="true"><i class="fi-rs-lock mr-10"></i>Change password</a>
@@ -326,6 +331,18 @@
 
                                                     </tbody>
                                                 </table>
+                                                 <!-- Pagination -->
+                                                 <div class="pagination">
+                                                    <% if (currentPage > 1) { %>
+                                                        <a href="?page=<%= currentPage - 1 %>" class="btn">Previous</a>
+                                                    <% } %>
+                                                    <% for (let i = 1; i <= totalPages; i++) { %>
+                                                        <a href="?page=<%= i %>" class="btn <%= i === currentPage ? 'active' : '' %>"><%= i %></a>
+                                                    <% } %>
+                                                    <% if (currentPage < totalPages) { %>
+                                                        <a href="?page=<%= currentPage + 1 %>" class="btn">Next</a>
+                                                    <% } %>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -361,6 +378,45 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="tab-pane fade" id="referal" role="tabpanel"
+                                    aria-labelledby="track-orders-tab">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Referal Offer</h5>
+                                        </div>
+                                        <div class="card-body contact-from-area">
+
+                                            <div class="row">
+                                                <div class="col-lg-8 mx-auto text-center mt-50">
+                                                    <form onsubmit="verifyReferalCode(event)" method="post">
+                                                        <div class="form-group">
+                                                            <label for="walletAmount" class="h4">Your referal
+                                                                code</label>
+                                                            <% if (locals.user.referalCode) { %>
+                                                                <br>
+                                                                <h5>
+                                                                    <%= locals.user.referalCode %>
+                                                                </h5>
+                                                                <% }else{ %>
+                                                                    <br>
+                                                                    <h5>No referal code found</h5>
+                                                                    <% } %>
+                                                        </div>
+
+                                                        <div class="mt-60">
+                                                            <h5>Do you have a code?</h5>
+                                                            <br>
+                                                            <input class="border-1" id="referalCode" type="text"
+                                                                name="referalCode" required
+                                                                style="border: 1px solid #000; width: 200px;">
+                                                            <br><br>
+                                                            <button type="submit">Get reward</button>
+                                                        </div>
+
+                                                    </form>
+                                                </div>
+                                            </div>
 
                                     <div class="tab-pane fade" id="changepassword" role="tabpanel"
                                     aria-labelledby="changepass-tab">
@@ -617,6 +673,63 @@ function verifyPayment(response, order) {
         }
     })
 }
+
+
+
+function verifyReferalCode() {
+            event.preventDefault();
+            let referalCode = document.getElementById("referalCode").value
+            // alert(referalCode)
+            if (referalCode === "<%= locals.user.referalCode %>") {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Oops',
+                        text: "You can't refer yourself!",
+                    });
+                    return;
+                }
+            $.ajax({
+                url: "/verifyReferalCode",
+                method: "POST",
+                data: {
+                    referalCode
+                },
+                success: (response) => {
+                    console.log(response.message);
+                    if (response.message == "Referral code verified successfully!") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: 'Referal offer redeemed successfully!',
+                        })
+                    } else if (response.message == "You have already used this referral code!") {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops',
+                            text: 'You have already used this referral code!',
+                        })
+                    } else if (response.message == "Invalid referral code!") {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops',
+                            text: 'Invalid referral code!',
+                        })
+                    } else if (response.message == "You have already redeemed a referral code before!") {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops',
+                            text: 'You have already redeemed a referral code before!',
+                        })
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: '',
+                        })
+                    }
+                }
+            })
+        }
 
  </script>
     

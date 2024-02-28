@@ -3,6 +3,7 @@ const bcrypt=require("bcrypt")
 const nodemailer=require("nodemailer");
 const Product=require("../model/productModel")
 const Category=require("../model/categoryModel")
+const {v4: uuidv4}= require("uuid")
 
 
 const userHomeGet=async(req,res)=>{
@@ -134,11 +135,13 @@ const verifyOtp= async (req,res)=>{
 
         
         if(otpFromAjax===otp){
+            const referalCode= uuidv4()
             const newUser=new User({
                 name: username,
                 email: email,
                 phone: phone,
-                password: password
+                password: password,
+                referalCode:referalCode
             });
 
             await newUser.save();

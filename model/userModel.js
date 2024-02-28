@@ -36,7 +36,22 @@ const userSchema=new mongoose.Schema({
     },
     history: {
         type: Array
-    }
+    },
+    referalCode: {
+        type: String,
+        required: true,
+    },
+    redeemed: {
+        type: Boolean,
+        default: false,
+    },
+    redeemedUsers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        }
+    ],
    
 })
 
