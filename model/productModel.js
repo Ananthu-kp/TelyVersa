@@ -40,6 +40,10 @@ const productSchema= new mongoose.Schema({
     isBlocked:{
         type: Boolean,
         required: false
+    },
+    productOffer : {
+        type : Number,
+        default : 0
     }
 
 })

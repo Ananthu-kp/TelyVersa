@@ -206,7 +206,7 @@ function validateForm() {
     var productName = document.getElementById("productName").value;
     var description = document.getElementsByName("description")[0].value;
     var regularPrice = document.getElementsByName("regularPrice")[0].value;
-    var salePrice = document.getElementsByName("salePrice")[0].value;
+   
     var quantity = document.getElementById("quantity").value;
     var size = document.getElementById("size").value;
     var resolution = document.getElementById("resolution").value;
@@ -222,25 +222,14 @@ function validateForm() {
         isValid = false;
     }
 
-    if (isNaN(parseFloat(salePrice)) ||!/^\d+$/.test(salePrice)|| parseFloat(salePrice) < 0) {
-        displayErrorMessage("salePrice-error", "Sale price must be an integer");
-        isValid = false;
-    }
 
-    if (parseFloat(salePrice) >= parseFloat(regularPrice)) {
-        displayErrorMessage("salePrice-error", "Sale price should be less than Regular price");
-        isValid = false;
-    }
 
     if (parseFloat(regularPrice) < 0) {
         displayErrorMessage("regularPrice-error", "Regular price cannot be negative");
         isValid = false;
     }
 
-    if (parseFloat(salePrice) < 0) {
-        displayErrorMessage("salePrice-error", "Sale price cannot be negative");
-        isValid = false;
-    }
+
 
     if (size.trim() === "") {
         displayErrorMessage("size-error", "Size is required");

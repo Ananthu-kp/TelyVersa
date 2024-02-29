@@ -1,10 +1,10 @@
-const Product=require("../model/productModel")
-const Category=require("../model/categoryModel")
+const Product = require("../model/productModel")
+const Category = require("../model/categoryModel")
 
 
-const addProductGet=async(req,res)=>{
+const addProductGet = async (req, res) => {
     const category = await Category.find({ isListed: true })
-    res.render("admin/adminAddProduct",{ category:category ,addProduct:true})
+    res.render("admin/adminAddProduct", { category: category, addProduct: true })
 }
 
 
@@ -20,8 +20,8 @@ const productListGet = async (req, res) => {
             .skip((page - 1) * perpage)
             .limit(perpage);
 
-        console.log(data);
-        res.render("admin/adminViewProducts", { data, currentPage: page, totalPages ,Products:true});
+        // console.log(data);
+        res.render("admin/adminViewProducts", { data, currentPage: page, totalPages, Products: true });
     } catch (err) {
         console.error("Product Listing error", err);
         res.status(500).send("Internal Server Error");
@@ -52,7 +52,7 @@ const addProduct = async (req, res) => {
                 productName: productData.productName,
                 description: productData.description,
                 regularPrice: productData.regularPrice,
-                salePrice: productData.salePrice,
+                salePrice: productData.regularPrice,
                 quantity: productData.quantity,
                 size: productData.size,
                 resolution: productData.resolution,
@@ -79,10 +79,10 @@ const editProductGet = async (req, res) => {
         const id = req.query.id
         const findProduct = await Product.findOne({ _id: id })
         const category = await Category.find({})
-        res.render("admin/editProduct", { product: findProduct, category: category})
+        res.render("admin/editProduct", { product: findProduct, category: category })
     } catch (error) {
         console.log(error.message);
-    }   
+    }
 }
 
 
@@ -103,24 +103,24 @@ const editProduct = async (req, res) => {
                 productName: productData.productName,
                 description: productData.description,
                 regularPrice: productData.regularPrice,
-                salePrice: productData.salePrice,
+                salePrice: productData.regularPrice,
                 quantity: productData.quantity,
                 size: productData.size,
                 resolution: productData.resolution,
                 category: productData.category,
                 productImage: productImage,
-                
+
             }, { new: true })
             console.log("product updated");
             res.redirect("/admin/productList")
-        } 
+        }
         else {
             console.log("no change in image")
             await Product.findByIdAndUpdate(id, {
                 productName: productData.productName,
                 description: productData.description,
                 regularPrice: productData.regularPrice,
-                salePrice: productData.salePrice,
+                salePrice: productData.regularPrice,
                 quantity: productData.quantity,
                 size: productData.size,
                 resolution: productData.resolution,
@@ -135,7 +135,7 @@ const editProduct = async (req, res) => {
 }
 
 
-const blockProduct= async(req,res)=>{
+const blockProduct = async (req, res) => {
     try {
         let id = req.query.id
         await Product.updateOne({ _id: id }, { $set: { isBlocked: true } })
@@ -158,13 +158,45 @@ const unblockProduct = async (req, res) => {
 }
 
 
+const addProductProductOffer = async (req, res) => {
+    try {
+       
+        const { percentage, productId } = req.body
+        // console.log("=>>>>>>>>>>>>", percentage, productId);
+        const findProduct = await Product.findOne({_id : productId})
+        // console.log(findProduct);
+        findProduct.salePrice -= Math.floor(findProduct.regularPrice * (percentage/100))
+        findProduct.productOffer = parseInt(percentage)
+        await findProduct.save()
+        res.json({status : true})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
-module.exports={
+const removeProductProductOffer = async (req, res) => {
+    try {
+        const {productId} = req.body
+        const findProduct = await Product.findOne({_id : productId})
+        const percentage = findProduct.productOffer
+        findProduct.salePrice += Math.floor(findProduct.regularPrice * (percentage/100))
+        findProduct.productOffer = 0
+        await findProduct.save()
+        res.json({status : true})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+module.exports = {
     addProductGet,
     productListGet,
     addProduct,
     editProductGet,
     editProduct,
     blockProduct,
-    unblockProduct
+    unblockProduct,
+    addProductProductOffer,
+    removeProductProductOffer
 }

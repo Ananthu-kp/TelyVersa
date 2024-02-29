@@ -144,7 +144,7 @@ const placeOrder = async (req, res) => {
 
         const newOrderFromRazorpay = new Order({
             product: orderedProducts,
-            totalPrice: grandTotal,
+            totalPrice: totalprice,
             address: desiredAddress,
             payment: payment,
             userId: userId,

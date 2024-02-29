@@ -29,6 +29,9 @@ router.get("/editProduct", isAdmin,productController.editProductGet)
 router.post("/editProduct/:id",isAdmin,productMulter.array("imageInput", 5), productController.editProduct)
 router.get("/blockProduct",isAdmin,productController.blockProduct);
 router.get("/unblockProduct",isAdmin,productController.unblockProduct)
+router.post("/addProductOffer", isAdmin, productController.addProductProductOffer)
+router.post("/removeProductOffer", isAdmin, productController.removeProductProductOffer)
+
 
 
 router.get("/category", isAdmin, categoryController.categoryGet)

@@ -425,15 +425,21 @@ const productDetailsGet= async(req,res)=>{
         const findProduct = await Product.findOne({ _id: productId });
         const product =await Product.find({})
         console.log(findProduct._id);
+
+        let offers=0;
+        if(findProduct.productOffer){
+            offers= findProduct.productOffer
+        }
+
         if (user) {
             const findUser= await User.findOne({email:user})
 
             const cartCount= findUser.cart.length
             const wishlistCount= findUser.wishlist.length
-            res.render("user/productDetails", { product: findProduct, user: user, cartCount ,wishlistCount})
+            res.render("user/productDetails", { product: findProduct, user: user, cartCount ,wishlistCount ,offers})
         } 
         else {
-            res.render("user/productDetails", { product: findProduct })
+            res.render("user/productDetails", { product: findProduct ,offers})
         }
     } catch (error) {
         console.log(error.message);

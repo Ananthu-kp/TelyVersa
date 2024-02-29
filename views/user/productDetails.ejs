@@ -38,7 +38,7 @@
                                     </h2>
                                     <div class="product-detail-rating">
                                         <div class="pro-details-brand">
-                                            <!-- <span> Brands: <a href="shop-grid-right.html"></a></span> -->
+                                         
                                         </div>
                                     </div>
                                     <div class="clearfix product-price-cover">
@@ -48,7 +48,11 @@
                                                 </span></ins>
                                             <ins><span class="old-price font-md ml-15">₹<%=
                                                         product.regularPrice.toLocaleString('en-IN') %></span></ins>
-                                            <span class="save-price  font-md color3 ml-15">25% Off</span>
+
+                                            <span class="save-price font-md color3 ml-15">
+                                                <%= offers ? offers + "% offer" : "0% offer" %>
+                                            </span>
+                                            
                                         </div>
                                     </div>
                                     <div class="bt-1 border-color-1 mt-15 mb-15"></div>
