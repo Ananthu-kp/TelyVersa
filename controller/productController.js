@@ -1,6 +1,6 @@
 const Product = require("../model/productModel")
 const Category = require("../model/categoryModel")
-
+const fs= require("fs")
 
 const addProductGet = async (req, res) => {
     const category = await Category.find({ isListed: true })
@@ -85,6 +85,32 @@ const editProductGet = async (req, res) => {
     }
 }
 
+const path = require("path")
+const deleteSingleImage = async (req, res) => {
+    try {
+        console.log("hi");
+        const id = req.body.productId
+        const image = req.body.filename
+        console.log(id, image);
+        const product = await Product.findByIdAndUpdate(id, {
+            $pull: { productImage: image }
+        })
+        // console.log(image);
+        const imagePath = path.join('public', 'uploads', 'products', image);
+        if (fs.existsSync(imagePath)) {
+            await fs.unlinkSync(imagePath);
+            console.log(`Image ${image} deleted successfully`);
+            res.json({ success: true })
+        } else {
+            console.log(`Image ${image} not found`);
+        }
+
+        // res.redirect(`/admin/editProduct?id=${product._id}`)
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 const editProduct = async (req, res) => {
     try {
@@ -195,6 +221,7 @@ module.exports = {
     addProduct,
     editProductGet,
     editProduct,
+    deleteSingleImage,
     blockProduct,
     unblockProduct,
     addProductProductOffer,

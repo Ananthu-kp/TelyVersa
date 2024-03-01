@@ -31,6 +31,14 @@ const orderSchema = mongoose.Schema({
     },
     date : {
         type : String,
+    },
+    discount: {
+        type: Number,
+        default: 0  
+    },
+    couponDeduction: {
+        type: Number,
+        default: 0 
     }
 })
 

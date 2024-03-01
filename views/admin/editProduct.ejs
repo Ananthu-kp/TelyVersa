@@ -50,14 +50,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-4">
-                                        <label class="form-label">Sale price</label>
-                                        <input placeholder="$" name="salePrice" type="text" id="salePrice" value="<%= product.salePrice %>" class="form-control border">
-                                        <div id="salePrice-error" class="error-message" ></div>
-
-                                    </div>
-                                </div>
+                               
                                 <div class="col-lg-4">
                                     <div class="mb-4">
                                         <label class="form-label">Quantity</label>
@@ -124,7 +117,7 @@
                                 <div class="card-body">
                                     <div class="input-upload">
                                         <img src="assets/imgs/theme/upload.svg" alt="">
-                                        <input class="form-control border" name="image"  id="imageInput" type="file" multiple>
+                                        <input class="form-control border" name="images"  id="imageInput" type="file" multiple>
                                     </div>
                                 </div>
                             </div>
@@ -196,6 +189,44 @@ function handleFileSelect(event) {
         addedImagesContainer.appendChild(thumbnail);
     }
 }
+
+
+function deleteImage(productId, filename) {
+            deleteSingleImage(productId, filename);
+        }
+
+        function deleteSingleImage(productId, filename) {
+            // alert("hi")
+            fetch("/admin/deleteImage", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ productId, filename }),
+            })
+                .then((response) => location.reload())
+                .then((data) => {
+                    // Handle success or error
+                    if (data.success) {
+                        removeImage(filename);
+                        // location.reload()
+                    } else {
+                        console.error("Error deleting image:", data.error);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
+
+        // remove the deleted image
+        function removeImage(filename) {
+            const imageElement = document.querySelector(`[data-filename="${filename}"]`);
+
+            if (imageElement) {
+                imageElement.closest('.col-md-12').remove();
+            }
+        }
 
 function validateForm() {
     
