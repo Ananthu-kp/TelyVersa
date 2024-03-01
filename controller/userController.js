@@ -423,12 +423,15 @@ const productDetailsGet= async(req,res)=>{
         const productId = req.query.id
         console.log(productId);
         const findProduct = await Product.findOne({ _id: productId });
+        const findCategory = await Category.findOne({name : findProduct.category})
         const product =await Product.find({})
         console.log(findProduct._id);
 
         let offers=0;
         if(findProduct.productOffer){
             offers= findProduct.productOffer
+        }else if(findCategory.categoryOffer){
+            offers= findCategory.categoryOffer
         }
 
         if (user) {
