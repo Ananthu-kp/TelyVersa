@@ -262,6 +262,10 @@
     const MAX_PRODUCTS_LIMIT = 5;
 
     async function placeOrder(userId, prodId, isSingle) {
+            const discountCell = document.getElementById("discountCell");
+            const h5Element = discountCell.querySelector("h5");
+            const couponDiscount = h5Element.textContent;
+
         let totalQuantity = isSingle ? 1 : prodId.length; 
         let address = $("input[name='selectedAddress']:checked").val();
         let payment = $("input[name='payment_option']:checked").val();
@@ -306,7 +310,8 @@
                 totalPrice: numericValue,
                 addressId: address,
                 payment: payment,
-                productId: prodId, 
+                productId: prodId,
+                couponDiscount 
             },
             success: function (response) {
                 // console.log(response);
@@ -463,7 +468,13 @@ document.addEventListener("DOMContentLoaded", function() {
         tempInput.select();
         document.execCommand("copy");
         document.body.removeChild(tempInput);
-        alert("Coupon code copied: " + text);
+        Swal.fire({
+            icon: 'success',
+            title: 'Coupon code copied:',
+            text: text,
+            timer: 2000,
+            showConfirmButton: false
+        });
     }
 });
 

@@ -100,7 +100,7 @@ const applyCoupon = async (req, res) => {
 const placeOrder = async (req, res) => {
     try {
         console.log("hi");
-        const { totalPrice, addressId, payment, productId } = req.body;
+        const { totalPrice, addressId, payment, productId ,couponDiscount} = req.body;
         const userId = req.session.user;
         console.log(req.session.grandTotal, "from session");
         const grandTotal = req.session.grandTotal
@@ -139,7 +139,8 @@ const placeOrder = async (req, res) => {
             payment: payment,
             userId: userId,
             status: "Confirmed",
-            createdOn: Date.now()
+            createdOn: Date.now(),
+            couponDeduction:couponDiscount
         });
 
         const newOrderFromRazorpay = new Order({
@@ -149,7 +150,8 @@ const placeOrder = async (req, res) => {
             payment: payment,
             userId: userId,
             status: "Pending",
-            createdOn: Date.now()
+            createdOn: Date.now(),
+            couponDeduction:couponDiscount
         });
 
 

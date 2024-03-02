@@ -95,7 +95,7 @@
                         <th scope="col">payment</th>
                         <th scope="col">Status</th>
                         <th scope="col" class="text-end"> Total Price </th>
-                        <th scope="col">Discount</th>
+                        <!-- <th scope="col">Discount</th> -->
                         <th scope="col">Coupon Deduction</th>
                     </tr>
                 </thead>
@@ -110,7 +110,7 @@
                             <td><%= data[i].payment %></td>
                             <td><%= data[i].status %></td>
                             <td class="text-end"><%= data[i].totalPrice %></td>
-                            <td class="text-end"><%= data[i].discount %></td>
+                            <!-- <td class="text-end"><%= data[i].discount %></td> -->
                             <td class="text-end"><%= data[i].couponDeduction %></td>
                         </tr>
                     <% } %>
@@ -133,6 +133,10 @@
                     <tr>
                         <td class="fw-bold">Total Price Count</td>
                         <td><%= overallOrderAmount %></td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Total Discount</td>
+                        <td><%= overallDiscount %></td>
                     </tr>
                 </tbody>
             </table>
