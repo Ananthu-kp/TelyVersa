@@ -428,10 +428,12 @@ const productDetailsGet= async(req,res)=>{
         console.log(findProduct._id);
 
         let offers=0;
-        if(findProduct.productOffer){
-            offers= findProduct.productOffer
-        }else if(findCategory.categoryOffer){
-            offers= findCategory.categoryOffer
+        if (findProduct.productOffer && findCategory.categoryOffer) {
+            offers = findProduct.productOffer + findCategory.categoryOffer;
+        } else if (findProduct.productOffer) {
+            offers = findProduct.productOffer;
+        } else if (findCategory.categoryOffer) {
+            offers = findCategory.categoryOffer;
         }
 
         if (user) {

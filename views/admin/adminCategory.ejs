@@ -206,16 +206,16 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
             event.preventDefault()
         }
 
-     const existingCategories = ["LED", "LCD", "OLED","QLED","Curved"];
-    const lowerCaseName = name.toLowerCase();
+    //  const existingCategories = ["LED", "LCD", "OLED","QLED","Curved"];
+    // const lowerCaseName = name.toLowerCase();
     
-    if (existingCategories.map(cat => cat.toLowerCase()).includes(lowerCaseName)) {
-        document.getElementById('name').style.borderColor = '#cc0000';
-        document.getElementById('name').style.borderWidth = '1px';
-        document.getElementById('name-err-msg').innerHTML = 'Category name already exists.';
-        event.preventDefault();
-        return;
-    }
+    // if (existingCategories.map(cat => cat.toLowerCase()).includes(lowerCaseName)) {
+    //     document.getElementById('name').style.borderColor = '#cc0000';
+    //     document.getElementById('name').style.borderWidth = '1px';
+    //     document.getElementById('name-err-msg').innerHTML = 'Category name already exists.';
+    //     event.preventDefault();
+    //     return;
+    // }
     }
 
 

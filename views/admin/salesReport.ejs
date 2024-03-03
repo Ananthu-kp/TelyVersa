@@ -90,7 +90,7 @@
                         <th>#</th>
                         <th> Data ID</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Product ID</th>
+                        <!-- <th scope="col">Product ID</th> -->
                         <th scope="col">Date</th>
                         <th scope="col">payment</th>
                         <th scope="col">Status</th>
@@ -105,7 +105,7 @@
                             <td><%= i + 1 %></td>
                             <td><%= data[i]._id %></td>
                             <td><b><%= data[i].address[0].name %></b></td>
-                            <td><b><%= data[i].product[0]._id || data[i].product._id %></b></td>
+                            <!-- <td><b><%= data[i].product[0]._id || data[i].product._id %></b></td> -->
                             <td><%= data[i].createdOn.toLocaleString('en-IN') %></td>
                             <td><%= data[i].payment %></td>
                             <td><%= data[i].status %></td>
@@ -145,25 +145,20 @@
     
         
 
-        <% if (totalPages) { %>
-            <div class="pagination">
-                <% if (currentPage> 1) { %>
-                    <button class="btn btn-sm"><a href="?page=<%= currentPage - 1 %>">Previous</a></button>
+                <!-- Pagination -->
+                <div class="pagination">
+                    <% if (currentPage > 1) { %>
+                        <a href="?page=<%= currentPage - 1 %>" class="btn">Previous</a>
                     <% } %>
-
-                        <% for (let i=1; i <=totalPages; i++) { %>
-                            <button class="btn btn-sm <%= i === currentPage ? 'active' : '' %>">
-                                <a href="?page=<%= i %>">
-                                    <%= i %>
-                                </a>
-                            </button>
-                            <% } %>
-
-                                <% if (currentPage < totalPages) { %>
-                                    <button class="btn btn-sm"><a href="?page=<%= currentPage + 1 %>">Next</a></button>
-                                    <% } %>
-            </div>
-            <% } %>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <a href="?page=<%= i %>" class="btn <%= i === currentPage ? 'active' : '' %>">
+                            <%= i %>
+                        </a>
+                    <% } %>
+                    <% if (currentPage < totalPages) { %>
+                        <a href="?page=<%= currentPage + 1 %>" class="btn">Next</a>
+                    <% } %>
+                </div>
         </section>
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

@@ -14,6 +14,7 @@
                 <div>
                     <h2 class="content-title card-title">Edit Category</h2>
                 </div>
+                <div id="errorMessage" class="error-message"></div>
 
                 <div class="mb-4 mt-30">
                     <label for="product_name" class="form-label">Name</label>
@@ -39,23 +40,27 @@
 <br><br>
 
 <script>
+       function displayErrorMessage(message) {
+        const errorMessageContainer = document.getElementById('errorMessage');
+        errorMessageContainer.textContent = message;
+    }
     function validateForm(event) {
     const categoryNameInput = document.getElementById('categoryName');
     const descriptionInput = document.getElementById('description');
     const nameError = document.getElementById('nameError');
     const descriptionError = document.getElementById('descriptionError');
-    const existingCategories = ["LED", "LCD", "OLED","QLED","Curved"]; 
+    // const existingCategories = ["LED", "LCD", "OLED","QLED","Curved"]; 
 
     nameError.textContent = ""; 
     descriptionError.textContent = "";
 
-    const categoryName = categoryNameInput.value.trim().toLowerCase();
+    // const categoryName = categoryNameInput.value.trim().toLowerCase();
 
-    if (categoryName === "") {
-        nameError.textContent = "Please enter a name for the category.";
-    } else if (existingCategories.map(cat => cat.toLowerCase()).includes(categoryName)) {
-        nameError.textContent = `The category '${categoryName}' already exists.`;
-    }
+    // if (categoryName === "") {
+    //     nameError.textContent = "Please enter a name for the category.";
+    // } else if (existingCategories.map(cat => cat.toLowerCase()).includes(categoryName)) {
+    //     nameError.textContent = `The category '${categoryName}' already exists.`;
+    // }
 
     if (descriptionInput.value.trim() === "") {
         descriptionError.textContent = "Please enter a description for the category.";

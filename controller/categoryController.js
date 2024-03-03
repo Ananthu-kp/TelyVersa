@@ -20,17 +20,18 @@ const categoryGet = async (req, res) => {
 
 const addCategory = async (req, res) => {
     try {
-        const { name, description }=req.body;
-        const categoryExists = await Category.findOne({ name });
+        const { name, description } = req.body;
+        const categoryName = name.trim().toLowerCase(); 
+        const categoryExists = await Category.findOne({ name: { $regex: new RegExp('^' + categoryName + '$', 'i') } });
 
         if (!categoryExists) {
-            const newCategory=new Category({
-                 name:name,
-               description:description
+            const newCategory = new Category({
+                name: name,
+                description: description
             });
 
             await newCategory.save();
-            console.log("Category done:", newCategory);
+            console.log("Category added:", newCategory);
             res.redirect("/admin/category");
         } else {
             res.redirect("/admin/category");
@@ -68,7 +69,8 @@ const editCategoryGet = async (req, res) => {
     try {
         const id = req.query.id;
         const category = await Category.findOne({ _id: id });
-        res.render("admin/editCategory", { category: category });
+        const errorMessage = req.query.error || '';
+        res.render("admin/editCategory", { category: category ,Category:true ,errorMessage: errorMessage});
     } catch (error) {
         console.log(error.message);
     }
@@ -78,20 +80,28 @@ const editCategory = async (req, res) => {
     try {
         const id = req.params.id;
         const { categoryName, description } = req.body;
+        const updatedCategoryName = categoryName.trim().toLowerCase(); 
         
-        const findCategory = await Category.findById(id);
+        const categoryExists = await Category.findOne({ _id: { $ne: id }, name: { $regex: new RegExp('^' + updatedCategoryName + '$', 'i') } });
 
-        if (findCategory) {
-            await Category.updateOne(
-                { _id: id },
-                {
-                    name: categoryName,
-                    description: description
-                }
-            );
-            res.redirect("/admin/category");
+        if (!categoryExists) {
+            const findCategory = await Category.findById(id);
+
+            if (findCategory) {
+                await Category.updateOne(
+                    { _id: id },
+                    {
+                        name: categoryName,
+                        description: description
+                    }
+                );
+                res.redirect("/admin/category");
+            } else {
+                console.log("Category not found");
+            }
         } else {
-            console.log("Category not found");
+            res.redirect("/admin/category");
+            console.log("Category Already exists");
         }
     } catch (error) {
         console.log(error.message);
