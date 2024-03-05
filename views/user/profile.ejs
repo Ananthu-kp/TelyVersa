@@ -148,7 +148,11 @@
                                                                     <% for (let j = 0; j < order[i].product.length; j++) { %>
                                                                         <tr>
                                                                             <td><%=  order[i]._id %></td>
-                                                                            <td><%= order[i].createdOn %></td>
+                                                                            <td><% const dateOptions={ day: '2-digit' ,
+                                                                                month: 'short' , year: 'numeric' }; %>
+                                                                                <%= new
+                                                                                    Date(order[i].createdOn).toLocaleDateString('en-US',
+                                                                                    dateOptions) %></td>
                                                                             <td><img src="/uploads/products/<%= order[i].product[j].images %>" alt="Product Image" style="width: 50px;"></td>
                                                                             <td><%= order[i].product[j].name %></td>
                                                                             <td><%= order[i].status %></td>

@@ -197,7 +197,7 @@
                 
 
                 <div class="col-lg-8">
-                    <div class="row align-items-start mt-30 ml-150">
+                    <div class="row align-items-start mt-30">
                         <% if (locals.userAddress) { %>
                             <% userAddress.address.forEach((address) => { %>
                                 <div class="col-lg-6 mb-3">
@@ -259,7 +259,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
-    const MAX_PRODUCTS_LIMIT = 5;
+    const MAX_PRODUCTS_LIMIT = 2;
 
     async function placeOrder(userId, prodId, isSingle) {
             const discountCell = document.getElementById("discountCell");
