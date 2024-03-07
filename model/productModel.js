@@ -44,6 +44,10 @@ const productSchema= new mongoose.Schema({
     productOffer : {
         type : Number,
         default : 0
+    },
+    createdOn :{
+        type: Date,
+        required:true
     }
 
 })

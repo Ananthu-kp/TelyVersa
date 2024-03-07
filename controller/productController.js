@@ -58,6 +58,7 @@ const addProduct = async (req, res) => {
                 resolution: productData.resolution,
                 category: productData.category,
                 productImage: productImage,
+                createdOn:Date.now()
             });
 
             // Save the new product to the database
@@ -135,6 +136,7 @@ const editProduct = async (req, res) => {
                 resolution: productData.resolution,
                 category: productData.category,
                 productImage: productImage,
+                createdOn:Date.now()
 
             }, { new: true })
             console.log("product updated");
@@ -151,6 +153,7 @@ const editProduct = async (req, res) => {
                 size: productData.size,
                 resolution: productData.resolution,
                 category: productData.category,
+                createdOn:Date.now()
             }, { new: true })
             console.log("product updated");
             res.redirect("/admin/productList")

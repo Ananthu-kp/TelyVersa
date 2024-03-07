@@ -45,6 +45,9 @@ const userSchema=new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    createdOn: {
+        type: Date
+    },
     redeemedUsers: [
         {
             type: mongoose.Schema.Types.ObjectId,
