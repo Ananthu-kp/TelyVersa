@@ -272,6 +272,16 @@
 
         const sum = document.getElementById("totalValue").textContent;
         const numericValue = parseInt(sum.replace(/[^\d.]/g, ''));
+        
+        if (numericValue > 10000 && payment === "cod") {
+        Swal.fire({
+            title: 'Order Amount Exceeded',
+            text: 'Orders with Cash on Delivery are only available for amounts under 10000.',
+            icon: 'error',
+            timer: 3000,
+        });
+        return;
+    }
 
         if (totalQuantity > MAX_PRODUCTS_LIMIT) {
             Swal.fire({
