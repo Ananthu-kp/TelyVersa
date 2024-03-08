@@ -328,66 +328,64 @@
         }
 
         function validateForm() {
-            resetErrorMessages();
+    
+    resetErrorMessages();
 
-            var isValid = true;
+    var isValid = true;
 
-            var productName = document.getElementById("productName").value;
-            var description = document.getElementsByName("description")[0].value;
-            var regularPrice = document.getElementsByName("regularPrice")[0].value;
+    var productName = document.getElementById("productName").value;
+    var description = document.getElementsByName("description")[0].value;
+    var regularPrice = document.getElementsByName("regularPrice")[0].value;
+   
+    var quantity = document.getElementById("quantity").value;
+    var size = document.getElementById("size").value;
+    var resolution = document.getElementById("resolution").value;
+ 
 
-            var quantity = document.getElementById("quantity").value;
-            var size = document.getElementById("size").value;
-            var resolution = document.getElementById("resolution").value;
+    if (productName.trim() === "") {
+        displayErrorMessage("productName-error", "Product Name is Required");
+        isValid = false;
+    }
 
-            if (productName.trim() === "") {
-                displayErrorMessage("productName-error", "Product Name is Required");
-                isValid = false;
-            }
-
-            if (isNaN(parseFloat(regularPrice)) || !/^\d+$/.test(regularPrice) || parseFloat(regularPrice) <= 0) {
-                displayErrorMessage("regularPrice-error", "Regular price must be an integer");
-                isValid = false;
-            }
-
-
-
-
-            if (parseFloat(regularPrice) < 0) {
-                displayErrorMessage("regularPrice-error", "Regular price cannot be negative");
-                isValid = false;
-            }
+    if (isNaN(parseFloat(regularPrice)) ||!/^\d+$/.test(regularPrice)|| parseFloat(regularPrice) <= 0) {
+        displayErrorMessage("regularPrice-error", "Regular price must be an integer");
+        isValid = false;
+    }
 
 
 
-            if (size.trim() === "") {
-                displayErrorMessage("size-error", "Size is required");
-                isValid = false;
-            }
-
-            if (resolution.trim() === "") {
-                displayErrorMessage("resolution-error", "Resolution is required");
-                isValid = false;
-            }
-
-            if (!/^[1-9]\d*$/.test(quantity)) {
-                displayErrorMessage("quantity-error", "Invalid Quantity");
-                isValid = false;
-            }
+    if (parseFloat(regularPrice) < 0) {
+        displayErrorMessage("regularPrice-error", "Regular price cannot be negative");
+        isValid = false;
+    }
 
 
-            var fileInput = document.getElementById('imageInput');
-            var files = fileInput.files;
 
-            // Check if at least one file is selected
-            if (files.length === 0) {
-                alert('Please choose at least one image.');
-                isValid = false;
-            }
+    if (size.trim() === "") {
+        displayErrorMessage("size-error", "Size is required");
+        isValid = false;
+    }
+
+    if (resolution.trim() === "") {
+        displayErrorMessage("resolution-error", "Resolution is required");
+        isValid = false;
+    }
+
+    if (!/^[1-9]\d*$/.test(quantity)) {
+        displayErrorMessage("quantity-error", "Invalid Quantity");
+        isValid = false;
+    }
+
+    // Check if category is selected
+    if (category === "") {
+        displayErrorMessage("category-error", "Please select a category");
+        isValid = false;
+    }
 
 
-            return isValid;
-        }
+    return isValid;
+}
+
 
         function displayErrorMessage(elementId, message) {
             var errorElement = document.getElementById(elementId);
@@ -402,6 +400,8 @@
                 element.style.display = "none";
             });
         }
+
+
 
 
 

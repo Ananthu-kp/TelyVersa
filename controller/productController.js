@@ -115,53 +115,43 @@ const deleteSingleImage = async (req, res) => {
 
 const editProduct = async (req, res) => {
     try {
-        const id = req.params.id
-        const productData = req.body
-        const productImage = []
+        const id = req.params.id;
+        const productData = req.body;
+        const product = await Product.findById(id);
+
+        const existingImages = product.productImage || []; 
+        const newImages = [];
+
         if (req.files && req.files.length > 0) {
+            // Push new image filenames to newImages array
             for (let i = 0; i < req.files.length; i++) {
-                productImage.push(req.files[i].filename);
+                newImages.push(req.files[i].filename);
             }
         }
-        console.log(req.files)
-        if (req.files.length > 0) {
+        const updatedImages = [...existingImages, ...newImages];
 
-            await Product.findByIdAndUpdate(id, {
-                productName: productData.productName,
-                description: productData.description,
-                regularPrice: productData.regularPrice,
-                salePrice: productData.regularPrice,
-                quantity: productData.quantity,
-                size: productData.size,
-                resolution: productData.resolution,
-                category: productData.category,
-                productImage: productImage,
-                createdOn:Date.now()
+        const updatedProduct = {
+            productName: productData.productName,
+            description: productData.description,
+            regularPrice: productData.regularPrice,
+            salePrice: productData.regularPrice,
+            quantity: productData.quantity,
+            size: productData.size,
+            resolution: productData.resolution,
+            category: productData.category,
+            productImage: updatedImages,
+            createdOn: Date.now()
+        };
 
-            }, { new: true })
-            console.log("product updated");
-            res.redirect("/admin/productList")
-        }
-        else {
-            console.log("no change in image")
-            await Product.findByIdAndUpdate(id, {
-                productName: productData.productName,
-                description: productData.description,
-                regularPrice: productData.regularPrice,
-                salePrice: productData.regularPrice,
-                quantity: productData.quantity,
-                size: productData.size,
-                resolution: productData.resolution,
-                category: productData.category,
-                createdOn:Date.now()
-            }, { new: true })
-            console.log("product updated");
-            res.redirect("/admin/productList")
-        }
+        await Product.findByIdAndUpdate(id, updatedProduct, { new: true });
+
+        console.log("Product updated");
+        res.redirect("/admin/productList");
     } catch (error) {
         console.log(error.message);
     }
-}
+};
+
 
 
 const blockProduct = async (req, res) => {
