@@ -1,4 +1,10 @@
 <%- include("../partials/adminHeader") %>
+<style>
+    .product-item {
+    height: 100%;
+    border: 1px solid #e0e0e0; /* Adjust border color and style as needed */
+}
+</style>
         <section class="content-main">
             <div class="content-header">
                 <div>
@@ -83,8 +89,44 @@
                         </article>
                     </div>
             </div>
+<br>
+<div class="tab-content wow fadeIn animated" id="myTabContent">
+    <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+        <h4>Top 5 Selling Products</h4>
+        <br>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            <% for (let i=0; i < top5BestSellingProducts.length; i++) { %>
+                <div class="col">
+                    <div class="product-item border rounded p-3 mb-4">
+                        <div class="product-cart-wrap mb-3">
+                            <div class="product-img-action-wrap">
+                                <div class="product-img product-img-zoom">
+                                    <a href="/productDetails?id=<%= top5BestSellingProducts[i]._id %>">
+                                        <img class="default-img" src="/uploads/products/<%= top5BestSellingProducts[i].productImage[0] %>" alt="<%= top5BestSellingProducts[i].productName %>">
+                                    </a>
+                                </div>
+                                <!-- You can add product actions or badges here if needed -->
+                            </div>
+                            <div class="product-content-wrap">
+                                <h4><a href="/productDetails?id=<%= top5BestSellingProducts[i]._id %>"><%- top5BestSellingProducts[i].productName %></a></h4>
+                                <div class="product-price">
+                                    <span>₹<%= top5BestSellingProducts[i].salePrice.toLocaleString('en-IN') %></span>
+                                    <!-- <span class="old-price">₹<%= top5BestSellingProducts[i].regularPrice.toLocaleString('en-IN') %></span> -->
+                                </div>
+                                <!-- You can add additional product information or actions here if needed -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
 
+
+     
         </section> <!-- content-main end// -->
+        <br><br><br>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 

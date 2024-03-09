@@ -77,6 +77,10 @@ const adminHomeGet=async(req,res)=>{
             userPerMonth[createdMonth]++;
         });
 
+        const top5BestSellingProducts = await calculateTopSellingProducts();
+        console.log("Top 5 Best Selling Products:", top5BestSellingProducts);
+
+
         res.render("admin/adminHome",{
             totalRevenue, 
             orderCount,
@@ -86,7 +90,8 @@ const adminHomeGet=async(req,res)=>{
             monthlySalesArray, 
             productPerMonth, 
             latestOrders,
-            userPerMonth, 
+            userPerMonth,
+            top5BestSellingProducts, 
             dashboard:true})
 
     } catch (error) {
@@ -145,6 +150,52 @@ const getMonthlySales = async () => {
             }
         }
     ]);
+};
+
+const calculateTopSellingProducts = async () => {
+    const orders = await Order.aggregate([
+        {
+            $match: { status: "Delivered" }
+        },
+        {
+            $unwind: "$product"
+        },
+        {
+            $group: {
+                _id: { productId: "$product._id", productName: "$product.productName" },
+                totalQuantitySold: { $sum: { $toInt: "$product.quantity" } }
+            }
+        },
+        {
+            $sort: { totalQuantitySold: -1 }
+        },
+        {
+            $limit: 5
+        },
+        {
+            $lookup: {
+                from: "products",
+                localField: "_id.productId",
+                foreignField: "_id",
+                as: "product"
+            }
+        },
+        {
+            $unwind: "$product"
+        },
+        {
+            $project: {
+                _id: "$product._id",
+                productName: "$product.productName",
+                productImage: "$product.productImage",
+                salePrice: "$product.salePrice",
+                regularPrice: "$product.regularPrice",
+                totalQuantitySold: 1
+            }
+        }
+    ]);
+
+    return orders;
 };
 
 const adminLogout = async (req, res) => {
