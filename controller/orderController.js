@@ -6,6 +6,7 @@ const Coupon = require("../model/couponModel")
 const mongodb = require('mongodb');
 const razorpay = require("razorpay")
 const crypto = require("crypto")
+const Category=require("../model/categoryModel")
 
 let instance = new razorpay({
     key_id: process.env.KEY_ID,
@@ -109,6 +110,7 @@ const placeOrder = async (req, res) => {
         const findAddress = await Address.findOne({ 'address._id': addressId });
         const desiredAddress = findAddress.address.find(item => item._id.toString() === addressId.toString());
         const products = await Product.find({ _id: { $in: productId } });
+        const category= await Category.find({_id:{$in:productId}})
         // console.log(products);
 
         const cartItemUnit = findUser.cart.map((item) => ({
@@ -122,6 +124,7 @@ const placeOrder = async (req, res) => {
             price: item.salePrice,
             name: item.productName,
             images: item.productImage[0],
+            category:item.category,
             quantity: cartItemUnit.find(cartItem => cartItem.ProductId.toString() === item._id.toString()).quantity
         }));
 

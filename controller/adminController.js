@@ -79,7 +79,8 @@ const adminHomeGet=async(req,res)=>{
 
         const top5BestSellingProducts = await calculateTopSellingProducts();
         console.log("Top 5 Best Selling Products:", top5BestSellingProducts);
-
+        const topSellingCategories = await calculateTopSellingCategories();
+        console.log("Top 5 Best Selling Products:", topSellingCategories);
 
         res.render("admin/adminHome",{
             totalRevenue, 
@@ -91,13 +92,52 @@ const adminHomeGet=async(req,res)=>{
             productPerMonth, 
             latestOrders,
             userPerMonth,
-            top5BestSellingProducts, 
+            top5BestSellingProducts,
+            topSellingCategories: topSellingCategories, 
             dashboard:true})
 
     } catch (error) {
         console.log(error);
     } 
 }
+const calculateTopSellingCategories = async () => {
+    try {
+        const topSellingCategories = await Order.aggregate([
+            {
+                $unwind: "$product"
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "product._id",
+                    foreignField: "_id",
+                    as: "productDetails"
+                }
+            },
+            {
+                $unwind: "$productDetails"
+            },
+            {
+                $group: {
+                    _id: "$productDetails.category",
+                    totalQuantitySold: { $sum: "$product.quantity" }
+                }
+            },
+            {
+                $sort: { totalQuantitySold: -1 }
+            },
+            {
+                $limit: 5
+            }
+        ]);
+
+        return topSellingCategories;
+    } catch (error) {
+        console.error("Error calculating top selling categories:", error);
+        return []; // Return an empty array in case of error
+    }
+};
+
 
 const calculateTotalRevenue = (order) => {
     let totalRevenue = 0;

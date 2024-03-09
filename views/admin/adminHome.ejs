@@ -1,216 +1,255 @@
 <%- include("../partials/adminHeader") %>
-<style>
-    .product-item {
-    height: 100%;
-    border: 1px solid #e0e0e0; /* Adjust border color and style as needed */
-}
-</style>
-        <section class="content-main">
-            <div class="content-header">
-                <div>
-                    <h2 class="content-title card-title">Dashboard </h2>
-                    <p>Whole data about your business here</p>
-                </div>
-                <div>
-                    <!-- <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a> -->
-                </div>
+    <style>
+        .product-item {
+            height: 100%;
+            border: 1px solid #e0e0e0;
+            /* Adjust border color and style as needed */
+        }
+    </style>
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Dashboard </h2>
+                <p>Whole data about your business here</p>
             </div>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="card card-body mb-4">
-                        <article class="icontext">
-                            <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
-                            <div class="text">
-                                <h6 class="mb-1 card-title">Revenue</h6>
-                                <span>₹<%= totalRevenue.toLocaleString() %></span>
-                                <span class="text-sm">
-                                    Shipping fees are not included
-                                </span>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="card card-body mb-4">
-                        <article class="icontext">
-                            <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
-                            <div class="text">
-                                <h6 class="mb-1 card-title">Orders</h6> <span><%= orderCount %></span>
-                                <span class="text-sm">
-                                    Excluding orders in transit
-                                </span>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="card card-body mb-4">
-                        <article class="icontext">
-                            <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
-                            <div class="text">
-                                <h6 class="mb-1 card-title">Products</h6> <span><%= productCount %></span>
-                                <span class="text-sm">
-                                    In <%= categoryCount %> Categories
-                                </span>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="card card-body mb-4">
-                        <article class="icontext">
-                            <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
-                            <div class="text">
-                                <h6 class="mb-1 card-title">Monthly Earning</h6> <span>₹<%= monthlyEarnings.toLocaleString() %></span>
-                                <span class="text-sm">
-                                    Based in your local time.
-                                </span>
-                            </div>
-                        </article>
-                    </div>
-                </div>
+            <div>
+                <!-- <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a> -->
             </div>
-            <div class="row">
-                <div class="col-xl-8 col-lg-12">
-                    <div class="card mb-4">
-                        <article class="card-body">
-                            <h5 class="card-title">Sale statistics</h5>
-                            <canvas id="saleChart" width="400" height="200"></canvas>
-                        </article>
-                    </div>
-
-
-                </div>
-                <div class="col-xl-4 col-lg-12">
-                    <div class="card mb-4">
-                        <article class="card-body">
-                            <h5 class="card-title">Revenue Base on Area</h5>
-                            <canvas id="myChart2" height="217"></canvas>
-                        </article>
-                    </div>
-            </div>
-<br>
-<div class="tab-content wow fadeIn animated" id="myTabContent">
-    <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
-        <h4>Top 5 Selling Products</h4>
-        <br>
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            <% for (let i=0; i < top5BestSellingProducts.length; i++) { %>
-                <div class="col">
-                    <div class="product-item border rounded p-3 mb-4">
-                        <div class="product-cart-wrap mb-3">
-                            <div class="product-img-action-wrap">
-                                <div class="product-img product-img-zoom">
-                                    <a href="/productDetails?id=<%= top5BestSellingProducts[i]._id %>">
-                                        <img class="default-img" src="/uploads/products/<%= top5BestSellingProducts[i].productImage[0] %>" alt="<%= top5BestSellingProducts[i].productName %>">
-                                    </a>
-                                </div>
-                                <!-- You can add product actions or badges here if needed -->
-                            </div>
-                            <div class="product-content-wrap">
-                                <h4><a href="/productDetails?id=<%= top5BestSellingProducts[i]._id %>"><%- top5BestSellingProducts[i].productName %></a></h4>
-                                <div class="product-price">
-                                    <span>₹<%= top5BestSellingProducts[i].salePrice.toLocaleString('en-IN') %></span>
-                                    <!-- <span class="old-price">₹<%= top5BestSellingProducts[i].regularPrice.toLocaleString('en-IN') %></span> -->
-                                </div>
-                                <!-- You can add additional product information or actions here if needed -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <% } %>
         </div>
-    </div>
-</div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-primary-light"><i
+                                class="text-primary material-icons md-monetization_on"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Revenue</h6>
+                            <span>₹<%= totalRevenue.toLocaleString() %></span>
+                            <span class="text-sm">
+                                Shipping fees are not included
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-success-light"><i
+                                class="text-success material-icons md-local_shipping"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Orders</h6> <span>
+                                <%= orderCount %>
+                            </span>
+                            <span class="text-sm">
+                                Excluding orders in transit
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-warning-light"><i
+                                class="text-warning material-icons md-qr_code"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Products</h6> <span>
+                                <%= productCount %>
+                            </span>
+                            <span class="text-sm">
+                                In <%= categoryCount %> Categories
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-info-light"><i
+                                class="text-info material-icons md-shopping_basket"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Monthly Earning</h6> <span>₹<%= monthlyEarnings.toLocaleString()
+                                    %></span>
+                            <span class="text-sm">
+                                Based in your local time.
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-8 col-lg-12">
+                <div class="card mb-4">
+                    <article class="card-body">
+                        <h5 class="card-title">Sale statistics</h5>
+                        <canvas id="saleChart" width="400" height="200"></canvas>
+                    </article>
+                </div>
 
 
-     
-        </section> <!-- content-main end// -->
-        <br><br><br>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            </div>
+            <div class="col-xl-4 col-lg-12">
+                <div class="card mb-4">
+                    <article class="card-body">
+                        <h5 class="card-title">Revenue Base on Area</h5>
+                        <canvas id="myChart2" height="217"></canvas>
+                    </article>
+                </div>
+            </div>
+            <div style="margin-top: 20px;"></div>
+            <div class="tab-content wow fadeIn animated" id="myTabContent">
+                <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                    <h4>Top 5 Selling Products</h4>
+                    <br>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                        <% for (let i=0; i < top5BestSellingProducts.length; i++) { %>
+                            <div class="col">
+                                <div class="product-item border rounded p-3 mb-4">
+                                    <div class="product-cart-wrap mb-3">
+                                        <div class="product-img-action-wrap">
+                                            <div class="product-img product-img-zoom">
+                                                <a href="/productDetails?id=<%= top5BestSellingProducts[i]._id %>">
+                                                    <img class="default-img"
+                                                        src="/uploads/products/<%= top5BestSellingProducts[i].productImage[0] %>"
+                                                        alt="<%= top5BestSellingProducts[i].productName %>">
+                                                </a>
+                                            </div>
+                                            <!-- You can add product actions or badges here if needed -->
+                                        </div>
+                                        <div class="product-content-wrap">
+                                            <h4><a href="/productDetails?id=<%= top5BestSellingProducts[i]._id %>"><%-
+                                                        top5BestSellingProducts[i].productName %></a></h4>
+                                            <div class="product-price">
+                                                <span>₹<%= top5BestSellingProducts[i].salePrice.toLocaleString('en-IN')
+                                                        %></span>
+                                                <!-- <span class="old-price">₹<%= top5BestSellingProducts[i].regularPrice.toLocaleString('en-IN') %></span> -->
+                                            </div>
+                                            <!-- You can add additional product information or actions here if needed -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 70px;"></div>
+            <div class="tab-content wow fadeIn animated" id="myTabContent">
+                <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
+                    <h4>Top Selling Categories</h4>
+                    <br>
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                        <% for (let i=0; i < topSellingCategories.length; i++) { %>
+                            <div class="col">
+                                <div class="category-item border rounded p-3 mb-4">
+                                    <div class="category-content-wrap">
+                                        <h4>
+                                            <%= topSellingCategories[i]._id %>
+                                        </h4>
+                                        <div class="category-sales">
+                                            <span>Total Quantity Sold: <%= topSellingCategories[i].totalQuantitySold %>
+                                                    </span>
+                                        </div>
+                                        <!-- You can add additional category information or actions here if needed -->
+                                    </div>
+                                </div>
+                            </div>
+                            <% } %>
+                    </div>
+                </div>
+            </div>
 
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const monthlySalesData = <%= JSON.stringify(monthlySalesArray) %>;
-                const productData = <%= JSON.stringify(productPerMonth) %>;
-                const userData = <%= JSON.stringify(userPerMonth) %>;
-                // alert(userData)
-                const ctx = document.getElementById('saleChart').getContext('2d');
-                const saleChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                        datasets: [{
-                            label: 'Sales',
-                            data: monthlySalesData,
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 2,
-                            pointRadius: 4,
-                            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverRadius: 6,
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
-                            fill: {
-                                target: 'origin',
-                                above: 'rgba(54, 162, 235, 0.2)',   // Gradient start color
-                                below: 'rgba(54, 162, 235, 0)'      // Gradient end color (transparent)
-                            },
-                            tension: 0.4 
+
+    </section> <!-- content-main end// -->
+    <br><br><br>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const monthlySalesData = <%= JSON.stringify(monthlySalesArray) %>;
+            const productData = <%= JSON.stringify(productPerMonth) %>;
+            const userData = <%= JSON.stringify(userPerMonth) %>;
+            // alert(userData)
+            const ctx = document.getElementById('saleChart').getContext('2d');
+            const saleChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: monthlySalesData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(54, 162, 235, 1)',
+                        fill: {
+                            target: 'origin',
+                            above: 'rgba(54, 162, 235, 0.2)',   // Gradient start color
+                            below: 'rgba(54, 162, 235, 0)'      // Gradient end color (transparent)
                         },
-                        {
-                            label: 'Products',
-                            data: productData,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 2,
-                            pointRadius: 4,
-                            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverRadius: 6,
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
-                            fill: {
-                                target: 'origin',
-                                above: 'rgba(255, 99, 132, 0.2)',
-                                below: 'rgba(255, 99, 132, 0)'
-                            },
-                            tension: 0.4 
-                        },
-                        {
-                            label: 'Users',
-                            data: userData,
-                            backgroundColor: 'rgba(144, 238, 144, 0.2)',
-                            borderColor: 'rgba(144, 238, 144, 1)',
-                            borderWidth: 2,
-                            pointRadius: 4,
-                            pointBackgroundColor: 'rgba(144, 238, 144, 1)',
-                            pointBorderColor: '#fff',
-                            pointHoverRadius: 6,
-                            pointHoverBackgroundColor: '#fff',
-                            pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
-                            fill: {
-                                target: 'origin',
-                                above: 'rgba(75, 192, 192, 0.2)',
-                                below: 'rgba(75, 192, 192, 0)'
-                            },
-                            tension: 0.4 
-                        }]
+                        tension: 0.4
                     },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+                    {
+                        label: 'Products',
+                        data: productData,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(255, 99, 132, 1)',
+                        fill: {
+                            target: 'origin',
+                            above: 'rgba(255, 99, 132, 0.2)',
+                            below: 'rgba(255, 99, 132, 0)'
+                        },
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Users',
+                        data: userData,
+                        backgroundColor: 'rgba(144, 238, 144, 0.2)',
+                        borderColor: 'rgba(144, 238, 144, 1)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: 'rgba(144, 238, 144, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverRadius: 6,
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
+                        fill: {
+                            target: 'origin',
+                            above: 'rgba(75, 192, 192, 0.2)',
+                            below: 'rgba(75, 192, 192, 0)'
+                        },
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
-                });
+                }
             });
-        </script>
-        
+        });
+    </script>
 
-        
-       
-  <%- include("../partials/adminFooter") %>
+
+
+
+    <%- include("../partials/adminFooter") %>
