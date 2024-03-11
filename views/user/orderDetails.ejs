@@ -59,7 +59,9 @@
                                     </div>
                                     <% }else if(orders.status==="Returned" ){ %>
                                         <h4 class="text-warning">Returned</h4>
-                                        <% } else { %>
+                                        <% } else if(orders.status==="Pending"){ %>
+                                            <button class="btn custom-btn" id="continue-payment" onclick="continuePayment('<%= orders._id %>', '<%= orders.totalPrice %>')">Continue Payment</button>
+                                            <% } else{ %>
                                             <select id="actionDropdown"
                                                 class="form-select form-select-sm d-inline-block mb-lg-0 mb-15 mw-100"
                                                 onchange="handleDropdownChange(this)">
@@ -284,8 +286,96 @@
 <script src="
 https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
 "></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
+
+async function continuePayment(orderId, orderAmount) {
+            const numericValue = parseInt(orderAmount);
+            // alert(numericValue)
+            $.ajax({
+                url: '/continuePayment',
+                method: 'POST',
+                data: { orderId },
+                success: function (response) {
+                    if (response.method === "online") {
+                        let orderAmount = Math.round(numericValue * 100);
+                        console.log("Responds : ", response.razorpayOrder.id, orderAmount);
+                        console.log("Responds full : ", response);
+
+                        var options = {
+                            "key": "rzp_test_PQuoSyT1cgKHjg",
+                            "amount": orderAmount,
+                            "currency": "INR",
+                            "name": "TelyVersa",
+                            "description": "Test Transaction",
+                            "image": "https://blog.flamingtext.com/blog/2024/02/02/flamingtext_com_1706871147_110639469.png",
+                            "order_id": response.razorpayOrder.id,
+                            "handler": function (status) {
+                                console.log("Response after rezorepay",response.razorpayOrder, status);
+                                // Handle payment response here
+                                verifyPayment(response.razorpayOrder, status, response.razorpayOrder.id, response.orderId);
+                            },
+                            "prefill": {
+                                "name": "Customer Name",
+                                "email": "customer@example.com",
+                                "contact": "9000090000"
+                            },
+                            "theme": {
+                                "color": "#3399cc"
+                            }
+                        };
+
+                        // Initialize Razorpay
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+
+                        // Handle payment failure
+                        rzp1.on('payment.failed', function (response) {
+                            console.error('Payment failed:', response.error.code, response.error.description);
+                        });
+                    }
+                }
+            });
+        }
+
+
+
+
+        function verifyPayment(order, payment, id, orderId) {
+            // alert("Hi");
+            console.log(order)
+            console.log("Payement : ", payment);
+            $.ajax({
+                url: '/verifyPayment',
+                method: 'post',
+                data: {
+                    order,
+                    payment,
+                    orderId
+                },
+                success: function (response) {
+                    if (response.status) {
+                        Swal.fire({
+                            title: "Order Success",
+                            text: "Order placed successfully",
+                            icon: "success",
+                            showCancelButton: true,
+                            confirmButtonText: "View Orders",
+                            cancelButtonText: "Continue Shopping",
+                            reverseButtons: true
+                        }).then(function (result) {
+                            if (result.value) {
+                                location.href = '/profile';
+                            } else if (result.dismiss === "cancel") {
+                                location.href = '/VuePix';
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
     function handleDropdownChange(selectElement) {
         var selectedValue = selectElement.value;
         if (selectedValue == "cancel") {
@@ -336,6 +426,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
         }
         document.getElementById("print-button").addEventListener('click', printInvoice);
 
+
+        
+       
 
 </script>
 

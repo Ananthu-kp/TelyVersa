@@ -275,6 +275,40 @@ const changeOrderStatusToConfirmed = async (orderId) => {
         .then(res => console.log(res))
 }
 
+const continuePayment = async (req, res) => {
+    try {
+        const { orderId } = req.body
+        const userId = req.session.user
+        const findUser = await User.findOne({ email: userId })
+        const findOrder = await Order.findOne({ _id: orderId })
+        console.log("ContinuePayment ", findOrder);
+
+
+        const cartItemUnit = findUser.cart.map((item) => ({
+            productId: item.ProductId,
+            quantity: item.quantity
+        }))
+
+
+        const generatedOrder = await generateOrderRazorpay(orderId, findOrder.totalPrice);
+        console.log(generatedOrder, "order generated");
+
+        res.json(
+            {
+                payment: false,
+                method: "online",
+                razorpayOrder: generatedOrder,
+                order: findOrder,
+                orderId: orderId,
+                quantity: cartItemUnit,
+
+            })
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 const cancelOrder = async (req, res) => {
     try {
@@ -442,6 +476,7 @@ module.exports = {
     applyCoupon,
     verify,
     returnProduct,
+    continuePayment,
 
     orderList,
     orderDetails,
