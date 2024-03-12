@@ -7,6 +7,7 @@ const cartPageGet = async (req, res) => {
         const email = req.session.user;
         const user = await User.findOne({ email });
         const oid = new mongodb.ObjectId(user._id);
+        const shipping=40;
 
         let product = await User.aggregate([
             { $match: { _id: oid } },
@@ -36,17 +37,19 @@ const cartPageGet = async (req, res) => {
                 grandTotal += product[i].productDetails[0].salePrice * product[i].quantity;
             }
         }
-        req.session.grandTotal = grandTotal;
+        req.session.grandTotal = grandTotal+shipping;
 // console.log("hii");
        if(user){
         const findUser= await User.findOne({email})
         const cartCount=findUser.cart.length
         const wishlistCount=findUser.wishlist.length
         console.log(cartCount);
+        
+        grandTotal=grandTotal+shipping
 
-        res.render("user/cart", { user, quantity, product, grandTotal ,cartCount,wishlistCount});
+        res.render("user/cart", { user, quantity, product, grandTotal ,cartCount,wishlistCount, shipping});
        }else{
-        res.render("user/cart", { user, quantity, product, grandTotal});
+        res.render("user/cart", { user, quantity, product, grandTotal,shipping});
        }
     } catch (err) {
         console.error("Error fetching cart page:", err);

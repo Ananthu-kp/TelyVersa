@@ -61,7 +61,9 @@ const checkoutPageGET = async (req, res) => {
         const cartCount = findUser.cart.length
         const wishlistCount = findUser.wishlist.length
 
-        res.render("user/checkout", { data: data, user: findUser, isCart: true, userAddress: userAddress, isSingle: false, grandTotal: grandTotal, cartCount, wishlistCount, coupons: findCoupon });
+        const shipping=40;
+
+        res.render("user/checkout", { data: data, user: findUser, isCart: true, userAddress: userAddress, isSingle: false, grandTotal: grandTotal, cartCount, wishlistCount, coupons: findCoupon ,shipping});
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");
@@ -135,6 +137,8 @@ const placeOrder = async (req, res) => {
             return total + (product.price * product.quantity);
         }, 0);
 
+        const shipping=40;
+
         const newOrder = new Order({
             product: orderedProducts,
             totalPrice: grandTotal,
@@ -143,18 +147,20 @@ const placeOrder = async (req, res) => {
             userId: userId,
             status: "Confirmed",
             createdOn: Date.now(),
-            couponDeduction:couponDiscount
+            couponDeduction:couponDiscount,
+            shipping:shipping
         });
 
         const newOrderFromRazorpay = new Order({
             product: orderedProducts,
-            totalPrice: totalprice,
+            totalPrice: grandTotal,
             address: desiredAddress,
             payment: payment,
             userId: userId,
             status: "Pending",
             createdOn: Date.now(),
-            couponDeduction:couponDiscount
+            couponDeduction:couponDiscount,
+            shipping:shipping
         });
 
 

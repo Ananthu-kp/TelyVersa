@@ -39,6 +39,10 @@ const orderSchema = mongoose.Schema({
     couponDeduction: {
         type: Number,
         default: 0 
+    },
+    shipping:{
+        type:Number,
+        required:true
     }
 })
 
