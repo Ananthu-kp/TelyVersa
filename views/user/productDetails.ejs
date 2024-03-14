@@ -120,7 +120,8 @@
                                                 to cart</button>
 
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                                href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
+                                            href="javascript:void(0);" onclick="addToWishlist('<%= product._id %>')">
+                                            <i class="fi-rs-heart"></i></a>
                                             <!-- <a aria-label="Compare" class="action-btn hover-up"
                                                 href="shop-compare.html"><i class="fi-rs-shuffle"></i></a> -->
                                         </div>
@@ -241,6 +242,50 @@
             })
         }
         
+        function addToWishlist(productId) {
+            $.ajax({
+                url: "/addToWishlist",
+                method: "POST",
+                data: {
+                    productId: productId
+                },
+                success: (response) => {
+                    if (response.status == true) {
+                        Swal.fire({
+                            title: 'Product Added to Wishlist!',
+                            text: 'Continue shopping.',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            // Redirect to the wishlist page
+                            window.location.href = '/wishlist';
+                        });
+                    } else  {
+                        Swal.fire({
+                            title: 'You need to log in first',
+                            text: 'Redirecting to login page...',
+                            icon: 'warning',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            // Redirect to the login page
+                            location.href = '/login'
+                        });
+                    }
+                },
+                error: (error) => {
+                    console.error('Error adding to wishlist:', error);
+                    Swal.fire({
+                        title: 'Oops!',
+                        text: 'Something went wrong. Please try again later.',
+                        icon: 'error',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
     </script>
 
     <footer class="main">

@@ -152,7 +152,7 @@
                                             <div class="product-action-1">
 
                                                 <a aria-label="Add To Wishlist" class="action-btn hover-up"
-                                                    onclick="addToWishlist('<%= product[i]._id %>')"><i
+                                                href="javascript:void(0);" onclick="addToWishlist('<%= product[i]._id %>')"><i
                                                         class="fi-rs-heart"></i></a>
 
                                             </div>
@@ -176,7 +176,7 @@
                                             </div>
                                             <div class="product-action-1 show">
                                                 <a aria-label="Add To Cart" class="action-btn hover-up"
-                                                    href="products-cart.html">
+                                                onclick="addToCart('<%= product[i].id %>',1,'<%= product[i].quantity %>')">
                                                     <i class="fi-rs-shopping-bag-add"></i></a>
                                             </div>
                                         </div>
@@ -200,31 +200,102 @@
 
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function addToWishlist(productId) {
+    $.ajax({
+        url: "/addToWishlist",
+        method: "POST",
+        data: {
+            productId: productId
+        },
+        success: (response) => {
+            if (response.status == true) {
+                Swal.fire({
+                    title: 'Product Added to Wishlist!',
+                    text: 'Continue shopping.',
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirect to the wishlist page
+                    window.location.href = '/wishlist';
+                });
+            } else  {
+                Swal.fire({
+                    title: 'You need to log in first',
+                    text: 'Redirecting to login page...',
+                    icon: 'warning',
+                    timer: 2000,
+                    showConfirmButton: false
+                }).then(() => {
+                    // Redirect to the login page
+                    location.href = '/login'
+                });
+            }
+        },
+        error: (error) => {
+            console.error('Error adding to wishlist:', error);
+            Swal.fire({
+                title: 'Oops!',
+                text: 'Something went wrong. Please try again later.',
+                icon: 'error',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+    });
+}
+
+function addToCart(proId,quantity, stock) {
+            // console.log(proId, stock);
+            if (stock <= 0) {
+                Swal.fire({
+                    title: 'OUT OF STOCK!',
+                    text: 'Quantity exceed.',
+                    icon: 'error',
+                    timer: 5000
+                })
+                return;
+            }
 
             $.ajax({
-                url: "/wishlist/add",
-                method: "POST",
+                url: `/cart`,
+                method: 'post',
                 data: {
-                    product: productId
+                    id:proId,
+                    quantity: quantity,
                 },
-                success: function (response) {
-                    if (response.status == true) {
+                success(response) {
+                    if (response.added == true) {
                         Swal.fire({
-
-                            icon: "success",
-                            title: "Product added to wishlist",
-                            showConfirmButton: false,
-                            timer: 1500
+                            title: 'CART',
+                            text: 'PRODUCT ADDED TO CART.',
+                            icon: 'success',
+                            timer: 5000
+                        })
+                    } else if (response.added == false) {
+                        Swal.fire({
+                            title: 'STOCK!',
+                            text: 'Product is out of stock.',
+                            icon: 'error',
+                            timer: 5000
+                        })
+                    } else {
+                            Swal.fire({
+                            title: 'You need to log in first',
+                            text: 'Redirecting to login page...',
+                            icon: 'warning',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            // Redirect to the login page
+                            location.href = '/login'
                         });
                     }
                 }
             })
-
-
         }
     </script>
 
