@@ -4,21 +4,29 @@ const nodemailer=require("nodemailer");
 const Product=require("../model/productModel")
 const Category=require("../model/categoryModel")
 const {v4: uuidv4}= require("uuid")
+const Banner =require("../model/bannerModel")
 
 
 const userHomeGet=async(req,res)=>{
     try{
+        const today = new Date().toISOString();
         const user=req.session.user
         const product= await Product.find({isBlocked:false})
+        
+        const findBanner = await Banner.find({
+            startDate: { $lt: new Date(today) },
+            endDate: { $gt: new Date(today) }
+        });
+
         if(user){
             const findUser= await User.findOne({email:user})
 
             const cartCount= findUser.cart.length
             const wishlistCount= findUser.wishlist.length
 
-            res.render("user/userHome", {user : user ,product:product, cartCount,wishlistCount});
+            res.render("user/userHome", {user : user ,product:product, cartCount,wishlistCount, banner: findBanner});
         }else{
-            res.render("user/userHome", {user : user ,product:product});
+            res.render("user/userHome", {user : user ,product:product, banner: findBanner});
         }
        
     }catch(error){
