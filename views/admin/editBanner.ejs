@@ -1,0 +1,392 @@
+<%- include("../partials/adminHeader") %>
+
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.css">
+</head>
+
+
+    <style>
+        .error-message {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+            /* Adjust font size as needed */
+        }
+    </style>
+
+
+
+
+
+    <section class="content-main">
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Edit Banner</h2>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+
+                        <form method="post" action="/admin/editBanner?id=<%= data._id %>" enctype="multipart/form-data"
+                            onsubmit="return validateForm()">
+                            <div class="mb-4">
+                                <label for="product_name" class="form-label">Banner Title</label>
+                                <input type="text" placeholder="Type here" name="title" value="<%= data.title %>"
+                                    class="form-control border" id="product_name">
+                                <div id="productName-error" class="error-message"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Description</label>
+                                <textarea placeholder="Type here" name="description" class="form-control border" value="<%= data.description %>
+                                    rows="4"></textarea>
+                                <div id="description" class="error-message"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="startingDate" class="form-label">Start Date</label>
+                                <input type="date" name="startDate" class="form-control" value="<%= data.startDate %> required id="startingDate" />
+                                <div id="error-start-date" class="error-message"></div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="expiringDate" class="form-label">End Date</label>
+                                <input type="date" name="endDate" class="form-control" value="<%= data.endDate %>" id="expiringDate" required />
+                                <div id="error-end-date" class="error-message"></div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label">Link</label>
+                                    <input placeholder="" name="link" type="text" value="<%= data.link %>" class="form-control border">
+                                    <div id="link-error" class="error-message"></div>
+
+                                </div>
+                            </div>
+
+
+
+                            <div class="card mb-2">
+                                <div class="card-header">
+                                    <h4>Choose Banner Image</h4>
+                                </div>
+                               
+
+
+                                <div id="addedImagesContainer" class="col-md-6">
+                                    <% if (data && data.image) { %>
+                                        <div class="col-md-12 mb-4">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <img class="rounded" style="width: 50px; height: 60px;"
+                                                        src="/uploads/products/<%= data.image %>"
+                                                        alt="image" data-filename="<%= data.image %>">
+                                                    <% if (data._id) { %>
+                                                        <span class="delete-icon"
+                                                            onclick="deleteImage('<%= data._id %>', '<%= data.image %>')">❌</span>
+                                                    <% } %>
+                                                </div>
+                                               
+                                            </div>
+                                            
+                                        </div>
+                                    <% } %>
+                                </div>
+                                
+                                
+
+
+
+                                <div class="card-body">
+                                    
+                                      
+                                    <img src="assets/imgs/theme/upload.svg" alt="" id="imgView1">
+                                    <input class="form-control" type="file" name="images" id="input1"
+                                        accept="image/png, image/jpeg, image/jpg"
+                                        onchange="viewImage1(event),viewImage(event, 1)">
+                                </div>
+                                <div class="image-cropper" style="display:none; width: 300px; height: 200px;">
+                                    <img src="" id="croppedImg1" alt="">
+                                    <button type="button" id="saveButton1" class="btn-sm btn-primary">Save</button>
+                                </div>
+                            <div>
+                                <button class="btn btn-md rounded font-sm hover-up ml-200" type="button"
+                                    onclick="validateAndSubmit()">Publish</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add an empty container div for displaying image thumbnails -->
+    <style>
+        .thumbnails-container {
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .thumbnail {
+            margin-right: 10px;
+            /* Adjust margin as needed for spacing between thumbnails */
+        }
+    </style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/cropperjs/dist/cropper.min.js"></script>
+
+
+
+    <script>
+        // Array to store selected images
+        const selectedImages = [];
+
+        // Function to handle file input change
+        document.getElementById("imageInput").addEventListener("change", handleFileSelect);
+
+        function handleFileSelect(event) {
+            // Target the container for displaying thumbnails
+            const addedImagesContainer = document.getElementById("addedImagesContainer");
+
+            // Clear previous content
+            addedImagesContainer.innerHTML = "";
+
+            const files = event.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                // Add the file to the selected images array
+                selectedImages.push(file);
+
+                // Create thumbnail element
+                const thumbnail = document.createElement("div");
+                thumbnail.classList.add("thumbnail");
+
+                // Create image element
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                img.alt = "thumbnail";
+
+                // Set a fixed width for the image
+                img.style.width = "50px"; // Adjust the width as needed
+                img.style.height = "auto";
+
+                // Create remove icon
+                const removeIcon = document.createElement("span");
+                removeIcon.classList.add("remove-icon");
+                removeIcon.innerHTML = "&times;"; // Multiplication symbol as a cross
+
+                // Event listener to remove the image on icon click
+                removeIcon.addEventListener("click", function () {
+                    // Remove the file from the selected images array
+                    const index = selectedImages.indexOf(file);
+                    if (index !== -1) {
+                        selectedImages.splice(index, 1);
+                    }
+
+                    // Remove the thumbnail from the container
+                    thumbnail.remove();
+                });
+
+                // Append elements to thumbnail
+                thumbnail.appendChild(img);
+                thumbnail.appendChild(removeIcon);
+
+                // Append thumbnail to the container
+                addedImagesContainer.appendChild(thumbnail);
+            }
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Your code here
+        });
+
+
+        function validateAndSubmit() {
+
+            if (validateForm()) {
+                // If validation passes, submit the form
+                document.forms[0].submit(); // Assuming this is the first (and only) form on your page
+            }
+        }
+
+        function validateForm() {
+         
+
+            resetErrorMessages();
+
+            var isValid = true;
+
+
+            var productName = document.getElementById("product_name").value;
+
+            const sDate = document.getElementsByName('startDate')[0].value;
+            const eDate = document.getElementsByName('endDate')[0].value;
+
+            if (!sDate) {
+                displayErrorMessage("error-start-date", 'Starting date is required');
+                isValid = false;
+            }
+
+            if (!eDate) {
+                displayErrorMessage("error-end-date", 'End date is required');
+                isValid = false;
+            }
+
+            const sDateObj = new Date(sDate);
+            const eDateObj = new Date(eDate);
+            const todayDateObj = new Date();
+            todayDateObj.setHours(0, 0, 0, 0);
+
+           
+
+            if (sDateObj > eDateObj) {
+                document.getElementById('error-end-date').innerHTML = 'End date should be after the start date';
+                isValid = false;
+            }
+
+            
+
+
+            if (productName === "") {
+                displayErrorMessage("productName-error", "Product Name is required");
+                isValid = false;
+            }
+
+            // Additional checks for other fields
+            var description = document.getElementsByName('description')[0].value;
+            if (description === "") {
+                displayErrorMessage("description-error", "Description is required");
+                isValid = false;
+            }
+
+            var link = document.getElementsByName('link')[0].value;
+            if (link === "") {
+                displayErrorMessage("link-error", "Link is required");
+                isValid = false;
+            }
+
+            // Additional checks can be added for other fields if needed
+
+            return isValid;
+        }
+
+        function displayErrorMessage(elementId, message) {
+            var errorElement = document.getElementById(elementId);
+            errorElement.innerText = message;
+            errorElement.style.display = "block";
+        }
+
+        function resetErrorMessages() {
+            var errorElements = document.querySelectorAll(".error-message");
+            errorElements.forEach(function (element) {
+                element.innerText = "";
+                element.style.display = "none";
+            });
+        }
+
+
+        function deleteImage(productId, filename) {
+    deleteSingleImage(productId, filename);
+}
+
+function deleteSingleImage(productId, filename) {
+    fetch("/admin/deleteImage", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productId, filename }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Handle success or error
+        if (data.success) {
+            removeImage(filename);
+        } else {
+            console.error("Error deleting image:", data.error);
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+}
+
+// Remove the deleted image
+function removeImage(filename) {
+    const imageElement = document.querySelector(`[data-filename="${filename}"]`);
+
+    if (imageElement) {
+        const parentDiv = imageElement.closest('.col-md-12');
+        parentDiv.remove();
+    }
+}
+
+
+function viewImage1(event) {
+            document.getElementById('imgView1').src = URL.createObjectURL(event.target.files[0])
+        }
+
+        function viewImage(event, index) {
+            let input = event.target;
+            let reader = new FileReader();
+
+            reader.onload = function () {
+                let dataURL = reader.result;
+                let image = document.getElementById('imgView' + index);
+                image.src = dataURL;
+
+                // Initialize Cropper.js on the image
+                let cropper = new Cropper(image, {
+                    aspectRatio:2560 / 777, // Initial aspect ratio
+                    viewMode: 1,
+                    guides: true,
+                    background: false,
+                    autoCropArea: 1,
+                    zoomable: true
+                });
+
+
+                // Show the image cropper container
+                let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
+                cropperContainer.style.display = 'block';
+
+                // Update the cropped image when the "Save" button is clicked
+                let saveButton = document.querySelector('#saveButton' + index);
+                saveButton.addEventListener('click', async function () {
+                    let croppedCanvas = cropper.getCroppedCanvas();
+                    let croppedImage = document.getElementById("croppedImg" + index);
+                    croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+
+                    // Generate a unique name for the cropped image file based on the current timestamp
+                    let timestamp = new Date().getTime();
+                    let fileName = `cropped-img-${timestamp}-${index}.png`;
+
+                    await croppedCanvas.toBlob(blob => {
+                        let input = document.getElementById('input' + index)
+                        let imgFile = new File([blob], fileName, blob)
+                        const fileList = new DataTransfer();
+                        fileList.items.add(imgFile);
+                        input.files = fileList.files
+                    });
+                    // cropperContainer.style.display = 'none';
+                });
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+
+
+    </script>
+
+    <%- include("../partials/adminFooter") %>

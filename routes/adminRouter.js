@@ -10,6 +10,7 @@ const {isAdmin}=require("../middlewares/Auth")
 const couponController= require("../controller/couponController")
 const salesReportController= require("../controller/salesReportController")
 const orderController=require("../controller/orderController")
+const bannerController=require("../controller/bannerController")
 
 router.get("/",isAdmin,adminController.adminHomeGet)
 router.get("/login",adminController.adminLoginGet)
@@ -63,4 +64,12 @@ router.get("/dateWiseFilter", isAdmin, salesReportController.dateWiseFilter)
 router.post("/generatePdf", isAdmin, salesReportController.generatePdf)
 router.post("/downloadExcel", isAdmin, salesReportController.downloadExcel)
 router.post("/deleteImage", isAdmin, productController.deleteSingleImage)
+
+router.get("/banner", isAdmin, bannerController.getBanner)
+router.get("/addBanner", isAdmin, bannerController.getAddBannerPage)
+router.post("/addBanner", isAdmin,productMulter.single("images"), bannerController.postAddBanner)
+router.get("/editBanner", isAdmin, bannerController.getEditBannerPage)
+router.post("/editBanner", isAdmin,productMulter.single("images"), bannerController.postEditBanner)
+router.get("/deleteBanner", isAdmin, bannerController.deleteBanner)
+
 module.exports=router; 
