@@ -601,6 +601,14 @@ const getSortProducts = async (req, res) => {
     }
 };
 
+const aboutPageGET=async(req,res)=>{
+    try{
+        res.render("user/about")
+    }catch(error){
+        console.log(error);
+    }
+}
+
 
 
 
@@ -625,5 +633,6 @@ module.exports={
     getShop,
     searchProducts,
     filterProduct,
-    getSortProducts
+    getSortProducts,
+    aboutPageGET
 }

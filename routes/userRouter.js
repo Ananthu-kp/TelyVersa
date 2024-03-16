@@ -75,4 +75,7 @@ router.get("/deleteWishlist",isLogged,isBlocked,wishListController.deleteWishlis
 router.post("/addMoney", isLogged, isBlocked, walletController.addMoneyToWallet)
 router.post('/paymentMethod', isLogged, isBlocked, walletController.paymentMethod)
 
+
+router.get("/about",userController.aboutPageGET)
+
 module.exports=router;
