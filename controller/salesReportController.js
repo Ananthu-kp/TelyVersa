@@ -381,41 +381,49 @@ const generatePdf = async (req, res) => {
 
 const downloadExcel = async (req, res) => {
     try {
+        // Fetch orders from the database
+        const orders = await Order.find({ status: 'Delivered' });
 
+        // Create a new Excel workbook and worksheet
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('Sales Report');
 
+        // Define the columns and column headers
         worksheet.columns = [
-            { header: 'Order ID', key: 'orderId', width: 50 },
-            { header: 'Customer', key: 'customer', width: 30 },
-            { header: 'Date', key: 'date', width: 30 },
-            { header: 'Total', key: 'totalAmount', width: 15 },
-            { header: 'Payment', key: 'payment', width: 15 },
+            { header: 'Order ID', key: '_id', width: 30 },
+            { header: 'Customer', key: 'userId', width: 30 },
+            { header: 'Date', key: 'createdOn', width: 30 },
+            { header: 'Total', key: 'totalPrice', width: 15 },
+            { header: 'Payment', key: 'address[0].payment', width: 15 },
+            { header: 'Status', key: 'status', width: 15 },
+            { header: 'Coupon Deduction', key: 'couponDeduction', width: 15 },
         ];
 
-        const orders = req.body;
-
-        orders.forEach(order => {
+        // Add rows to the worksheet based on the fetched orders
+        orders.forEach((order, index) => {
             worksheet.addRow({
-                orderId: order.orderId,
-                customer: order.name,
-                date: order.date,
-                totalAmount: order.totalAmount,
-                payment: order.payment,
-                products: order.products,
+                _id: order._id,
+                userId: order.userId,
+                createdOn: order.createdOn.toISOString(), // Format date as needed
+                totalPrice: order.totalPrice,
+                'address[0].payment': order.payment,
+                status: order.status,
+                couponDeduction: order.couponDeduction,
             });
         });
 
+        // Set the response headers for Excel file download
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', `attachment; filename=salesReport.xlsx`);
+        res.setHeader('Content-Disposition', 'attachment; filename=salesReport.xlsx');
 
+        // Write the workbook to the response and end the response
         await workbook.xlsx.write(res);
         res.end();
-
     } catch (error) {
-        console.log(error.message);
+        console.error('Error generating Excel file:', error.message);
+        res.status(500).send('Error generating Excel file');
     }
-}
+};
 
 
 
