@@ -268,9 +268,9 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
 
 
             if (selectedValue == "Shipped") {
-                window.location.href = `http://localhost:3000/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
+                window.location.href = `https://www.telyversa.top/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
             } else if (selectedValue == "Delivered") {
-                window.location.href = `http://localhost:3000/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
+                window.location.href = `https://www.telyversa.top/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
             } else if (selectedValue == "Canceled") {
                 Swal.fire({
                     title: 'Confirm cancellation',
@@ -282,7 +282,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js
                     confirmButtonText: 'Yes, cancel it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = `http://localhost:3000/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
+                        window.location.href = `https://www.telyversa.top/admin/changeStatus?orderId=${orderId}&status=${selectedValue}`;
                     } else {
                         location.reload();
                     }
