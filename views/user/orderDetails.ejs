@@ -389,7 +389,7 @@ async function continuePayment(orderId, orderAmount) {
                 confirmButtonText: 'Yes, cancel it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = `http://localhost:3000/cancelOrder?orderId=${orderId.value}`;
+                    window.location.href = `https://www.telyversa.top/cancelOrder?orderId=${orderId.value}`;
                 }
             });
         }
@@ -414,7 +414,7 @@ async function continuePayment(orderId, orderAmount) {
                     if (result.isConfirmed) {
                         const reason = result.value;
                         // Redirect to the return endpoint with orderId and reason
-                        window.location.href = `http://localhost:3000/return?id=${orderId}&reason=${encodeURIComponent(reason)}`;
+                        window.location.href = `https://www.telyversa.top/return?id=${orderId}&reason=${encodeURIComponent(reason)}`;
                     }
                 });
             });
