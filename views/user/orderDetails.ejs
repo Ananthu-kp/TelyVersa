@@ -154,74 +154,56 @@
                                     <tr class="text-center">
                                         <th width="30%">Product</th>
                                         <th width="20%">Name</th>
-                                        
                                         <th width="10%">Quantity</th>
                                         <th class="text-center" width="10%">Amount</th>
                                         <th class="text-center" width="20%" class="text-end">Total</th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <%if(locals.orders){%>
-                                        <% let orderId; %>
-                                            <% for (let i=0; i < orders.product.length; i++) { %>
-                                                <tr>
-                                                    <td class="text-center">
-                                                        <a class="itemside" href="#">
-                                                            <div class="left">
-                                                                <img src="/uploads/products/<%= orders.product[i].images %>"
-                                                                    style="height: 7rem; width: 7rem;" class="img-xs"
-                                                                    alt="Item">
-                                                            </div>
-                                                        </a>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        <div class="info">
-                                                            <%= orders.product[i].name %>
+                                    <% if (locals.orders) { %>
+                                        <% let totalProductPrice = 40; %>
+                                        <% for (let i = 0; i < orders.product.length; i++) { %>
+                                            <tr>
+                                                <td class="text-center">
+                                                    <a class="itemside" href="#">
+                                                        <div class="left">
+                                                            <img src="/uploads/products/<%= orders.product[i].images %>"
+                                                                style="height: 7rem; width: 7rem;" class="img-xs" alt="Item">
                                                         </div>
-                                                    </td>
-                                                   
-                                                    <td class="text-center">
-                                                        <%= orders.product[i].quantity %>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        ₹<%= orders.totalPrice.toLocaleString()
-                                                            %>
-                                                    </td>
-                                                    <td class="text-center">
-                                                        ₹<%= (parseInt(orders.totalPrice) *
-                                                            parseInt(orders.product[i].quantity)).toLocaleString() %>
-
-                                                    </td>
-
-
-                                                    <% } %>
-
-                                                        <% let totalProductPrice=0; %>
-                                                            <% for (let i=0; i < orders.product.length; i++) { %>
-                                                                <% totalProductPrice +=parseInt(orders.product[i].price)
-                                                                    * parseInt(orders.product[i].quantity); %>
-                                                                    <% } %>
-
-
-                                                                        <% let discount=totalProductPrice -
-                                                                            orders.totalPrice; %>
-
-                                                                            
-
-                                                                            
-                                                </tr>
-
-
-                                                <%}%>
-
-                                                    <input type="hidden" name="" id="orderId" value="<%= orderId %>">
-
+                                                    </a>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="info">
+                                                        <%= orders.product[i].name %>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <%= orders.product[i].quantity %>
+                                                </td>
+                                                <td class="text-center">
+                                                    ₹<%= orders.product[i].price.toLocaleString() %>
+                                                </td>
+                                                <td class="text-center">
+                                                    ₹<%= (parseInt(orders.product[i].price) * parseInt(orders.product[i].quantity)).toLocaleString() %>
+                                                </td>
+                                            </tr>
+                                            <% totalProductPrice += parseInt(orders.product[i].price) * parseInt(orders.product[i].quantity); %>
+                                        <% } %>
+                                        <tr>
+                                            <td colspan="4" class="text-end"><strong>Total Price:</strong></td>
+                                            <td class="text-center">₹<%= totalProductPrice.toLocaleString() %></td>
+                                        </tr>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="5" class="text-center">No orders found</td>
+                                        </tr>
+                                    <% } %>
                                 </tbody>
                             </table>
-                        </div> <!-- table-responsive// -->
-                    </div> <!-- col// -->
-                    <div class="col-lg-1"></div>
+                        </div>
+                    </div>
+                </div>
+                
                     <!-- col// -->
                 </div>
             </div> <!-- card-body end// -->

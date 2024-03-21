@@ -158,12 +158,12 @@
                                                 data[i].productDetails[0].salePrice * data[i].quantity %></span>
                                     </td>
                                 </tr>
-                                <% grandTotal +=data[i].productDetails[0].salePrice * data[i].quantity+40; %>
+                                <% grandTotal +=data[i].productDetails[0].salePrice * data[i].quantity; %>
                                     <% } %>
                                         <tr>
                                             <td class="cart_total_label">Grand Total</td>
                                             <td class="cart_total_amount">
-                                                <span class="font-lg fw-900 text-brand" id="totalValue">₹ <%= grandTotal
+                                                <span class="font-lg fw-900 text-brand" id="totalValue">₹ <%= grandTotal+40
                                                         %></span>
                                             </td>
                                         </tr>
