@@ -71,10 +71,9 @@
                                                 </div>
                                             </td>
                                             <td class="action" product-title="Remove">
-                                                <a class="btn btn-sm"
-                                                    href="/deleteItem?id=<%= product[i].productDetails[0]._id %>">
+                                                <button class="btn btn-sm delete-btn" data-product-id="<%= product[i].productDetails[0]._id %>">
                                                     <i class="fi-rs-trash"></i>
-                                                </a>
+                                                </button>
                                             </td>
                                         </tr>
                                     <% } %>
@@ -181,6 +180,42 @@
             }
         });
     }
+
+    $(document).ready(function () {
+        // Add event listener to delete buttons
+        $('.delete-btn').on('click', function () {
+            const productId = $(this).data('product-id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    deleteProduct(productId);
+                }
+            });
+        });
+
+        // Function to delete the product
+        function deleteProduct(productId) {
+            $.ajax({
+                url: `/deleteItem?id=${productId}`,
+                method: 'GET',
+                success: function (response) {
+                    window.location.reload();
+                },
+                error: function (error) {
+                    // Handle error
+                    console.error('Error deleting product:', error);
+                }
+            });
+        }
+    });
 </script>
 
 <%- include("../partials/footer") %>
